@@ -2,9 +2,12 @@
 
 G2GML: Semantic Graph to Property Graph Mapping Language
 
-# Example
+# Example of G2GML
 
 ```
+PREFIX icgc : <http://icgc.link/vocab/>
+PREFIX faldo: <http://biohackathon.org/resource/faldo>
+
 nodes:
   donor:
     type:   <S rdfs:type icgc:donor>
