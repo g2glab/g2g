@@ -1,0 +1,1 @@
+G = session.readGraphWithProperties("examples/icgc.json")
