@@ -1,2 +1,3 @@
-# G2GML: Semantic Graph to Mapping Language
+# G2GML
 
+G2GML: Semantic Graph to Property Graph Mapping Language
