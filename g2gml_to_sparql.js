@@ -1,4 +1,4 @@
-// USAGE: $ node g2gml.js <g2g_file> <out_prefix>
+// USAGE: $ node g2gml_to_sparql.js <g2g_file> <out_prefix>
 
 var g2gmlPath = process.argv[2];
 var outPrefix = process.argv[3];
