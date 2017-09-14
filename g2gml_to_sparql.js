@@ -34,7 +34,7 @@ function g2gmlToSparql(g2gmlPath, outPrefix) {
   var nodeFileName = outPrefix + '_nodes.sql';
   fs.writeFileSync(nodeFileName,
                prefixPart + nodeSparql,
-               'utf8', );
+               'utf8');
   var edgeFileName = outPrefix + '_edges.sql';
   fs.writeFileSync(edgeFileName,
                prefixPart + edgeSparql,
