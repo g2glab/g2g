@@ -6,7 +6,7 @@ G2GML: Semantic Graph to Property Graph Mapping Language
 
 Go into the project directory.
 ```
-cd g2gml
+$ cd g2gml
 ```
 
 Install modules by npm.
@@ -14,7 +14,7 @@ Install modules by npm.
 $ npm install js-yaml fs require config
 ```
 
-You can check the installation by running test.sh.
+You can check the installation by running the test script.
 
 ```
 $ ./test.sh
