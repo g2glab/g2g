@@ -66,7 +66,14 @@ function createClassSparqlList(className, classObject) {
   }
   var sparqlList = [];
   var typeLine = '    ' + transformSandO(classObject['type']) + '. \n';
-
+  sparqlList.push(
+      '  SELECT \n' +
+      '    ?s   \n' +
+      '    "type" AS ?p\n' +
+      '    "' + className +'" AS  ?o \n' +
+      '  WHERE { \n' +
+      typeLine +
+      '  } \n');
   for(property in classObject) {
     if(property == 'type') continue;
     let selectPart =
