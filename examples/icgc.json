@@ -5,7 +5,8 @@
   "vertex_id_type": "string",
   "separator": ",",
   "node_props":[
-    { "name":"label", "type":"string" }
+    { "name":"type", "type":"string" }
+  , { "name":"label", "type":"string" }
   , { "name":"age", "type":"integer" }
   , { "name":"gender", "type":"string" }
   ],
