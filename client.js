@@ -1,20 +1,10 @@
-// USAGE: $ node client.js <query_file> <result_file>
+// USAGE: $ node client.js <endpoint> <query_file> <result_file>
 
 var request = require('request');
 var fs = require('fs');
-var config = require('config');
-
-var inFile = process.argv[2]; // Query
-var outFile = process.argv[3]; // Result
-
-// ENDPOINT
-var endpoint;
-if (config.endpoint) {
-  console.log('Endpoint is ' + config.endpoint);
-  endpoint = config.endpoint;
-} else {
-  console.log('Please set endpoint URL in ./config/default.yaml!');
-}
+var endpoint = process.argv[2];
+var inFile = process.argv[3]; // Query
+var outFile = process.argv[4]; // Result
 
 // QUERY
 var query = '';
