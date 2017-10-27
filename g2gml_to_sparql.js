@@ -16,7 +16,7 @@ function g2gmlToSparql(g2gmlPath, outPrefix) {
     var value = g2g[key];
     switch(key) {
     case 'nodes':
-      nodeSparql = createNodeSparql(value);
+      node2SPARQL = createNodeSparqlMap(value);
       break;
     case 'edges':
       edgeSparql = createEdgeSparql(value);
@@ -30,28 +30,34 @@ function g2gmlToSparql(g2gmlPath, outPrefix) {
       break;
     }
   }
+  Object.keys(node2SPARQL).forEach(
+    (node) =>
+      {
+        var nodeFileName = outPrefix + '_' + node + '_nodes.sql';
+        fs.writeFileSync(nodeFileName,  prefixPart + node2SPARQL[node], 'utf8');
+      }
+  );
 
-  var nodeFileName = outPrefix + '_nodes.sql';
-  fs.writeFileSync(nodeFileName,
-               prefixPart + nodeSparql,
-               'utf8');
   var edgeFileName = outPrefix + '_edges.sql';
   fs.writeFileSync(edgeFileName,
                prefixPart + edgeSparql,
                'utf8');
-  console.log('Created "' + nodeFileName + '" and "' + edgeFileName + '".');
 }
 
-function createNodeSparql(nodes) {
-  var listOfClassSparqlList = Object.keys(nodes).map((className) => createClassSparqlList(className, nodes[className]));
-  return 'SELECT \n' +
-    '  ?s AS ?nid \n' +
-    '  ?p AS ?property \n' +
-    '  ?o AS ?value \n' +
-    'WHERE {{ \n' +
-    flatten(listOfClassSparqlList)
-    .join('} Union { \n') +
-    '}} \n';
+function createNodeSparqlMap(nodes) {
+  var map = {};
+  Object.keys(nodes).forEach(
+    (node) => {
+      map[node] = 'SELECT \n' +
+        '  ?s AS ?nid \n' +
+        '  ?p AS ?property \n' +
+        '  ?o AS ?value \n' +
+        'WHERE {{ \n' +
+        flatten(createClassSparqlList(node, nodes[node]))
+        .join('} Union { \n') +
+        '}} \n';
+    });
+  return map;
 }
 
 function flatten(array) {
