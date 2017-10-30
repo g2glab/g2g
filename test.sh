@@ -4,11 +4,11 @@ npm install js-yaml fs require config request
 
 mkdir output
 
-node g2gml_to_sparql.js examples/donar_mutation.g2g output/test
+node g2gml_to_sparql.js examples/donor_mutation.g2g output/test
 
 END_POINT=https://integbio.jp/rdf/sparql
 
-node client.js $END_POINT output/test_donar_nodes.sql output/donar_nodes.tsv
+node client.js $END_POINT output/test_donor_nodes.sql output/donor_nodes.tsv
 node client.js $END_POINT output/test_mutation_nodes.sql output/mutation_nodes.tsv
 node client.js $END_POINT output/test_edges.sql output/edges.tsv
 
