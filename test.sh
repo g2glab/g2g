@@ -15,3 +15,9 @@ node client.js $END_POINT output/test_edges.sql output/edges.tsv
 sh gpg_to_pgx.sh icgc
 
 cat examples/icgc.pgql | pgx
+
+node gpg_to_neo.js
+
+rm -rf ./graph.db
+
+neo4j-import --nodes output/donor_nodes.tsv.csv,output/mutation_nodes.tsv.csv --relationships output/edges.tsv.csv --into=./graph.db --ignore-missing-nodes --bad-tolerance 3000000

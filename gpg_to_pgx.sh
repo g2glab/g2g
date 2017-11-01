@@ -1,5 +1,6 @@
 rm -f output/$1.opv
 rm -f output/$1.ope
+
 for node in `ls output/*nodes.tsv`
 do
     sed -e "s/\"//g" $node |\
