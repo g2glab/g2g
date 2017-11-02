@@ -1,6 +1,6 @@
 {
-  "vertex_uri_list": [ "../output/icgc.opv" ],
-  "edge_uri_list": [ "../output/icgc.ope" ],
+  "vertex_uri_list": [ "../output/pgx/icgc.opv" ],
+  "edge_uri_list": [ "../output/pgx/icgc.ope" ],
   "format": "flat_file",
   "vertex_id_type": "string",
   "separator": ",",

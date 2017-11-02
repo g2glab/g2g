@@ -1,6 +1,6 @@
 #!/bin/bash
 
-npm install js-yaml fs require config request
+npm install js-yaml fs require config request path
 
 mkdir output
 
