@@ -1,0 +1,24 @@
+EFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX prop-ja: <http://ja.dbpedia.org/property/>
+PREFIX schema: <http://schema.org/>
+PREFIX dbpedia-owl:	<http://dbpedia.org/ontology/>
+PREFIX prop-ja: <http://ja.dbpedia.org/property/>
+
+nodes:
+  musician:
+    match:      S rdf:type foaf:Person, dbpedia-owl:MusicalArtist
+    label:      S rdfs:label O
+    born:       S prop-ja:born O
+    hometown:   S dbpedia-owl:hometown O
+    pageLength: S dbpedia-owl:wikiPageLength O
+
+edges:
+  member(musician, musician):
+    match:      ?group rdf:type schema:MusicGroup; dbpedia-owl:bandMember SN . ?group dbpedia-owl:bandMember DN
+    label:      S rdfs:label O
+    hometown:   S dbpedia-owl:hometown O
+    pageLength: S dbpedia-owl:wikiPageLength O
+
+  influenced(musician, musician):
+    match: SN dbpedia-owl:influenced DN
