@@ -18,14 +18,12 @@ var dstDir = './output/' + inputName;
 
 var sparqlDir = dstDir + '/sparql/';
 var tsvDir = dstDir + '/tsv/';
-var gpgDir = dstDir + '/gpg/';
 var g2gmlToSparql = require('./g2gml_to_sparql.js');
 var client = require('./client.js');
 
 tryToMkdir(dstDir);
 tryToMkdir(sparqlDir);
 tryToMkdir(tsvDir);
-tryToMkdir(gpgDir);
 
 [nodeFiles, edgeFiles] = g2gmlToSparql.g2gmlToSparql(g2gPath, sparqlDir);
 
