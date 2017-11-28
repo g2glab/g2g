@@ -126,8 +126,8 @@ return 'WHERE { \n  ' +
 }
 
 
-function toVariable(srcString, index, to_src) {
-  if(to_src) srcString = srcString.replace(/(\W|^)S(\W|$)/g, '$1SN$2');
+function toVariable(srcString, index, toSrc) {
+  if(toSrc) srcString = srcString.replace(/(\W|^)S(\W|$)/g, '$1SN$2');
   return srcString.replace(/(\W|^)(S|SN|DN)(\W|$)/g, '$1?$2$3')
            .replace(/(\W|^)O(\W|$)/g, '$1?O'+index+'$2')
 }
