@@ -14,6 +14,11 @@ var cnt_edges = 0;
 
 var node_props = [];
 var edge_props = [];
+var node_props_type = [];
+var edge_props_type = [];
+
+var sep = '\t';
+
 
 fs.writeFile(pgx_prefix + '.opv', '', function (err) {});
 fs.writeFile(pgx_prefix + '.ope', '', function (err) {});
@@ -36,10 +41,12 @@ rl.on('line', function(line) {
         output[1] = key;
         output = output.concat(format(val, type));
         if (node_props.indexOf(key) == -1) {
+          var prop = { name: key, type: type };
           node_props.push(key); 
+          node_props_type.push(prop); 
         }
-        fs.appendFile(pgx_prefix + '.opv', output.join('\t') + '\n', function (err) {});
-        //console.log(output.join('\t'));
+        fs.appendFile(pgx_prefix + '.opv', output.join(sep) + '\n', function (err) {});
+        //console.log(output.join(sep));
       }
     } else {
       // This line is a edge
@@ -65,17 +72,26 @@ rl.on('line', function(line) {
           output[4] = key;
           output = output.concat(format(val, type));
           if (edge_props.indexOf(key) == -1) {
+            var prop = { name: key, type: type };
             edge_props.push(key); 
+            edge_props_type.push(prop); 
           }
-          fs.appendFile(pgx_prefix + '.ope', output.join('\t') + '\n', function (err) {});
-          console.log(output.join('\t'));
+          fs.appendFile(pgx_prefix + '.ope', output.join(sep) + '\n', function (err) {});
+          //console.log(output.join(sep));
         }
       }
     }
   }
-  //console.log('');
 });
 
+rl.on('close', function() {
+  create_load_config();
+});
+
+function create_load_config() {
+  console.log(node_props_type);
+  console.log(edge_props_type);
+}
 
 function check_items(items) {
   for(var i=0; i<items.length; i++){
@@ -120,8 +136,7 @@ function format(str, type) {
 };
 
 function is_string(str) {
-  arr = str.split('"');
-  if (arr.length > 1) {
+  if (typeof str == 'string') {
     return true;
   } else {
     return false;
