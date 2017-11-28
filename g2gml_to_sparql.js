@@ -127,12 +127,9 @@ return 'WHERE { \n  ' +
 
 
 function toVariable(srcString, index, to_src) {
-  return srcString.split(' ').map((token) => {
-    if(to_src && token == SUBJECT) token = SRC;
-    return ((token == SUBJECT || token == SRC || token == DST) ?( '?' + token):
-    (token == OBJECT ? '?' + OBJECT + index : token))
-  }).join(' ');
-
+  if(to_src) srcString = srcString.replace(/(\W|^)S(\W|$)/g, '$1SN$2');
+  return srcString.replace(/(\W|^)(S|SN|DN)(\W|$)/g, '$1?$2$3')
+           .replace(/(\W|^)O(\W|$)/g, '$1?O'+index+'$2')
 }
 
 function parseEdgeDeclaration(declaration) {
