@@ -7,7 +7,7 @@ PREFIX dbpedia-owl:	<http://dbpedia.org/ontology/>
 nodes:
   musician:
     match:      S rdf:type foaf:Person, dbpedia-owl:MusicalArtist
-    label:      S rdfs:label O
+    label:      S rdfs:label O . FILTER(lang( O ) = "ja")
     born:       S prop-ja:born O
     hometown:   S dbpedia-owl:hometown O
     pageLength: S dbpedia-owl:wikiPageLength O
@@ -15,7 +15,7 @@ nodes:
 edges:
   member(musician, musician):
     match:      ?group rdf:type schema:MusicGroup; dbpedia-owl:bandMember SN . ?group dbpedia-owl:bandMember DN . FILTER( SN != DN )
-    label:      S rdfs:label O
+    label:      S rdfs:label O . FILTER(lang( O ) = "ja")
     hometown:   S dbpedia-owl:hometown O
     pageLength: S dbpedia-owl:wikiPageLength O
 
