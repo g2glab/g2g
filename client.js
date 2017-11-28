@@ -14,7 +14,7 @@ function query_sparql(endpoint, input, outFile, callbackFunc) {
     };
     request.post(options, function(error, response, body){
       if (!error && response.statusCode == 200) {
-        console.log('Writing file ...');
+        console.log('Writing ' + outFile + ' ...');
         fs.writeFile(outFile, body, 'utf8', function (err) {
           if (err == null) {
             console.log('Done.');
