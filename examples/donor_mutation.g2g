@@ -13,9 +13,11 @@ nodes:
     label:  S rdfs:label O
     start_position:
       S faldo:region ?r . ?r faldo:begin ?b . ?b faldo:position O
+  effect:
+    match:  S rdf:type icgc-class:Effect
 
 edges:
-  has_mutation (donor, mutation):
+  has_mutation(donor, mutation):
     match:         ?det icgc:donor SN . ?det icgc:mutation DN
     quality_score: ?det icgc:quality_score O
   affects(mutation, effect):

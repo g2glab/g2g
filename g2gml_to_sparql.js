@@ -1,47 +1,56 @@
-// USAGE: $ node g2gml_to_sparql.js <g2g_file> <out_prefix>
-
 var g2gmlPath = process.argv[2];
-var outPrefix = process.argv[3];
+var dstPath = process.argv[3];
+
+const REQUIRED = "match";
+const SRC = "SN";
+const DST = "DN";
+const SUBJECT = "S";
+const OBJECT = "O";
 
 var yaml = require('js-yaml');
 var fs = require('fs');
+var path = require('path');
 
-g2gmlToSparql(g2gmlPath, outPrefix);
+exports.g2gmlToSparql = g2gmlToSparql
 
-function g2gmlToSparql(g2gmlPath, outPrefix) {
+function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
   var sparqlList = [];
   var g2g = yaml.safeLoad(fs.readFileSync(g2gmlPath, 'utf8'));
+  const NODES = 'nodes';
+  const EDGES = 'edges';
   for(let key in g2g) {
     var value = g2g[key];
-    switch(key) {
-    case 'nodes':
-      node2SPARQL = createNodeSparqlMap(value);
-      break;
-    case 'edges':
-      edgeSparql = createEdgeSparql(value);
-      break;
-    default:
+    if(key != NODES && key != EDGES) {
       if(key.startsWith('PREFIX')){
         prefixPart += key+': ' + value + '\n';
       } else {
         throw 'invalid entry: ' + key;
       }
-      break;
     }
   }
-  Object.keys(node2SPARQL).forEach(
+  node2Sparql = createNodeSparqlMap(g2g[NODES]);
+  edge2Sparql = createEdgeSparqlMap(g2g[EDGES], g2g[NODES]);
+  var nodeFiles = [], edgeFiles = [];
+  Object.keys(node2Sparql).forEach(
     (node) =>
       {
-        var nodeFileName = outPrefix + '_' + node + '_nodes.sql';
-        fs.writeFileSync(nodeFileName,  prefixPart + node2SPARQL[node], 'utf8');
+        var nodeFileName = dstLocation + node + '_nodes.sql';
+        nodeFiles.push(nodeFileName);
+        fs.writeFileSync(nodeFileName,  prefixPart + node2Sparql[node], 'utf8');
       }
   );
 
-  var edgeFileName = outPrefix + '_edges.sql';
-  fs.writeFileSync(edgeFileName,
-               prefixPart + edgeSparql,
-               'utf8');
+
+  Object.keys(edge2Sparql).forEach(
+    (edge) =>
+      {
+        var edgeFileName = dstLocation + edge + '_edges.sql';
+        edgeFiles.push(edgeFileName);
+        fs.writeFileSync(edgeFileName,  prefixPart + edge2Sparql[edge], 'utf8');
+      }
+  );
+  return [nodeFiles, edgeFiles];
 }
 
 function createNodeSparqlMap(nodes) {
@@ -49,77 +58,79 @@ function createNodeSparqlMap(nodes) {
   Object.keys(nodes).forEach(
     (node) => {
       map[node] = 'SELECT \n' +
-        '  ?s AS ?nid \n' +
-        '  ?p AS ?property \n' +
-        '  ?o AS ?value \n' +
-        'WHERE {{ \n' +
-        flatten(createClassSparqlList(node, nodes[node]))
-        .join('} Union { \n') +
-        '}} \n';
+        '  ?S AS ?nid \n' +
+        '  "' + node + '" AS ?type \n' + 
+        Object.keys(nodes[node]).map(
+          (prop, index) =>
+            (prop == REQUIRED ? '' : 
+            '  "' + prop + '" AS ?p' + index + '\n' +
+            '  ?O' + index + '\n')
+        ).join('') + 
+      createWherePhrase(nodes[node]);
     });
   return map;
 }
 
-function flatten(array) {
-  return array.reduce(function (p, c) {
-      return Array.isArray(c) ? p.concat(flatten(c)) : p.concat(c);
-    }, []);
-};
-
-function createClassSparqlList(className, classObject) {
-  if(!classObject.hasOwnProperty('type') ) {
-    throw className + ' does not have "type" line';
-  }
-  var sparqlList = [];
-  var typeLine = '    ' + transformSandO(classObject['type']) + '. \n';
-  sparqlList.push(
-      '  SELECT \n' +
-      '    ?s   \n' +
-      '    "type" AS ?p\n' +
-      '    "' + className +'" AS  ?o \n' +
-      '  WHERE { \n' +
-      typeLine +
-      '  } \n');
-  for(property in classObject) {
-    if(property == 'type') continue;
-    let selectPart =
-      '  SELECT            \n' + 
-      '    ?s              \n' + 
-      '    "' + property + '"  AS ?p\n' +
-      '    ?o             \n';
-    let wherePart =
-      '  WHERE {           \n' +
-      typeLine +
-      '    ' + transformSandO(classObject[property], property) + '\n' +
-      '  }\n';
-    sparqlList.push(selectPart + wherePart);
-  }
-  return sparqlList;
+function createWherePhrase(nodeObject) {
+  conditionList = 
+    Object.keys(nodeObject).map(
+      (node, index) => '  ' +  
+        (node == REQUIRED ?
+          toVariable(nodeObject[node], index) :
+          'OPTIONAL {' + toVariable(nodeObject[node], index) + '}'));
+return 'WHERE { \n' +
+    conditionList.join(' .\n') +
+   '\n}';
 }
 
-function transformSandO(srcString, oName) {
-  return srcString.split(' ').map(
-    (token) => token == 'S'?'?s':(token=='O'?'?o':token))
-    .join(' ');
+
+function toVariable(srcString, index) {
+  return srcString.split(' ').map((token) =>
+    (token == SUBJECT ? '?' + SUBJECT :
+    (token == OBJECT ? '?' + OBJECT + index : token))).join(' ');
 }
 
-function createEdgeSparql(edges) {
-  var edgeSparqlList = 
-    Object.keys(edges).map(function(edge){
-      var declaration = parseEdgeDeclaration(edge);
-      return '  SELECT\n' +
-             '    ?' + declaration.src + ' AS ?s_nid\n' +
-             '    ?' + declaration.dst + ' AS ?d_nid\n' +
-             '    "' + declaration.name + '" AS ?label\n' +
-             '  WHERE {\n' +
-             '    ' + edges[edge] + '\n' +
-             '  }\n';
-      });
-      
-  return 'SELECT *\n' +
-         'WHERE {{ \n' +
-         edgeSparqlList.join('} Union { \n') +
-         '}} \n';
+
+function createEdgeSparqlMap(edges, nodes) {
+  var map = {};
+  Object.keys(edges).forEach(
+    (edge) => {
+      var edgeDcl = parseEdgeDeclaration(edge);
+      map[edgeDcl.name] = 'SELECT \n' +
+        '  ?SN\n' +
+        '  ?DN\n' +
+        '  "' + edgeDcl.name + '" AS ?type \n' + 
+        Object.keys(edges[edge]).map(
+          (prop, index) =>
+            (prop == REQUIRED ? '' : 
+            '  "' + prop + '" AS ?p' + index + '\n' +
+            '  ?O' + index + '\n')
+        ).join('') + 
+      createEdgeWherePhrase(edges[edge], edgeDcl, nodes);
+    });
+  return map;
+}
+
+function createEdgeWherePhrase(edgeObject, edgeDcl, nodes) {
+  conditionList = 
+    Object.keys(edgeObject).map(
+      (prop, index) => '  ' +  
+        (prop == REQUIRED ?
+          toVariable(edgeObject[prop], index) :
+          'OPTIONAL {' + toVariable(edgeObject[prop], index) + '}'));
+return 'WHERE { \n  ' +
+    nodes[edgeDcl.src][REQUIRED].replace(SUBJECT, '?' + SRC) + ('.\n  ') +
+    nodes[edgeDcl.dst][REQUIRED].replace(SUBJECT, '?' + DST) + ('.\n  ') +
+    conditionList.join(' .\n  ') +
+   '\n}';
+}
+
+
+
+function toVariable(srcString, index) {
+  return srcString.split(' ').map((token) =>
+    ((token == SUBJECT || token == SRC || token == DST) ? '?' + token :
+    (token == OBJECT ? '?' + OBJECT + index : token))).join(' ');
 }
 
 function parseEdgeDeclaration(declaration) {
@@ -130,7 +141,7 @@ function parseEdgeDeclaration(declaration) {
     throw '"' + declaration + '" has no arguments';
   } else {
     arguments = declaration.substring(argStart + 1, declaration.length - 1).split(',');
-    name = declaration.substring(0, argStart - 1);
+    name = declaration.substring(0, argStart);
     if(arguments.length != 2) {
       throw '"' + declaration + '" has wrong number of arguments';
     }
