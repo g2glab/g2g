@@ -13,7 +13,7 @@ function translateNode(src, dst)
                {
                  data = row.split('\t');
                  if(data.length < 2) return;
-                 var line = data[0] + '\t type:' + data[1];
+                 var line = data[0] + '\t "type":' + data[1];
                  for(var i = 2; i < data.length; i += 2) {
                    if(data[i+1] != '') line += '\t' + data[i] +':' + data[i+1];
                  }
@@ -35,7 +35,7 @@ function translateEdge(src, dst)
                {
                  data = row.split('\t');
                  if(data.length < 3) return;
-                 var line = data[0] + '\t' + data[1] + '\t type:' + data[2];
+                 var line = data[0] + '\t' + data[1] + '\t "type":' + data[2];
                  for(var i = 3; i < data.length; i += 2) {
                    if(data[i+1] != '') line += '\t' + data[i] +':' + data[i+1];
                  }
