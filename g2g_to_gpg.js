@@ -30,10 +30,9 @@ if(fs.existsSync(dstPath))fs.unlinkSync(dstPath);
 nodeFiles.concat(edgeFiles).forEach(
   (file) => {
     var tsvPath = TSV_DIR + path.basename(file) + '.tsv'
-    console.log('"' + file + '" is queried...');
     sparqlClient.query(endpoint, file, tsvPath, () => 
                        {
-                         console.log('"' + file + '" has been completed.');
+                         console.log('"' + tsvPath + '" has been created.');
                          tsvToGPG.translateNode(tsvPath, dstPath)
                        }
                       );

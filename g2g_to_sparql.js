@@ -41,6 +41,7 @@ function writeSparqlFiles(name2SparqlMap, dstLocation, header, suffix) {
       {
         var fileName = dstLocation + name + '_' + suffix + '.sql';
         fs.writeFileSync(fileName,  header + name2SparqlMap[name], 'utf8');
+        console.log('"' + fileName + '" has been created.');
         return fileName;
       }
   );
