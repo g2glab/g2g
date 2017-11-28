@@ -57,13 +57,13 @@ function createNodeSparqlMap(nodes) {
   var map = {};
   Object.keys(nodes).forEach(
     (node) => {
-      map[node] = 'SELECT \n' +
+      map[node] = 'SELECT\n' +
         '  ?S AS ?nid \n' +
         '  "' + node + '" AS ?type \n' + 
         Object.keys(nodes[node]).map(
           (prop, index) =>
             (prop == REQUIRED ? '' : 
-            '  "' + prop + '" AS ?p' + index + '\n' +
+            '  "' + prop + '" AS ?P' + index + '\n' +
             '  ?O' + index + '\n')
         ).join('') + 
       createWherePhrase(nodes[node]);
@@ -96,14 +96,14 @@ function createEdgeSparqlMap(edges, nodes) {
   Object.keys(edges).forEach(
     (edge) => {
       var edgeDcl = parseEdgeDeclaration(edge);
-      map[edgeDcl.name] = 'SELECT \n' +
+      map[edgeDcl.name] = 'SELECT\n' +
         '  ?SN\n' +
         '  ?DN\n' +
         '  "' + edgeDcl.name + '" AS ?type \n' + 
         Object.keys(edges[edge]).map(
           (prop, index) =>
             (prop == REQUIRED ? '' : 
-            '  "' + prop + '" AS ?p' + index + '\n' +
+            '  "' + prop + '" AS ?P' + index + '\n' +
             '  ?O' + index + '\n')
         ).join('') + 
       createEdgeWherePhrase(edges[edge], edgeDcl, nodes);
@@ -117,20 +117,22 @@ function createEdgeWherePhrase(edgeObject, edgeDcl, nodes) {
       (prop, index) => '  ' +  
         (prop == REQUIRED ?
           toVariable(edgeObject[prop], index) :
-          'OPTIONAL {' + toVariable(edgeObject[prop], index) + '}'));
+          'OPTIONAL {' + toVariable(edgeObject[prop], index, true) + '}'));
 return 'WHERE { \n  ' +
     nodes[edgeDcl.src][REQUIRED].replace(SUBJECT, '?' + SRC) + ('.\n  ') +
-    nodes[edgeDcl.dst][REQUIRED].replace(SUBJECT, '?' + DST) + ('.\n  ') +
-    conditionList.join(' .\n  ') +
+    nodes[edgeDcl.dst][REQUIRED].replace(SUBJECT, '?' + DST) + ('.\n') +
+    conditionList.join(' .\n') +
    '\n}';
 }
 
 
+function toVariable(srcString, index, to_src) {
+  return srcString.split(' ').map((token) => {
+    if(to_src && token == SUBJECT) token = SRC;
+    return ((token == SUBJECT || token == SRC || token == DST) ?( '?' + token):
+    (token == OBJECT ? '?' + OBJECT + index : token))
+  }).join(' ');
 
-function toVariable(srcString, index) {
-  return srcString.split(' ').map((token) =>
-    ((token == SUBJECT || token == SRC || token == DST) ? '?' + token :
-    (token == OBJECT ? '?' + OBJECT + index : token))).join(' ');
 }
 
 function parseEdgeDeclaration(declaration) {

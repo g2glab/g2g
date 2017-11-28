@@ -1,4 +1,6 @@
 // USAGE: $ node g2g_to_gpg.js <g2g_file> <endpoint> <dst_gpg>
+// EXAMPLE: $ node g2g_to_gpg.js examples/musicans.g2g http://dbpedia.org/sparql output/musician
+
 
 var fs = require('fs');
 var path = require('path');
@@ -19,6 +21,7 @@ var tsvDir = dstDir + '/tsv/';
 var gpgDir = dstDir + '/gpg/';
 var g2gmlToSparql = require('./g2gml_to_sparql.js');
 var client = require('./client.js');
+
 tryToMkdir(dstDir);
 tryToMkdir(sparqlDir);
 tryToMkdir(tsvDir);
@@ -29,16 +32,19 @@ tryToMkdir(gpgDir);
 nodeFiles.forEach(
   (nodeFile) => {
     var tsvPath = tsvDir + path.basename(nodeFile) + '.tsv';
-
+    var gpgPath =  gpgDir + path.basename(nodeFile) + '.gpg';
+    if(fs.existsSync(gpgPath))fs.unlinkSync(gpgPath);
     client.query_sparql(endpoint, nodeFile, tsvPath, () => 
-      tsvToGPG.translateNode(tsvPath, gpgDir + path.basename(nodeFile) + '.gpg'));
+      tsvToGPG.translateNode(tsvPath, gpgPath));
   }
 );
 
 edgeFiles.forEach(
   (edgeFile) => {
     var tsvPath = tsvDir + path.basename(edgeFile) + '.tsv';
-    client.query_sparql(endpoint, edgeFile, tsvPath, () =>     tsvToGPG.translateEdge(tsvPath, gpgDir + path.basename(edgeFile) + '.gpg'));
+    var gpgPath =  gpgDir + path.basename(edgeFile) + '.gpg';
+    if(fs.existsSync(gpgPath))fs.unlinkSync(gpgPath);
+    client.query_sparql(endpoint, edgeFile, tsvPath, () =>     tsvToGPG.translateEdge(tsvPath, gpgPath));
   }
 );
 
