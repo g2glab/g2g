@@ -9,10 +9,9 @@ var fs = require('fs');
 var path = require('path');
 var sparqlClient = require('./sparql_client.js');
 var g2gmlToSparql = require('./g2g_to_sparql.js');
+var tsvToGPG = require('./tsv_to_gpg.js');
 
 var inputName = path.basename(g2gPath);
-
-var tsvToGPG = require('./tsv_to_gpg.js');
 
 const OUTPUT_DIR = './output/'
 const DST_DIR = OUTPUT_DIR + inputName;
@@ -28,32 +27,18 @@ tryToMkdir(TSV_DIR);
 
 if(fs.existsSync(dstPath))fs.unlinkSync(dstPath);
 
-nodeFiles.forEach(
-  (nodeFile) => {
-    var tsvPath = TSV_DIR + path.basename(nodeFile) + '.tsv'
-    console.log('"' + nodeFile + '" is queried...');
-    sparqlClient.query(endpoint, nodeFile, tsvPath, () => 
+nodeFiles.concat(edgeFiles).forEach(
+  (file) => {
+    var tsvPath = TSV_DIR + path.basename(file) + '.tsv'
+    console.log('"' + file + '" is queried...');
+    sparqlClient.query(endpoint, file, tsvPath, () => 
                        {
-                         console.log('"' + nodeFile + '" has been completed.');
+                         console.log('"' + file + '" has been completed.');
                          tsvToGPG.translateNode(tsvPath, dstPath)
                        }
                       );
   }
 );
-
-edgeFiles.forEach(
-  (edgeFile) => {
-    var tsvPath = TSV_DIR + path.basename(edgeFile) + '.tsv';
-    console.log('"' + edgeFile + '" is queried...');
-    sparqlClient.query(endpoint, edgeFile, tsvPath, () => 
-                       {
-                         console.log('"' + edgeFile + '" has been completed.');
-                         tsvToGPG.translateEdge(tsvPath, dstPath);
-                      }
-    );
-  }
-);
-
 
 function tryToMkdir(dst) {
   if(!fs.existsSync(dst))fs.mkdirSync(dst);

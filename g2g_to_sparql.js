@@ -1,3 +1,5 @@
+exports.g2gmlToSparql = g2gmlToSparql
+
 var g2gmlPath = process.argv[2];
 var dstPath = process.argv[3];
 
@@ -11,11 +13,8 @@ var yaml = require('js-yaml');
 var fs = require('fs');
 var path = require('path');
 
-exports.g2gmlToSparql = g2gmlToSparql
-
 function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
-  var sparqlList = [];
   var g2g = yaml.safeLoad(fs.readFileSync(g2gmlPath, 'utf8'));
   const NODES = 'nodes';
   const EDGES = 'edges';
@@ -31,26 +30,20 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   }
   node2Sparql = createNodeSparqlMap(g2g[NODES]);
   edge2Sparql = createEdgeSparqlMap(g2g[EDGES], g2g[NODES]);
-  var nodeFiles = [], edgeFiles = [];
-  Object.keys(node2Sparql).forEach(
-    (node) =>
-      {
-        var nodeFileName = dstLocation + node + '_nodes.sql';
-        nodeFiles.push(nodeFileName);
-        fs.writeFileSync(nodeFileName,  prefixPart + node2Sparql[node], 'utf8');
-      }
-  );
-
-
-  Object.keys(edge2Sparql).forEach(
-    (edge) =>
-      {
-        var edgeFileName = dstLocation + edge + '_edges.sql';
-        edgeFiles.push(edgeFileName);
-        fs.writeFileSync(edgeFileName,  prefixPart + edge2Sparql[edge], 'utf8');
-      }
-  );
+  var nodeFiles = writeSparqlFiles(node2Sparql, dstLocation, prefixPart, 'nodes');
+  var edgeFiles = writeSparqlFiles(edge2Sparql, dstLocation, prefixPart, 'edges');
   return [nodeFiles, edgeFiles];
+}
+
+function writeSparqlFiles(name2SparqlMap, dstLocation, header, suffix) {
+  return Object.keys(name2SparqlMap).map(
+    (name) =>
+      {
+        var fileName = dstLocation + name + '_' + suffix + '.sql';
+        fs.writeFileSync(fileName,  header + name2SparqlMap[name], 'utf8');
+        return fileName;
+      }
+  );
 }
 
 function createNodeSparqlMap(nodes) {
