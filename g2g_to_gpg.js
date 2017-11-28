@@ -9,7 +9,7 @@ var g2gPath = process.argv[2];
 var endpoint = process.argv[3];
 var dstPath = process.argv[4];
 
-var g2gmlToSparql = require('./g2gml_to_sparql.js');
+var g2gmlToSparql = require('./g2g_to_sparql.js');
 
 var inputName = path.basename(g2gPath);
 
@@ -18,7 +18,6 @@ var dstDir = './output/' + inputName;
 
 var sparqlDir = dstDir + '/sparql/';
 var tsvDir = dstDir + '/tsv/';
-var g2gmlToSparql = require('./g2gml_to_sparql.js');
 var client = require('./client.js');
 
 tryToMkdir(dstDir);
