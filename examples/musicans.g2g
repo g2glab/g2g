@@ -14,7 +14,7 @@ nodes:
 
 edges:
   member(musician, musician):
-    match:      ?group rdf:type schema:MusicGroup; dbpedia-owl:bandMember SN . ?group dbpedia-owl:bandMember DN
+    match:      ?group rdf:type schema:MusicGroup; dbpedia-owl:bandMember SN . ?group dbpedia-owl:bandMember DN . FILTER( SN != DN )
     label:      S rdfs:label O
     hometown:   S dbpedia-owl:hometown O
     pageLength: S dbpedia-owl:wikiPageLength O
