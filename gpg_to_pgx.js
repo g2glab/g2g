@@ -17,11 +17,15 @@ var edge_props = [];
 var node_props_type = [];
 var edge_props_type = [];
 
+var opv = 'output/' + pgx_prefix + '.opv';
+var ope = 'output/' + pgx_prefix + '.ope';
+var cnf = pgx_prefix + '.json';
+
 var sep = '\t';
 
-
-fs.writeFile(pgx_prefix + '.opv', '', function (err) {});
-fs.writeFile(pgx_prefix + '.ope', '', function (err) {});
+fs.writeFile(opv, '', function (err) {});
+fs.writeFile(ope, '', function (err) {});
+fs.writeFile(cnf, '', function (err) {});
 
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
@@ -45,7 +49,7 @@ rl.on('line', function(line) {
           node_props.push(key); 
           node_props_type.push(prop); 
         }
-        fs.appendFile(pgx_prefix + '.opv', output.join(sep) + '\n', function (err) {});
+        fs.appendFile(opv, output.join(sep) + '\n', function (err) {});
         //console.log(output.join(sep));
       }
     } else {
@@ -76,7 +80,7 @@ rl.on('line', function(line) {
             edge_props.push(key); 
             edge_props_type.push(prop); 
           }
-          fs.appendFile(pgx_prefix + '.ope', output.join(sep) + '\n', function (err) {});
+          fs.appendFile(ope, output.join(sep) + '\n', function (err) {});
           //console.log(output.join(sep));
         }
       }
@@ -89,8 +93,21 @@ rl.on('close', function() {
 });
 
 function create_load_config() {
-  console.log(node_props_type);
-  console.log(edge_props_type);
+  var config = {
+    vertex_uri_list: [ opv ]
+  , edge_uri_list: [ ope ]
+  , format: "flat_file"
+  , node_id_type: "string"
+  , edge_label: true
+  , vertex_props: node_props_type
+  , edge_props: edge_props_type
+  , separator: ","
+  , loading: {
+      load_edge_label:true
+    }
+  };
+  console.log(JSON.stringify(config));
+  fs.appendFile(cnf, JSON.stringify(config), function (err) {});
 }
 
 function check_items(items) {
