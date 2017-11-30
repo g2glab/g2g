@@ -16,7 +16,7 @@ edges:
   same_group(musician, musician):
     match:      ?group rdf:type schema:MusicGroup ; dbpedia-owl:bandMember SN . ?group dbpedia-owl:bandMember DN . FILTER( SN != DN )
     label:      ?group rdfs:label O . FILTER(lang(O) = "ja")
-    hometown:   ?group dbpedia-owl:hometown O
+    hometown:   ?group dbpedia-owl:hometown  / rdfs:label O . FILTER(lang(O) = "ja")
     pageLength: ?group dbpedia-owl:wikiPageLength O
 
   influenced(musician, musician):
