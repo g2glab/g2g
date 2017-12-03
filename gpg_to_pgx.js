@@ -17,15 +17,19 @@ var edge_props = [];
 var node_props_type = [];
 var edge_props_type = [];
 
-var opv = 'output/' + pgx_prefix + '.opv';
-var ope = 'output/' + pgx_prefix + '.ope';
+var opv = pgx_prefix + '.opv';
+var ope = pgx_prefix + '.ope';
 var cnf = pgx_prefix + '.json';
+
+var path_opv = './output/' + opv;
+var path_ope = './output/' + ope;
+var path_cnf = './output/' + cnf;
 
 var sep = '\t';
 
-fs.writeFile(opv, '', function (err) {});
-fs.writeFile(ope, '', function (err) {});
-fs.writeFile(cnf, '', function (err) {});
+fs.writeFile(path_opv, '', function (err) {});
+fs.writeFile(path_ope, '', function (err) {});
+fs.writeFile(path_cnf, '', function (err) {});
 
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
@@ -49,7 +53,7 @@ rl.on('line', function(line) {
           node_props.push(key); 
           node_props_type.push(prop); 
         }
-        fs.appendFile(opv, output.join(sep) + '\n', function (err) {});
+        fs.appendFile(path_opv, output.join(sep) + '\n', function (err) {});
         //console.log(output.join(sep));
       }
     } else {
@@ -80,7 +84,7 @@ rl.on('line', function(line) {
             edge_props.push(key); 
             edge_props_type.push(prop); 
           }
-          fs.appendFile(ope, output.join(sep) + '\n', function (err) {});
+          fs.appendFile(path_ope, output.join(sep) + '\n', function (err) {});
           //console.log(output.join(sep));
         }
       }
@@ -89,6 +93,8 @@ rl.on('line', function(line) {
 });
 
 rl.on('close', function() {
+  console.log('"' + path_opv + '" has been created.');
+  console.log('"' + path_ope + '" has been created.');
   create_load_config();
 });
 
@@ -101,13 +107,13 @@ function create_load_config() {
   , edge_label: true
   , vertex_props: node_props_type
   , edge_props: edge_props_type
-  , separator: ","
+  , separator: sep
   , loading: {
       load_edge_label:true
     }
   };
-  console.log(JSON.stringify(config));
-  fs.appendFile(cnf, JSON.stringify(config), function (err) {});
+  fs.appendFile(path_cnf, JSON.stringify(config), function (err) {});
+  console.log('"' + path_cnf + '" has been created.');
 }
 
 function check_items(items) {

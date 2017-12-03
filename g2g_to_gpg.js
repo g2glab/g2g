@@ -1,5 +1,5 @@
 // USAGE: $ node g2g_to_gpg.js <endpoint> <g2g_file> <dst_gpg>
-// EXAMPLE: $ node g2g_to_gpg.js examples/musicians.g2g http://dbpedia.org/sparql musician.gpg
+// EXAMPLE: $ node g2g_to_gpg.js http://dbpedia.org/sparql examples/musicians.g2g musician.gpg
 
 var endpoint = process.argv[2];
 var g2gPath = process.argv[3];
