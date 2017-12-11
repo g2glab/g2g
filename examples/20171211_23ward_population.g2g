@@ -1,0 +1,24 @@
+-- 仕様確認中
+
+PREFIX estat-measure: <http://data.e-stat.go.jp/lod/ontology/measure/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#>
+PREFIX cd-dimension: <http://data.e-stat.go.jp/lod/ontology/crossDomain/dimension/>
+PREFIX cd-code: <http://data.e-stat.go.jp/lod/ontology/crossDomain/code/>
+
+nodes:
+  ward:
+    match:  S dcterms:isPartOf <http://data.e-stat.go.jp/lod/sac/C13100-19700401>
+    label:  S rdfs:label O . FILTER(lang(O) = "ja")
+    issued: S dcterms:issued O
+    valid:  S dcterms:valid O
+
+  all-population:
+    match: ?wardcode estat-measure:population S ; sdmx-dimension:refArea / dcterms:isPartOf <http://data.e-stat.go.jp/lod/sac/C13100-19700401> ; cd-dimension:timePeriod ?year ; sdmx-dimension:refArea / rdfs:label ?ward ; cd-dimension:sex cd-code:sex-all ; cd-dimension:nationality cd-code:nationality-japan ; cd-dimension:age cd-code:age-all . FILTER(lang(?ward)="ja") .
+    year:  ?wardcode cd-dimension:timePeriod O
+    city:  ?wardcode sdmx-dimension:refArea / rdfs:label ?ward 
+    
+edges:
+  population(ward, all-population):
+    match: ?wardcode estat-measure:population DN ; sdmx-dimension:refArea / dcterms:isPartOf <http://data.e-stat.go.jp/lod/sac/C13100-19700401> ; cd-dimension:timePeriod ?year ; sdmx-dimension:refArea / rdfs:label SN ; cd-dimension:sex cd-code:sex-all ; cd-dimension:nationality cd-code:nationality-japan ; cd-dimension:age cd-code:age-all . FILTER(lang(?ward)="ja") .
