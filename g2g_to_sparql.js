@@ -1,38 +1,64 @@
 exports.g2gmlToSparql = g2gmlToSparql
 
-var g2gmlPath = process.argv[2];
-var dstPath = process.argv[3];
-
 const REQUIRED = "match";
 const SRC = "SN";
 const DST = "DN";
 const SUBJECT = "S";
 const OBJECT = "O";
 
-var yaml = require('js-yaml');
 var fs = require('fs');
 var path = require('path');
 
 function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
-  var g2g = yaml.safeLoad(fs.readFileSync(g2gmlPath, 'utf8'));
+  var blocks = [];
+  var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
   const NODES = 'nodes';
   const EDGES = 'edges';
-  for(let key in g2g) {
-    var value = g2g[key];
-    if(key != NODES && key != EDGES) {
-      if(key.startsWith('PREFIX')){
-        prefixPart += key+': ' + value + '\n';
-      } else {
-        throw 'invalid entry: ' + key;
+  var inPrefix = true;
+  var currentBlock = [];
+  g2g.split('\n').forEach(
+    (line) => {
+      if(line.startsWith('#')) return;
+      if(line.trim().length == 0) {
+        inPrefix = false;
+        return;
+      }
+      if(inPrefix) prefixPart += line + '\n';
+      else {
+        if(!line.startsWith(' ') && currentBlock.length > 0) {
+          blocks.push(currentBlock);
+          currentBlock = [];
+        }
+        currentBlock += line;
       }
     }
-  }
-  node2Sparql = createNodeSparqlMap(g2g[NODES]);
-  edge2Sparql = createEdgeSparqlMap(g2g[EDGES], g2g[NODES]);
+  )
+  [node2Sparql, edge2Sparql] = parseBlocks(blocks);
   var nodeFiles = writeSparqlFiles(node2Sparql, dstLocation, prefixPart, 'nodes');
   var edgeFiles = writeSparqlFiles(edge2Sparql, dstLocation, prefixPart, 'edges');
   return [nodeFiles, edgeFiles];
+}
+
+function parseBlocks(blocks) {
+  var header = blocks[0];
+  var whereClauses = blocks.slice(1, blocks.length);
+  [nodeDeclaration, edgeDeclaration] = parseDeclaration(header);
+}
+
+function parseDeclaration(header) {
+  var edgeRegex = /\((.+)\)\-\[(.+)\]\-\((.+)\)/;
+  var matched = header.match(edgeRegex)
+  if(matched) {
+    return [null, { node1: parseElement(matched[1]),
+                    edge: parseElement(matched[2]),
+                    node2: parseElement(matched[3]) } ];
+  }
+  else return [parseElement(header.slice(1, header.length - 1)), null];
+}
+
+function parseElement(element) {
+  
 }
 
 function writeSparqlFiles(name2SparqlMap, dstLocation, header, suffix) {
@@ -143,3 +169,6 @@ function parseEdgeDeclaration(declaration) {
       src: arguments[0].trim(),
       dst: arguments[1].trim()};
 }
+
+// for test
+g2gmlToSparql('./examples/musician_sparql.g2g', '')
