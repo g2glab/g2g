@@ -37,27 +37,49 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
 }
 
 function edgeSelectClause(edge, nodes) {
-  var node1Required = replaceVariableInRequired(edge.node1, nodes);
-  var node2Required = replaceVariableInRequired(edge.node2, nodes);
-  return 'SELECT\n' +
-    '  ?' + edge.node1.variable + ' \n' +
-    '  ?' + edge.node2.variable + ' \n' +
-    '  "' + edge.label.name + '" AS ?type \n' +
-    edge.properties.map(
-      (prop, index) =>
-        '  "' + prop.name + '" AS ?P' + index + '\n' +
-        '  ?' + prop.variable + '\n').join('') +
-    '  WHERE {\n' + 
-    node1Required + '\n' + 
-    node2Required + '\n' + 
-    edge.where.join('\n') +
-    '\n}';
-    
+  var whereClause = edge.where.join('\n  ');
+  whereClause = addNodeRequired(whereClause, edge.node1, nodes);
+  whereClause = addNodeRequired(whereClause, edge.node2, nodes);
+  var lines = 
+      ['SELECT',
+       '?' + edge.node1.variable,
+       '?' + edge.node2.variable,
+       '"' + edge.label.name + '" AS ?type',
+       edge.properties.map((prop, index) =>
+        '"' + prop.name + '" AS ?P' + index + '\n' +
+        '  ?' + prop.variable).join('\n  '),
+       'WHERE {',
+       whereClause,
+       '}'];
+  return lines.join('\n  ');
 }
 
 // TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
-function replaceVariableInRequired(newNode, nodes) {
-  return nodes[newNode.name].required.join('\n').replace(new RegExp(nodes[newNode.name].label.variable,"g"), newNode.variable);
+function addNodeRequired(whereClause, addedNode, nodes) {
+  var required = nodes[addedNode.name].required.join('\n  ');
+  var existingVars = getVariables(whereClause);
+  var localVars = getVariables(required);
+  console.log("exist" + existingVars);
+  console.log("local" + localVars);
+  var varsToReplace = [];
+  localVars.forEach( (v) => {
+    if(addedNode.name == v || !existingVars.includes(v)) return;
+    var newName = v + '_';
+    while(existingVars.includes(newName)) {
+      newName += '_';
+    }
+    varsToReplace.push({from: v, to: newName});
+    existingVars.push(newName);
+  });
+  var replaced = replaceVariable(required, nodes[addedNode.name].label.variable, addedNode.variable);
+  varsToReplace.forEach((v) => {
+    replaced = replaceVariable(replaced, v.from, v.to);
+  });
+  return whereClause + replaced;
+}
+
+function replaceVariable(srcStr, from, to) {
+  return srcStr.replace(new RegExp('(\\W|^)\\'+ from + '(\\W|$)', "g"), '$1' + to + '$2');
 }
 
 function nodeSelectClause(nodeDefinition) {
@@ -106,6 +128,17 @@ function parseBlock(block, map) {
     edgeDeclaration.where = whereClauses;
     map.edges[edgeDeclaration.label.name] = edgeDeclaration;
   }
+}
+
+function getVariables(str) {
+  var vars = [];
+  var regex = /(\?.+?)\W/g
+  var matched = regex.exec(str);
+  while(matched) {
+    vars.push(matched[1]);
+    matched = regex.exec(str);
+  }
+  return vars;
 }
 
 function parseDeclaration(header) {
