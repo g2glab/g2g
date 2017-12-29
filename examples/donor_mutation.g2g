@@ -2,23 +2,21 @@ PREFIX icgc: <http://icgc.link/vocab/>
 PREFIX icgc-class: <http://icgc.link/>
 PREFIX faldo: <http://biohackathon.org/resource/faldo>
 
-nodes:
-  donor:
-    match:  S rdf:type icgc-class:Donor
-    label:  S rdfs:label O
-    age:    S icgc:age_at_diagnosis O
-    gender: S icgc:sex O
-  mutation:
-    match:  S rdf:type icgc-class:Mutation
-    label:  S rdfs:label O
-    start_position:
-      S faldo:region ?r . ?r faldo:begin ?b . ?b faldo:position O
-  effect:
-    match:  S rdf:type icgc-class:Effect
+(don:donor {label: l, age: a, gender: g } )
+    ?don rdf:type icgc-class:Donor.
+    OPTIONAL { ?don rdfs:label ?l }
+    OPTIONAL { ?don icgc:age_at_diagnosis ?a }
+    OPTIONAL { ?don icgc:sex ?g }
+(m:mutation {label: l, start_position: s } )
+    ?m rdf:type icgc-class:Mutation.
+    OPTIONAL { ?m rdfs:label ?l }
+    OPTIONAL { ?m faldo:region ?r . ?r faldo:begin ?b . ?b faldo:position ?s }
+(e:effect)
+    ?e rdf:type icgc-class:Effect.
 
-edges:
-  has_mutation(donor, mutation):
-    match:         ?det icgc:donor SN . ?det icgc:mutation DN
-    quality_score: ?det icgc:quality_score O
-  affects(mutation, effect):
-    match:         SN ^icgc:mutation DN . ?effect icgc:gene_affected ?gene
+(d:donor)-[:has_mutation { quality_score: q } ]-(m:mutation):
+    ?det icgc:donor ?d. 
+    ?det icgc:mutation ?n.
+    ?det icgc:quality_score ?q.
+(m:mutation)-[:affects]-(e:effect)
+    ?m ^icgc:mutation ?e. ?e icgc:gene_affected ?gene.
