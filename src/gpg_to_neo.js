@@ -1,6 +1,6 @@
 // USAGE: $ node gpg_to_neo.js <gpg_file> <prefix>
 // OUTPUT_DIR: output/
-// OUTPUT_FILES: <prefix>_<type>.csv
+// OUTPUT_FILES: <prefix>.neo.nodes <prefix>.neo.edges
 
 var pgp_file = process.argv[2];
 var prefix = process.argv[3];
@@ -8,8 +8,6 @@ var prefix = process.argv[3];
 var fs = require('fs');
 var readline = require('readline');
 
-var rs = fs.createReadStream(pgp_file);
-var rl = readline.createInterface(rs, {});
 
 var cnt_nodes = 0;
 var cnt_edges = 0;
@@ -30,14 +28,16 @@ fs.writeFile(path_edges, '', function (err) {});
 
 var sep = ',';
 
+
+var rs = fs.createReadStream(pgp_file);
+var rl = readline.createInterface(rs, {});
+
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
     var items = line.match(/\w+|"[^"]+"/g);
     check_items(items);
     if (is_prop(line.split(/\s+/)[1])) {
       // This line is a node
-      cnt_nodes++;
-      var id = items[0];
       // For each property, check if it is listed
       for (var i=1; i<items.length-1; i=i+2) {
         var key = items[i];
@@ -51,20 +51,11 @@ rl.on('line', function(line) {
       }
     } else {
       // This line is a edge
-      cnt_edges++;
-      var label;
-      // Find "type" property and store as "label"
-      for (var i=2; i<items.length-1; i=i+2) {
-        if (items[i] == 'type') {
-          label = items[i+1];
-        }
-      }
-      // For each property, add 1 line
+      // For each property, check if it is listed
       for (var i=2; i<items.length-1; i=i+2) {
         var key = items[i];
         var val = items[i+1];
         var type = eval_type(val);
-        var output = [];
         if (key != 'type') {
           if (edge_props.indexOf(key) == -1) {
             var prop = { name: key, type: type };
@@ -78,11 +69,12 @@ rl.on('line', function(line) {
 });
 
 rl.on('close', function() {
-  console.log('"' + path_nodes + '" has been created.');
-  console.log('"' + path_edges + '" has been created.');
   writeHeaderNodes(function() {
     writeHeaderEdges(function() {
-      write();
+      writeNodesAndEdges(function() {
+        console.log('"' + path_nodes + '" has been created.');
+        console.log('"' + path_edges + '" has been created.');
+      });
     });
   });
 });
@@ -91,7 +83,11 @@ var writeHeaderNodes = function(callback) {
   var output = [];
   output[0] = 'id:ID';
   for (var i=0; i<node_props.length; i++) {
-    output[i + 1] = node_props[i];
+    if (node_props[i] == 'type') {
+      output[i + 1] = ':LABEL';
+    } else {
+      output[i + 1] = node_props[i];
+    }
   }
   fs.appendFile(path_nodes, output.join(sep) + '\n', function (err) {});
   callback();
@@ -109,7 +105,7 @@ var writeHeaderEdges = function(callback) {
   callback();
 };
 
-function write() {
+var writeNodesAndEdges = function(callback) {
   var rs = fs.createReadStream(pgp_file);
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
@@ -136,13 +132,6 @@ function write() {
         fs.appendFile(path_nodes, output.join(sep) + '\n', function (err) {});
     } else {
       // This line is a edge
-      var label;
-      // Find "type" property and store as "label"
-      for (var i=2; i<items.length-1; i=i+2) {
-        if (items[i] == 'type') {
-          label = items[i+1];
-        }
-      }
       var output = [];
       output[0] = items[0]; // source node
       output[1] = items[1]; // target node
@@ -162,15 +151,17 @@ function write() {
         }
       }
       fs.appendFile(path_edges, output.join(sep) + '\n', function (err) {});
-      //console.log(output.join(sep));
+      }
     }
-  }
-});
+  });
+  rl.on('close', function() {
+    callback();
+  });
 }
 
 function check_items(items) {
   for(var i=0; i<items.length; i++){
-    items[i] = items[i].replace(/"/g,'');
+    //items[i] = items[i].replace(/"/g,'');
     if (items[i].match(/\t/)) {
       console.log('WARNING: This item has tab(\\t): ' + items[i]);
     }

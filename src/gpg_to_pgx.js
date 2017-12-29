@@ -1,7 +1,9 @@
-// USAGE: $ node gpg2pgx.js <gpg_file> <pgx_file>
+// USAGE: $ node gpg_to_pgx.js <gpg_file> <pgx_files_prefix>
+// OUTPUT_DIR: output/
+// OUTPUT_FILES: <prefix>.opv <prefix>.ope <prefix>.json
 
 var pgp_file = process.argv[2];
-var pgx_prefix = process.argv[3];
+var prefix = process.argv[3];
 
 var fs = require('fs');
 var readline = require('readline');
@@ -17,9 +19,9 @@ var edge_props = [];
 var node_props_type = [];
 var edge_props_type = [];
 
-var opv = pgx_prefix + '.opv';
-var ope = pgx_prefix + '.ope';
-var cnf = pgx_prefix + '.json';
+var opv = prefix + '.opv';
+var ope = prefix + '.ope';
+var cnf = prefix + '.json';
 
 var path_opv = './output/' + opv;
 var path_ope = './output/' + ope;
@@ -166,7 +168,7 @@ function is_string(str) {
   }
 };
 
-function isInteger(x) {
+function is_integer(x) {
   return Math.round(x) === x;
 };
 
