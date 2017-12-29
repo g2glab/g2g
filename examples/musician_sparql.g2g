@@ -5,22 +5,22 @@ PREFIX schema: <http://schema.org/>
 PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
 
 # Node mappings
-(mus:Musician label born hometown pageLength)
+(mus:Musician {label:nam, born:dat, hometown:twn, pageLength:len})
     ?mus a foaf:Person .
     ?mus a dbpedia-owl:MusicalArtist .
-    OPTIONAL { ?mus rdfs:label ?label . FILTER(lang(?label) = "ja") }
-    OPTIONAL { ?mus prop-ja:born ?born }
-    OPTIONAL { ?mus dbpedia-owl:hometown ?hometown }
-    OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?pageLength }
+    OPTIONAL { ?mus rdfs:label ?nam . FILTER(lang(?nam) = "ja") }
+    OPTIONAL { ?mus prop-ja:born ?dat }
+    OPTIONAL { ?mus dbpedia-owl:hometown ?twn }
+    OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
 
 # Edge mappings
-(mus1:Musician)-[:same_group label hometown pageLength]-(mus2:Musician)
+(mus1:Musician)-[:same_group {label:nam, hometown:twn, pageLength:len}]-(mus2:Musician)
     ?grp a schema:MusicGroup .
     ?grp dbpedia-owl:bandMember ?mus1 , ?mus2 .
     FILTER(?mus1 != ?mus2)
-    OPTIONAL { ?grp rdfs:label ?label . FILTER(lang(?label) = "ja") }
-    OPTIONAL { ?grp dbpedia-owl:hometown ?hometown }
-    OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?pageLength }
+    OPTIONAL { ?grp rdfs:label ?label . FILTER(lang(?nam) = "ja") }
+    OPTIONAL { ?grp dbpedia-owl:hometown ?twn }
+    OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
-(mus1:Musisian)-[:influenced]-(mus2:Musician)
+(mus1:Musician)-[:influenced]-(mus2:Musician)
     ?mus1 dbpedia-owl:influenced ?mus2 .

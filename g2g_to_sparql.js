@@ -17,7 +17,7 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   const EDGES = 'edges';
   var inPrefix = true;
   var currentBlock = [];
-  g2g.split('\n').forEach(
+  g2g.split(/\r\n|\r|\n/).forEach(
     (line) => {
       if(line.startsWith('#')) return;
       if(line.trim().length == 0) {
@@ -30,35 +30,128 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
           blocks.push(currentBlock);
           currentBlock = [];
         }
-        currentBlock += line;
+        currentBlock.push(line);
       }
     }
   )
+  if(currentBlock.length > 0) blocks.push(currentBlock);
+  var node2Sparql, edge2Sparql;
   [node2Sparql, edge2Sparql] = parseBlocks(blocks);
   var nodeFiles = writeSparqlFiles(node2Sparql, dstLocation, prefixPart, 'nodes');
   var edgeFiles = writeSparqlFiles(edge2Sparql, dstLocation, prefixPart, 'edges');
   return [nodeFiles, edgeFiles];
 }
 
+function edgeSelectClause(edge, nodes) {
+  var node1Required = replaceVariableInRequired(edge.node1, nodes);
+  var node2Required = replaceVariableInRequired(edge.node2, nodes);
+  return 'SELECT\n' +
+    '  ?' + edge.node1.variable + ' \n' +
+    '  ?' + edge.node2.variable + ' \n' +
+    '  "' + edge.label.name + '" AS ?type \n' +
+    edge.properties.map(
+      (prop, index) =>
+        '  "' + prop.name + '" AS ?P' + index + '\n' +
+        '  ?' + prop.variable + '\n').join('') +
+    '  WHERE {\n' + 
+    node1Required + '\n' + 
+    node2Required + '\n' + 
+    edge.where.join('\n') +
+    '}\n';
+    
+}
+
+// TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
+function replaceVariableInRequired(newNode, nodes) {
+  return nodes[newNode.name].required.join('\n').replace(new RegExp(nodes[newNode.name].label.variable,"g"), newNode.variable);
+}
+
+function nodeSelectClause(nodeDefinition) {
+  return 'SELECT\n' +
+    '  ?' + nodeDefinition.label.variable + ' AS ?nid \n' +
+    '  "' + nodeDefinition.label.name + '" AS ?type \n' + 
+    nodeDefinition.properties.map(
+      (prop, index) =>
+        '  "' + prop.name + '" AS ?P' + index + '\n' +
+        '  ?' + prop.variable + '\n').join('') +
+    '  WHERE { \n' + 
+    nodeDefinition.where.join('\n') +
+    '}\n';
+}
+
+// {nodes: {<name>: {required: ~, where: ~, label: {}, properties: []}, edges: {<name>: {node1: {name: ~, variable: ~ }, where: ~, node2: {}, label: {name: ~. props: []}} }
 function parseBlocks(blocks) {
-  var header = blocks[0];
-  var whereClauses = blocks.slice(1, blocks.length);
+  var map = {nodes: {}, edges: {}};
+  blocks.forEach((block) => parseBlock(block, map));
+
+  var nodeSparqls = {};
+  var edgeSparqls = {};
+
+  Object.keys(map.nodes).forEach( (node) => {
+    nodeSparqls[node] = nodeSelectClause(map.nodes[node]); 
+  });
+
+  Object.keys(map.edges).forEach( (edge) => {
+    edgeSparqls[edge] = edgeSelectClause(map.edges[edge], map.nodes); 
+  });
+  return [nodeSparqls, edgeSparqls];
+}
+
+function parseBlock(block, map) {
+  var header = block[0];
+  var whereClauses = block.slice(1, block.length);
+  var nodeDeclaration, edgeDeclaration;
   [nodeDeclaration, edgeDeclaration] = parseDeclaration(header);
+  if(nodeDeclaration != null) {
+    var requiredClauses = whereClauses.filter((line) => !line.trim().startsWith('OPTIONAL'));
+    map.nodes[nodeDeclaration.label.name] = {required: requiredClauses,
+                                              where: whereClauses,
+                                              label: nodeDeclaration.label,
+                                              properties: nodeDeclaration.properties};
+  } else {
+    edgeDeclaration.where = whereClauses;
+    map.edges[edgeDeclaration.label.name] = edgeDeclaration;
+  }
 }
 
 function parseDeclaration(header) {
-  var edgeRegex = /\((.+)\)\-\[(.+)\]\-\((.+)\)/;
+  //var edgeRegex = /\((.+)\)\-\[(.+)\]\-\((.+)\)/;
+  var edgeRegex = /\((.+)\)\-\[(.+)\]-\((.+)\)/;
   var matched = header.match(edgeRegex)
   if(matched) {
-    return [null, { node1: parseElement(matched[1]),
-                    edge: parseElement(matched[2]),
-                    node2: parseElement(matched[3]) } ];
+    var edgeMap = parseElement(matched[2]);
+    edgeMap.node1 = parseElement(matched[1]).label;
+    edgeMap.node2 = parseElement(matched[3]).label;
+    return [null, edgeMap];
   }
   else return [parseElement(header.slice(1, header.length - 1)), null];
 }
 
+// input: string like "<variable>:<label> {<variable>:<property> (, <variable>:<property>)*}"
+// output: object like {label: {name: <label>, variable: <variable>}, properties: [{name: <label>, variable: <variable>}, ...] }
 function parseElement(element) {
-  
+  var labelPart, propertyPart, labelVariable, labelName;
+  [labelPart, propertyPart] = element.split('{');
+  var result = {};
+  var label_var, label_name;
+  [label_var, label_name] = parseKeyValue(labelPart);
+  result.label = {name: label_name, variable: label_var};
+  if(propertyPart != null) {
+    propertyPart = propertyPart.replace('}', '');
+    result.properties = propertyPart.split(',').map((property) => {
+                          var prop_var, prop_name;
+                          [prop_name, prop_var] = parseKeyValue(property);
+                          return {name: prop_name, variable: prop_var};
+                        });
+  } else {
+    result.properties = [];
+  }
+  return result;
+}
+
+// input: string like "<key>:<value>"
+function parseKeyValue(kv) {
+  return kv.split(':').map((str) => str.trim());
 }
 
 function writeSparqlFiles(name2SparqlMap, dstLocation, header, suffix) {
@@ -169,6 +262,3 @@ function parseEdgeDeclaration(declaration) {
       src: arguments[0].trim(),
       dst: arguments[1].trim()};
 }
-
-// for test
-g2gmlToSparql('./examples/musician_sparql.g2g', '')
