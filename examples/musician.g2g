@@ -6,20 +6,20 @@ PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
 
 # Node mappings
 (mus:Musician {label:nam, born:dat, hometown:twn, pageLength:len})
-    ?mus a foaf:Person .
-    ?mus a dbpedia-owl:MusicalArtist .
-    OPTIONAL { ?mus rdfs:label ?nam . FILTER(lang(?nam) = "ja") }
+    ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
+    ?mus rdfs:label ?nam .
+    FILTER regex(str(?nam), "^A.*") .
     OPTIONAL { ?mus prop-ja:born ?dat }
-    OPTIONAL { ?mus dbpedia-owl:hometown ?twn }
+    OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn }
     OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
 
 # Edge mappings
 (mus1:Musician)-[:same_group {label:nam, hometown:twn, pageLength:len}]-(mus2:Musician)
-    ?grp a schema:MusicGroup .
-    ?grp dbpedia-owl:bandMember ?mus1 , ?mus2 .
+    ?grp a schema:MusicGroup ;
+         dbpedia-owl:bandMember ?mus1 , ?mus2 .
     FILTER(?mus1 != ?mus2)
-    OPTIONAL { ?grp rdfs:label ?label . FILTER(lang(?nam) = "ja") }
-    OPTIONAL { ?grp dbpedia-owl:hometown ?twn }
+    OPTIONAL { ?grp rdfs:label ?label}
+    OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn }
     OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
 (mus1:Musician)-[:influenced]-(mus2:Musician)
