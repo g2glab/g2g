@@ -5,7 +5,6 @@
 var childProcess = require('child_process');
 
 function runScript(scriptPath, callback, ...args) {
-
   // keep track of whether callback has been invoked to prevent multiple invocations
   var process = childProcess.fork(scriptPath, args);
   var invoked = false;
@@ -41,4 +40,4 @@ function afterGpg(err) {
   }
 }
 
-runScript('./g2g_to_gpg.js', afterGpg, endpoint, g2gPath, gpgPath);
+runScript('./src/g2g_to_gpg.js', afterGpg, endpoint, g2gPath, gpgPath);
