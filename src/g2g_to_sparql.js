@@ -47,10 +47,12 @@ function edgeSelectClause(edge, nodes) {
        '"' + edge.label.name + '" AS ?type',
        edge.properties.map((prop, index) =>
         '"' + prop.name + '" AS ?P' + index + '\n' +
-        '  ?' + prop.variable).join('\n  '),
+        '  SAMPLE(?' + prop.variable+ ')').join('\n  '),
        'WHERE {',
        whereClause,
-       '}'];
+       '}',
+       'GROUP BY ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ?type',
+        ];
   return lines.join('\n  ');
 }
 
@@ -87,10 +89,11 @@ function nodeSelectClause(nodeDefinition) {
     nodeDefinition.properties.map(
       (prop, index) =>
         '  "' + prop.name + '" AS ?P' + index + '\n' +
-        '  ?' + prop.variable + '\n').join('') +
+        '  SAMPLE(?' + prop.variable + ')\n').join('') +
     '  WHERE { \n' + 
     nodeDefinition.where.join('\n') +
-    '\n}';
+    '\n}' +
+    '  GROUP BY ?' + nodeDefinition.label.variable;
 }
 
 // {nodes: {<name>: {required: ~, where: ~, label: {}, properties: []}, edges: {<name>: {node1: {name: ~, variable: ~ }, where: ~, node2: {}, label: {name: ~. props: []}} }
