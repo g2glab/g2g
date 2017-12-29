@@ -1,6 +1,0 @@
-{
-  "endpoint"  : "http://localhost:8890/sparql"
-, "strReject" : "create|drop|insert|delete"
-, "port"      : 9001
-, "caching"   : false
-}
