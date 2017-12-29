@@ -1,23 +1,26 @@
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX prop-ja: <http://ja.dbpedia.org/property/>
 PREFIX schema: <http://schema.org/>
-PREFIX dbpedia-owl:	<http://dbpedia.org/ontology/>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
 
-nodes:
-  musician:
-    match:      S rdf:type foaf:Person , dbpedia-owl:MusicalArtist
-    label:      S rdfs:label O . FILTER(lang(O) = "ja")
-    born:       S prop-ja:born O
-    hometown:   S dbpedia-owl:hometown O
-    pageLength: S dbpedia-owl:wikiPageLength O
+# Node mappings
+(mus:Musician {label:nam, born:dat, hometown:twn, pageLength:len})
+    ?mus a foaf:Person .
+    ?mus a dbpedia-owl:MusicalArtist .
+    OPTIONAL { ?mus rdfs:label ?nam . FILTER(lang(?nam) = "ja") }
+    OPTIONAL { ?mus prop-ja:born ?dat }
+    OPTIONAL { ?mus dbpedia-owl:hometown ?twn }
+    OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
 
-edges:
-  same_group(musician, musician):
-    match:      ?group rdf:type schema:MusicGroup ; dbpedia-owl:bandMember SN . ?group dbpedia-owl:bandMember DN . FILTER( SN != DN )
-    label:      ?group rdfs:label O . FILTER(lang(O) = "ja")
-    hometown:   ?group dbpedia-owl:hometown O
-    pageLength: ?group dbpedia-owl:wikiPageLength O
+# Edge mappings
+(mus1:Musician)-[:same_group {label:nam, hometown:twn, pageLength:len}]-(mus2:Musician)
+    ?grp a schema:MusicGroup .
+    ?grp dbpedia-owl:bandMember ?mus1 , ?mus2 .
+    FILTER(?mus1 != ?mus2)
+    OPTIONAL { ?grp rdfs:label ?label . FILTER(lang(?nam) = "ja") }
+    OPTIONAL { ?grp dbpedia-owl:hometown ?twn }
+    OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
-  influenced(musician, musician):
-    match:      SN dbpedia-owl:influenced DN
+(mus1:Musician)-[:influenced]-(mus2:Musician)
+    ?mus1 dbpedia-owl:influenced ?mus2 .
