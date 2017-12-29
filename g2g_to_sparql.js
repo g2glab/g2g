@@ -51,7 +51,7 @@ function edgeSelectClause(edge, nodes) {
     node1Required + '\n' + 
     node2Required + '\n' + 
     edge.where.join('\n') +
-    '}\n';
+    '\n}';
     
 }
 
@@ -70,7 +70,7 @@ function nodeSelectClause(nodeDefinition) {
         '  ?' + prop.variable + '\n').join('') +
     '  WHERE { \n' + 
     nodeDefinition.where.join('\n') +
-    '}\n';
+    '\n}';
 }
 
 // {nodes: {<name>: {required: ~, where: ~, label: {}, properties: []}, edges: {<name>: {node1: {name: ~, variable: ~ }, where: ~, node2: {}, label: {name: ~. props: []}} }
