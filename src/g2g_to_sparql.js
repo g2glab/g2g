@@ -59,8 +59,6 @@ function addNodeRequired(whereClause, addedNode, nodes) {
   var required = nodes[addedNode.name].required.join('\n  ');
   var existingVars = getVariables(whereClause);
   var localVars = getVariables(required);
-  console.log("exist" + existingVars);
-  console.log("local" + localVars);
   var varsToReplace = [];
   localVars.forEach( (v) => {
     if(addedNode.name == v || !existingVars.includes(v)) return;

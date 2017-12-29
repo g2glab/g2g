@@ -9,6 +9,7 @@ PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
     ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
     ?mus rdfs:label ?nam .
     FILTER regex(str(?nam), "^A.*") .
+    FILTER(lang(?nam) = "ja") .
     OPTIONAL { ?mus prop-ja:born ?dat }
     OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn }
     OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
@@ -18,7 +19,7 @@ PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
     ?grp a schema:MusicGroup ;
          dbpedia-owl:bandMember ?mus1 , ?mus2 .
     FILTER(?mus1 != ?mus2)
-    OPTIONAL { ?grp rdfs:label ?label}
+    OPTIONAL { ?grp rdfs:label ?nam. FILTER(lang(?nam) = "ja")}
     OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn }
     OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
