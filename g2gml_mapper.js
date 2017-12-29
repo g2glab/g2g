@@ -30,9 +30,10 @@ function afterGpg(err) {
   if(err) throw err;
   switch(dstFormat) {
     case 'neo':
-    throw 'mapping to neo4j is not supported yet';
+    runScript('./src/gpg_to_neo.js', (err) => {if(err) throw err; console.log('Done.');}, gpgPath, dstPrefix);
+    break;
     case 'pgx':
-    runScript('./gpg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, gpgPath, dstPrefix);
+    runScript('./src/gpg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, gpgPath, dstPrefix);
     break;
     case 'gpg':
     console.log('Done.');
