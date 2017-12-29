@@ -14,9 +14,8 @@ PREFIX faldo: <http://biohackathon.org/resource/faldo>
 (e:effect)
     ?e rdf:type icgc-class:Effect.
 
-(d:donor)-[:has_mutation { quality_score: q } ]-(m:mutation):
-    ?det icgc:donor ?d. 
-    ?det icgc:mutation ?n.
+(d:donor)-[:has_mutation { quality_score: q } ]-(m:mutation)
+    ?det icgc:donor ?d. ?det icgc:mutation ?m.
     ?det icgc:quality_score ?q.
 (m:mutation)-[:affects]-(e:effect)
     ?m ^icgc:mutation ?e. ?e icgc:gene_affected ?gene.
