@@ -1,4 +1,4 @@
-// USAGE: $ node g2gml_mapper.js <pgp|neo|pgx> <endpoint> <g2g_file> <dst_prefix>
+// USAGE: $ node g2gml_mapper.js <gpg|neo|pgx> <endpoint> <g2g_file> <dst_prefix>
 
 [dstFormat, endpoint, g2gPath, dstPrefix] = process.argv.slice(2);
 
