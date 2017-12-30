@@ -28,7 +28,6 @@ fs.writeFile(path_edges, '', function (err) {});
 
 var sep = ',';
 
-
 var rs = fs.createReadStream(pgp_file);
 var rl = readline.createInterface(rs, {});
 
@@ -97,9 +96,12 @@ var writeHeaderEdges = function(callback) {
   var output = [];
   output[0] = ':START_ID';
   output[1] = ':END_ID';
-  output[2] = ':TYPE';
   for (var i=0; i<edge_props.length; i++) {
-    output[i + 3] = edge_props[i];
+　　if (node_props[i] == '"type"') {
+      output[i + 2] = ':TYPE';
+    } else {
+      output[i + 2] = edge_props[i];
+    }
   }
   fs.appendFile(path_edges, output.join(sep) + '\n', function (err) {});
   callback();
@@ -140,11 +142,11 @@ var writeNodesAndEdges = function(callback) {
         var key = items[i];
         var val = items[i+1];
         if (key == 'type') {
-          output[2] = val; // label
+          output[2] = val; // type
         } else {
           var index = edge_props.indexOf(key);
           if (index != -1) {
-            output[index + 3] = val;
+            output[index + 2] = val;
           } else {
             console.log('WARNING: This edge property is not defined: ' + key);
           }
