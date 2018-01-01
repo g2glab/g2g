@@ -8,10 +8,6 @@ var prefix = process.argv[3];
 var fs = require('fs');
 var readline = require('readline');
 
-
-var cnt_nodes = 0;
-var cnt_edges = 0;
-
 var node_props = [];
 var edge_props = [];
 var node_props_type = [];
@@ -28,46 +24,7 @@ fs.writeFile(path_edges, '', function (err) {});
 
 var sep = ',';
 
-var rs = fs.createReadStream(pgp_file);
-var rl = readline.createInterface(rs, {});
-
-rl.on('line', function(line) {
-  if (line.charAt(0) != '#') {
-    var items = line.match(/\w+|"[^"]+"/g);
-    check_items(items);
-    if (is_prop(line.split(/\s+/)[1])) {
-      // This line is a node
-      // For each property, check if it is listed
-      for (var i=1; i<items.length-1; i=i+2) {
-        var key = items[i];
-        var val = items[i+1];
-        var type = eval_type(val);
-        if (node_props.indexOf(key) == -1) {
-          var prop = { name: key, type: type };
-          node_props.push(key);
-          node_props_type.push(prop);
-        }
-      }
-    } else {
-      // This line is a edge
-      // For each property, check if it is listed
-      for (var i=2; i<items.length-1; i=i+2) {
-        var key = items[i];
-        var val = items[i+1];
-        var type = eval_type(val);
-        if (key != 'type') {
-          if (edge_props.indexOf(key) == -1) {
-            var prop = { name: key, type: type };
-            edge_props.push(key);
-            edge_props_type.push(prop);
-          }
-        }
-      }
-    }
-  }
-});
-
-rl.on('close', function() {
+listProps(function() {
   writeHeaderNodes(function() {
     writeHeaderEdges(function() {
       writeNodesAndEdges(function() {
@@ -78,7 +35,50 @@ rl.on('close', function() {
   });
 });
 
-var writeHeaderNodes = function(callback) {
+function listProps(callback) {
+  var rs = fs.createReadStream(pgp_file);
+  var rl = readline.createInterface(rs, {});
+  rl.on('line', function(line) {
+    if (line.charAt(0) != '#') {
+      var items = line.match(/\w+|"[^"]+"/g);
+      checkItems(items);
+      if (isProp(line.split(/\s+/)[1])) {
+        // This line is a node
+        // For each property, check if it is listed
+        for (var i=1; i<items.length-1; i=i+2) {
+          var key = items[i];
+          var val = items[i+1];
+          var type = evalType(val);
+          if (node_props.indexOf(key) == -1) {
+            var prop = { name: key, type: type };
+            node_props.push(key);
+            node_props_type.push(prop);
+          }
+        }
+      } else {
+        // This line is a edge
+        // For each property, check if it is listed
+        for (var i=2; i<items.length-1; i=i+2) {
+          var key = items[i];
+          var val = items[i+1];
+          var type = evalType(val);
+          if (key != 'type') {
+            if (edge_props.indexOf(key) == -1) {
+              var prop = { name: key, type: type };
+              edge_props.push(key);
+              edge_props_type.push(prop);
+            }
+          }
+        }
+      }
+    }
+  });
+  rl.on('close', function() {
+    callback();
+  });
+}
+
+function writeHeaderNodes(callback) {
   var output = [];
   output[0] = 'id:ID';
   for (var i=0; i<node_props.length; i++) {
@@ -90,9 +90,9 @@ var writeHeaderNodes = function(callback) {
   }
   fs.appendFile(path_nodes, output.join(sep) + '\n', function (err) {});
   callback();
-};
+}
 
-var writeHeaderEdges = function(callback) {
+function writeHeaderEdges(callback) {
   var output = [];
   output[0] = ':START_ID';
   output[1] = ':END_ID';
@@ -105,18 +105,17 @@ var writeHeaderEdges = function(callback) {
   }
   fs.appendFile(path_edges, output.join(sep) + '\n', function (err) {});
   callback();
-};
+}
 
-var writeNodesAndEdges = function(callback) {
+function writeNodesAndEdges(callback) {
   var rs = fs.createReadStream(pgp_file);
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
       var items = line.match(/\w+|"[^"]+"/g);
-      check_items(items);
-      if (is_prop(line.split(/\s+/)[1])) {
+      checkItems(items);
+      if (isProp(line.split(/\s+/)[1])) {
         // This line is a node
-        cnt_nodes++;
         var id = items[0];
         var output = [];
         output[0] = id;
@@ -161,40 +160,40 @@ var writeNodesAndEdges = function(callback) {
   });
 }
 
-function check_items(items) {
+function checkItems(items) {
   for(var i=0; i<items.length; i++){
     //items[i] = items[i].replace(/"/g,'');
     if (items[i].match(/\t/)) {
       console.log('WARNING: This item has tab(\\t): ' + items[i]);
     }
   }
-};
+}
 
-function is_prop(str) {
+function isProp(str) {
   arr = str.match(/\w+|"[^"]+"/g);
   if (arr.length > 1 && arr[0] != '') {
     return true;
   } else {
     return false;
   }
-};
+}
 
-function eval_type(str) {
-  if (is_string(str)) {
+function evalType(str) {
+  if (isString(str)) {
     return 'string';
   } else {
     return 'double';
   }
-};
+}
 
-function is_string(str) {
+function isString(str) {
   if (typeof str == 'string') {
     return true;
   } else {
     return false;
   }
-};
+}
 
-function is_integer(x) {
+function isInteger(x) {
   return Math.round(x) === x;
-};
+}
