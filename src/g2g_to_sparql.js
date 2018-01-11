@@ -52,12 +52,13 @@ function edgeSelectClause(edge, nodes) {
 
 // TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
 function addNodeRequired(whereClause, addedNode, nodes) {
-  var required = nodes[addedNode.name].required.join('\n');
+  var nodeDef = nodes[addedNode.name]
+  var required = nodeDef.required.join('\n');
   var existingVars = getVariables(whereClause);
   var localVars = getVariables(required);
   var varsToReplace = [];
   localVars.forEach( (v) => {
-    if(addedNode.name == v || !existingVars.includes(v)) return;
+    if(!existingVars.includes(v)) return;
     var newName = v + '_';
     while(existingVars.includes(newName)) {
       newName += '_';
@@ -65,7 +66,7 @@ function addNodeRequired(whereClause, addedNode, nodes) {
     varsToReplace.push({from: v, to: newName});
     existingVars.push(newName);
   });
-  var replaced = replaceVariable(required, nodes[addedNode.name].label.variable, addedNode.variable);
+  var replaced = replaceVariable(required, "?" + nodeDef.label.variable, "?" + addedNode.variable);
   varsToReplace.forEach((v) => {
     replaced = replaceVariable(replaced, v.from, v.to);
   });
@@ -122,6 +123,10 @@ function parseBlock(block, map) {
   }
 }
 
+function unique(array) {
+  return array.filter((x, index, array) => array.indexOf(x) == index);
+}
+
 function getVariables(str) {
   var vars = [];
   var regex = /(\?.+?)\W/g
@@ -130,7 +135,7 @@ function getVariables(str) {
     vars.push(matched[1]);
     matched = regex.exec(str);
   }
-  return vars;
+  return unique(vars);
 }
 
 function parseDeclaration(header) {
