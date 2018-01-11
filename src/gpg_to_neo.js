@@ -13,11 +13,8 @@ var edge_props = [];
 var node_props_type = [];
 var edge_props_type = [];
 
-var file_nodes = prefix + '.neo.nodes';
-var file_edges = prefix + '.neo.edges';
-
-var path_nodes = './output/' + file_nodes;
-var path_edges = './output/' + file_edges;
+var path_nodes = prefix + '.neo.nodes';
+var path_edges = prefix + '.neo.edges';
 
 fs.writeFile(path_nodes, '', function (err) {});
 fs.writeFile(path_edges, '', function (err) {});
