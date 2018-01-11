@@ -37,28 +37,22 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
 }
 
 function edgeSelectClause(edge, nodes) {
-  var whereClause = edge.where.join('\n  ');
+  var whereClause = edge.where.join('\n');
   whereClause = addNodeRequired(whereClause, edge.node1, nodes);
   whereClause = addNodeRequired(whereClause, edge.node2, nodes);
-  var lines = 
-      ['SELECT',
-       '?' + edge.node1.variable,
-       '?' + edge.node2.variable,
-       '"' + edge.label.name + '" AS ?type',
-       edge.properties.map((prop, index) =>
-        '"' + prop.name + '" AS ?P' + index + '\n' +
-        '  SAMPLE(?' + prop.variable+ ')').join('\n  '),
-       'WHERE {',
-       whereClause,
-       '}',
-       'GROUP BY ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ?type',
-        ];
-  return lines.join('\n  ');
+  return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)\n' +
+    edge.properties.map(
+      (prop, index) =>
+        '       ("' + prop.name + '" AS ?P' + index + ')' + ' SAMPLE(?' + prop.variable+ ')\n').join('') +
+    'WHERE {\n' +
+    whereClause + '\n' +
+    '}\n' +
+    'GROUP BY ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ?type' + '\n';
 }
 
 // TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
 function addNodeRequired(whereClause, addedNode, nodes) {
-  var required = nodes[addedNode.name].required.join('\n  ');
+  var required = nodes[addedNode.name].required.join('\n');
   var existingVars = getVariables(whereClause);
   var localVars = getVariables(required);
   var varsToReplace = [];
@@ -75,7 +69,7 @@ function addNodeRequired(whereClause, addedNode, nodes) {
   varsToReplace.forEach((v) => {
     replaced = replaceVariable(replaced, v.from, v.to);
   });
-  return whereClause + replaced;
+  return whereClause + '\n\n' + replaced;
 }
 
 function replaceVariable(srcStr, from, to) {
@@ -83,17 +77,14 @@ function replaceVariable(srcStr, from, to) {
 }
 
 function nodeSelectClause(nodeDefinition) {
-  return 'SELECT\n' +
-    '  ?' + nodeDefinition.label.variable + ' AS ?nid \n' +
-    '  "' + nodeDefinition.label.name + '" AS ?type \n' + 
+  return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
       (prop, index) =>
-        '  "' + prop.name + '" AS ?P' + index + '\n' +
-        '  SAMPLE(?' + prop.variable + ')\n').join('') +
-    '  WHERE { \n' + 
-    nodeDefinition.where.join('\n') +
-    '\n}' +
-    '  GROUP BY ?' + nodeDefinition.label.variable;
+        '       ("' + prop.name + '" AS ?P' + index + ') SAMPLE(?' + prop.variable + ')\n').join('') +
+    'WHERE {\n' + 
+    nodeDefinition.where.join('\n') + '\n' +
+    '}\n' +
+    'GROUP BY ?' + nodeDefinition.label.variable + '\n';
 }
 
 // {nodes: {<name>: {required: ~, where: ~, label: {}, properties: []}, edges: {<name>: {node1: {name: ~, variable: ~ }, where: ~, node2: {}, label: {name: ~. props: []}} }
@@ -185,8 +176,8 @@ function writeSparqlFiles(name2SparqlMap, dstLocation, header, suffix) {
   return Object.keys(name2SparqlMap).map(
     (name) =>
       {
-        var fileName = dstLocation + name + '_' + suffix + '.sql';
-        fs.writeFileSync(fileName,  header + name2SparqlMap[name], 'utf8');
+        var fileName = dstLocation + name + '_' + suffix + '.rq';
+        fs.writeFileSync(fileName,  header + '\n' + name2SparqlMap[name], 'utf8');
         console.log('"' + fileName + '" has been created.');
         return fileName;
       }
