@@ -1,0 +1,30 @@
+# node g2gml_mapper.js gpg https://integbio.jp/rdf/sparql examples/icgc.g2g output/icgc
+
+PREFIX icgc: <http://icgc.link/vocab/>
+PREFIX icgc-class: <http://icgc.link/>
+PREFIX faldo: <http://biohackathon.org/resource/faldo>
+
+# Node mappings
+
+(d:donor {label:l, age:a, gender:g} )
+    ?d rdf:type icgc-class:Donor .
+    OPTIONAL { ?d rdfs:label ?l }
+    OPTIONAL { ?d icgc:age_at_diagnosis ?a }
+    OPTIONAL { ?d icgc:sex ?g }
+
+(m:mutation {label:l, start_position:s} )
+    ?m rdf:type icgc-class:Mutation .
+    OPTIONAL { ?m rdfs:label ?l }
+    OPTIONAL { ?m faldo:region ?r . ?r faldo:begin ?b . ?b faldo:position ?s }
+
+(e:effect)
+    ?e rdf:type icgc-class:Effect.
+
+# Edge mappings
+
+(d:donor)-[:has_mutation { quality_score: q } ]-(m:mutation)
+    ?det icgc:donor ?d . ?det icgc:mutation ?m .
+    ?det icgc:quality_score ?q .
+
+(m:mutation)-[:affects]-(e:effect)
+    ?m ^icgc:mutation ?e . ?e icgc:gene_affected ?gene .
