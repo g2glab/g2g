@@ -25,3 +25,6 @@ PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
 
 (mus1:Musician)-[:influenced]-(mus2:Musician)
     ?mus1 dbpedia-owl:influenced ?mus2 .
+
+# USAGE:
+# $ node g2gml_mapper.js gpg http://ja.dbpedia.org/sparql examples/musician.g2g output/musician

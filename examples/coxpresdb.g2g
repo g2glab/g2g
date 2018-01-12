@@ -12,3 +12,6 @@ PREFIX coxpresdb: <http://coxpresdb.jp/rdf/def/0.1/>
        coxpresdb:mutual_rank ?mr ;
        coxpresdb:pcc ?cc .
     FILTER(?cc >= 0.85)
+
+# USAGE:
+# $ node g2gml_mapper.js gpg http://coxpresdb.jp/sparql examples/coxpresdb.g2g output/coxpresdb

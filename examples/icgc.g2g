@@ -1,5 +1,3 @@
-# node g2gml_mapper.js gpg https://integbio.jp/rdf/sparql examples/icgc.g2g output/icgc
-
 PREFIX icgc: <http://icgc.link/vocab/>
 PREFIX icgc-class: <http://icgc.link/>
 PREFIX faldo: <http://biohackathon.org/resource/faldo>
@@ -28,3 +26,6 @@ PREFIX faldo: <http://biohackathon.org/resource/faldo>
 
 (m:mutation)-[:affects]-(e:effect)
     ?m ^icgc:mutation ?e . ?e icgc:gene_affected ?gene .
+
+# USAGE:
+# $ node g2gml_mapper.js gpg https://integbio.jp/rdf/sparql examples/icgc.g2g output/icgc
