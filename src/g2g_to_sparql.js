@@ -47,7 +47,7 @@ function edgeSelectClause(edge, nodes) {
     'WHERE {\n' +
     whereClause + '\n' +
     '}\n' +
-    'GROUP BY ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ?type' + '\n';
+    'GROUP BY ?' + edge.node1.variable + ' ?' + edge.node2.variable + '\n';
 }
 
 // TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
