@@ -177,11 +177,11 @@ function parseKeyValue(kv) {
   return kv.split(':').map((str) => str.trim());
 }
 
-function writeSparqlFiles(name2SparqlMap, dstLocation, header, suffix) {
+function writeSparqlFiles(name2SparqlMap, dstLocation, header, fileNamePrefix) {
   return Object.keys(name2SparqlMap).map(
     (name) =>
       {
-        var fileName = dstLocation + name + '_' + suffix + '.rq';
+        var fileName = dstLocation + fileNamePrefix + '.' + name + '.rq';
         fs.writeFileSync(fileName,  header + '\n' + name2SparqlMap[name], 'utf8');
         console.log('"' + fileName + '" has been created.');
         return fileName;
