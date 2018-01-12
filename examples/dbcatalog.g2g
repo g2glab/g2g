@@ -1,0 +1,18 @@
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Node mappings
+(db:Database { identifier: id, name: title, description: descr } )
+    ?db a dcat:Dataset .
+    FILTER regex(str(?db), "^http://purl.jp/bio/03/dbcatalog/")
+    OPTIONAL { ?db dct:identifier ?id }
+    OPTIONAL { ?db dct:title ?title . FILTER(lang(?title) = "en") }
+    OPTIONAL { ?db dct:description ?descr . FILTER(lang(?descr) = "en") }
+
+# Edge mappings
+(db1:Database)-[:related]-(db2:Database)
+    ?db1 rdfs:seeAlso ?db2 .
+
+# USAGE:
+# $ node g2gml_mapper.js http://integbio.jp/rdf/sparql examples/dbcatalog.g2g output/dbcatalog
