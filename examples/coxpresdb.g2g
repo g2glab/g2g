@@ -1,16 +1,16 @@
 PREFIX coxpresdb: <http://coxpresdb.jp/rdf/def/0.1/>
 
 # Node mappings
-(g:Gene {gene_id:geneid})
+(g:Gene {gene_id: id})
     <http://coxpresdb.jp/rdf/db/Sce.v12> coxpresdb:gene_id ?g .
-    BIND(strafter(str(?g), "http://bio2rdf.org/geneid:") AS ?geneid)
+    BIND(strafter(str(?g), "http://bio2rdf.org/geneid:") AS ?id)
 
 # Edge mappings
-(g1:Gene)-[:coexpress {mutual_rank:mr, pcc:cc}]-(g2:Gene)
-    ?x coxpresdb:gene_id_1 ?g1 ;
-       coxpresdb:gene_id_2 ?g2 ;
-       coxpresdb:mutual_rank ?mr ;
-       coxpresdb:pcc ?cc .
+(g1:Gene)-[:coexpress {mutual_rank: mr, pcc: cc}]-(g2:Gene)
+    ?co coxpresdb:gene_id_1 ?g1 ;
+        coxpresdb:gene_id_2 ?g2 ;
+        coxpresdb:mutual_rank ?mr ;
+        coxpresdb:pcc ?cc .
     FILTER(?cc >= 0.85)
 
 # USAGE:
