@@ -69,7 +69,7 @@ rl.on('line', function(line) {
         var key = items[i]; 
         var val = items[i+1];
         var type = evalType(val);
-        console.log(val, type);
+        //console.log(val, type);
         var output = [];
         output[0] = cnt_edges; // edge id
         output[1] = items[0]; // source node
