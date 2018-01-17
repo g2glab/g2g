@@ -1,5 +1,5 @@
-// USAGE: $ node gpg_to_pgx.js <gpg_file> <pgx_files_prefix>
-// OUTPUT_DIR: output/
+// USAGE: $ node gpg_to_pgx.js <gpg_file> <prefix>
+// EXAMPLE: $ node gpg_to_pgx.js example/musician.gpg output/musician/musician
 // OUTPUT_FILES: <prefix>.opv <prefix>.ope <prefix>.json
 
 var pgp_file = process.argv[2];
@@ -148,6 +148,10 @@ function evalType(str) {
   }
 };
 
+function isInteger(num) {
+  return Math.round(num) === num;
+};
+
 function format(str, type) {
   var output = [];
   if (type == 'string') {
@@ -160,16 +164,27 @@ function format(str, type) {
     output[1] = '';
     output[2] = str;
     output[3] = '';
+  } else if (type == 'float') {
+    output[0] = '3';
+    output[1] = '';
+    output[2] = str;
+    output[3] = '';
   } else if (type == 'double') {
     output[0] = '4';
     output[1] = '';
     output[2] = str;
     output[3] = '';
+  } else if (type == 'datetime') {
+    output[0] = '5';
+    output[1] = '';
+    output[2] = '';
+    output[3] = str;
+  } else if (type == 'datetime') {
+    output[0] = '6';
+    output[1] = str;
+    output[2] = '';
+    output[3] = ;
   }
   return output;
-};
-
-function isInteger(num) {
-  return Math.round(num) === num;
 };
 
