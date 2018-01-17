@@ -69,6 +69,7 @@ rl.on('line', function(line) {
         var key = items[i]; 
         var val = items[i+1];
         var type = evalType(val);
+        console.log(val, type);
         var output = [];
         output[0] = cnt_edges; // edge id
         output[1] = items[0]; // source node
@@ -83,7 +84,6 @@ rl.on('line', function(line) {
             edge_props_type.push(prop); 
           }
           fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
-          //console.log(output.join(sep));
         }
       }
     }
@@ -137,10 +137,14 @@ function isProp(str) {
 };
 
 function evalType(str) {
-  if (isString(str)) {
+  if (isNaN(str)) {
     return 'string';
   } else {
-    return 'double';
+    if (isInteger(Number(str))) {
+      return 'integer';
+    } else {
+      return 'double';
+    }
   }
 };
 
@@ -151,6 +155,11 @@ function format(str, type) {
     output[1] = str;
     output[2] = '';
     output[3] = '';
+  } else if (type == 'integer') {
+    output[0] = '2';
+    output[1] = '';
+    output[2] = str;
+    output[3] = '';
   } else if (type == 'double') {
     output[0] = '4';
     output[1] = '';
@@ -160,15 +169,7 @@ function format(str, type) {
   return output;
 };
 
-function isString(str) {
-  if (typeof str == 'string') {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-function isInteger(x) {
-  return Math.round(x) === x;
+function isInteger(num) {
+  return Math.round(num) === num;
 };
 
