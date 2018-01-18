@@ -183,7 +183,7 @@ function format(str, type) {
     output[0] = '6';
     output[1] = str;
     output[2] = '';
-    output[3] = ;
+    output[3] = '';
   }
   return output;
 };
