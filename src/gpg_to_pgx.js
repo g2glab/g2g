@@ -37,22 +37,28 @@ rl.on('line', function(line) {
       // This line is a node
       cnt_nodes++;
       var id = items[0];
-      // For each property, add 1 line
-      for (var i=1; i<items.length-1; i=i+2) {
-        var key = items[i]; 
-        var val = items[i+1];
-        var type = evalType(val);
-        var output = [];
-        output[0] = id;
-        output[1] = key;
-        output = output.concat(format(val, type));
-        if (node_props.indexOf(key) == -1) {
-          var prop = { name: key, type: type };
-          node_props.push(key); 
-          node_props_type.push(prop); 
-        }
+      var output = [];
+      output[0] = id;
+      if (items.length == 1) {
+        // When this node has no property
+        output[1] = '%20';
+        output = output.concat(format('', 'none'));
         fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
-        //console.log(output.join(sep));
+      } else {
+        // For each property, add 1 line
+        for (var i=1; i<items.length-1; i=i+2) {
+          var key = items[i]; 
+          var val = items[i+1];
+          var type = evalType(val);
+          output[1] = key;
+          output = output.concat(format(val, type));
+          fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
+          if (node_props.indexOf(key) == -1) {
+            var prop = { name: key, type: type };
+            node_props.push(key); 
+            node_props_type.push(prop); 
+          }
+        }
       }
     } else {
       // This line is a edge
@@ -72,30 +78,25 @@ rl.on('line', function(line) {
       if (items.length == 4) {
         // When this edge has no property
         output[4] = '%20';
-        output[5] = '';
-        output[6] = '';
-        output[7] = '';
-        output[8] = '';
+        output = output.concat(format('', 'none'));
         fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
       } else {
-
-      // For each property, add 1 line
-      for (var i=2; i<items.length-1; i=i+2) {
-        var key = items[i]; 
-        var val = items[i+1];
-        var type = evalType(val);
-        //console.log(val, type);
-        if (key != 'type') {
-          output[4] = key;
-          output = output.concat(format(val, type));
-          if (edge_props.indexOf(key) == -1) {
-            var prop = { name: key, type: type };
-            edge_props.push(key); 
-            edge_props_type.push(prop); 
+        // For each property, add 1 line
+        for (var i=2; i<items.length-1; i=i+2) {
+          var key = items[i]; 
+          var val = items[i+1];
+          if (key != 'type') {
+            output[4] = key;
+            var type = evalType(val);
+            output = output.concat(format(val, type));
+            fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
+            if (edge_props.indexOf(key) == -1) {
+              var prop = { name: key, type: type };
+              edge_props.push(key); 
+              edge_props_type.push(prop); 
+            }
           }
-          fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
         }
-      }
       }
     }
   }
@@ -165,7 +166,12 @@ function isInteger(num) {
 
 function format(str, type) {
   var output = [];
-  if (type == 'string') {
+  if (type == 'none') {
+    output[0] = '';
+    output[1] = '';
+    output[2] = '';
+    output[3] = '';
+  } else if (type == 'string') {
     output[0] = '1';
     output[1] = str;
     output[2] = '';
