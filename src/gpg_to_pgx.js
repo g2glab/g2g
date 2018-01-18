@@ -64,18 +64,28 @@ rl.on('line', function(line) {
           label = items[i+1];
         }
       }
+      var output = [];
+      output[0] = cnt_edges; // edge id
+      output[1] = items[0]; // source node
+      output[2] = items[1]; // target node
+      output[3] = label;
+      if (items.length == 4) {
+        // When this edge has no property
+        output[4] = '%20';
+        output[5] = '';
+        output[6] = '';
+        output[7] = '';
+        output[8] = '';
+        fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
+      } else {
+
       // For each property, add 1 line
       for (var i=2; i<items.length-1; i=i+2) {
         var key = items[i]; 
         var val = items[i+1];
         var type = evalType(val);
         //console.log(val, type);
-        var output = [];
-        output[0] = cnt_edges; // edge id
-        output[1] = items[0]; // source node
-        output[2] = items[1]; // target node
         if (key != 'type') {
-          output[3] = label;
           output[4] = key;
           output = output.concat(format(val, type));
           if (edge_props.indexOf(key) == -1) {
@@ -85,6 +95,7 @@ rl.on('line', function(line) {
           }
           fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
         }
+      }
       }
     }
   }
