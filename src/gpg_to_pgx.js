@@ -23,7 +23,7 @@ var file_nodes = prefix + '.pgx.nodes';
 var file_edges = prefix + '.pgx.edges';
 var file_config = prefix + '.pgx.json';
 
-var sep = '\t';
+var sep = ',';
 
 fs.writeFile(file_nodes, '', function (err) {});
 fs.writeFile(file_edges, '', function (err) {});
