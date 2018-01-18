@@ -31,7 +31,7 @@ fs.writeFile(file_config, '', function (err) {});
 
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
-    var items = line.match(/\w+|"[^"]+"/g);
+    var items = line.match(/"[^"]+"|[\d|.]+/g);
     checkItems(items);
     if (isProp(line.split(/\s+/)[1])) {
       // This line is a node
@@ -128,7 +128,7 @@ function checkItems(items) {
 };
 
 function isProp(str) {
-  arr = str.match(/\w+|"[^"]+"/g);
+  arr = str.match(/"[^"]+"|[\d|.]+/g);
   if (arr.length > 1 && arr[0] != '') {
     return true;
   } else {
