@@ -1,5 +1,5 @@
-// USAGE: $ node gpg_to_pgx.js <gpg_file> <prefix>
-// EXAMPLE: $ node gpg_to_pgx.js example/musician.gpg output/musician/musician
+// USAGE: $ node pg_to_pgx.js <pg_file> <prefix>
+// EXAMPLE: $ node pg_to_pgx.js example/musician.pg output/musician/musician
 // OUTPUT_FILES: <prefix>.opv <prefix>.ope <prefix>.json
 
 var pgp_file = process.argv[2];

@@ -1,4 +1,4 @@
-// USAGE: $ node gpg_to_neo.js <gpg_file> <prefix>
+// USAGE: $ node pg_to_neo.js <pg_file> <prefix>
 // OUTPUT_DIR: output/
 // OUTPUT_FILES: <prefix>.neo.nodes <prefix>.neo.edges
 
