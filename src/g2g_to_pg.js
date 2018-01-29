@@ -1,5 +1,5 @@
-// USAGE: $ node g2g_to_gpg.js <endpoint> <g2g_file> <dst_gpg>
-// EXAMPLE: $ node g2g_to_gpg.js http://dbpedia.org/sparql examples/musicians.g2g musician.gpg
+// USAGE: $ node g2g_to_pg.js <endpoint> <g2g_file> <dst_pg>
+// EXAMPLE: $ node g2g_to_pg.js http://dbpedia.org/sparql examples/musicians.g2g musician.pg
 
 var endpoint = process.argv[2];
 var g2gPath = process.argv[3];
@@ -9,7 +9,7 @@ var fs = require('fs');
 var path = require('path');
 var sparqlClient = require('./sparql_client.js');
 var g2gmlToSparql = require('./g2g_to_sparql.js');
-var tsvToGpg = require('./tsv_to_gpg.js');
+var tsvToPg = require('./tsv_to_pg.js');
 
 var inputName = path.basename(g2gPath);
 
@@ -27,8 +27,8 @@ tryToMkdir(TSV_DIR);
 
 if(fs.existsSync(dstPath))fs.unlinkSync(dstPath);
 
-nodeFiles.forEach(file => queryTsv(file, tsvToGpg.translateNode));
-edgeFiles.forEach(file => queryTsv(file, tsvToGpg.translateEdge));
+nodeFiles.forEach(file => queryTsv(file, tsvToPg.translateNode));
+edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge));
 
 function queryTsv(file, callback) {
   var tsvPath = TSV_DIR + path.basename(file) + '.tsv'

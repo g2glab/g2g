@@ -1,4 +1,4 @@
-// USAGE: $ node g2gml_mapper.js <gpg|neo|pgx> <endpoint> <g2g_file> <dst_prefix>
+// USAGE: $ node g2gml_mapper.js <pg|neo|pgx> <endpoint> <g2g_file> <dst_prefix>
 
 [dstFormat, endpoint, g2gPath, dstPrefix] = process.argv.slice(2);
 
@@ -24,21 +24,21 @@ function runScript(scriptPath, callback, ...args) {
   });
 }
 
-var gpgPath = dstPrefix + '.gpg';
+var pgPath = dstPrefix + '.pg';
 
-function afterGpg(err) {
+function afterPg(err) {
   if(err) throw err;
   switch(dstFormat) {
     case 'neo':
-    runScript('./src/gpg_to_neo.js', (err) => {if(err) throw err; console.log('Done.');}, gpgPath, dstPrefix);
+    runScript('./src/pg_to_neo.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, dstPrefix);
     break;
     case 'pgx':
-    runScript('./src/gpg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, gpgPath, dstPrefix);
+    runScript('./src/pg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, dstPrefix);
     break;
-    case 'gpg':
+    case 'pg':
     console.log('Done.');
     break;
   }
 }
 
-runScript('./src/g2g_to_gpg.js', afterGpg, endpoint, g2gPath, gpgPath);
+runScript('./src/g2g_to_pg.js', afterPg, endpoint, g2gPath, pgPath);
