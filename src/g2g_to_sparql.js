@@ -9,17 +9,12 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
   const NODES = 'nodes';
   const EDGES = 'edges';
-  var inPrefix = true;
   var currentBlock = [];
   g2g.split(/\r\n|\r|\n/).forEach(
     (line) => {
       if(line.startsWith('#')) return;
-      if(line.trim().length == 0) {
-        inPrefix = false;
-        return;
-      }
-      if(inPrefix) prefixPart += line + '\n';
-      else {
+      if(line.startsWith('PREFIX')) prefixPart += line + '\n';
+      else if(line.trim().length > 0) {
         if(!line.startsWith(' ') && currentBlock.length > 0) {
           blocks.push(currentBlock);
           currentBlock = [];
@@ -43,7 +38,7 @@ function edgeSelectClause(edge, nodes) {
   return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)\n' +
     edge.properties.map(
       (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ')' + ' SAMPLE(?' + prop.variable+ ')\n').join('') +
+        '       ("' + prop.name + '" AS ?P' + index + ')' + ' SAMPLE(?' + prop.variable + ') AS ?' + prop.variable + '\n').join('') +
     'WHERE {\n' +
     whereClause + '\n' +
     '}\n' +
@@ -81,7 +76,7 @@ function nodeSelectClause(nodeDefinition) {
   return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
       (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ') SAMPLE(?' + prop.variable + ')\n').join('') +
+        '       ("' + prop.name + '" AS ?P' + index + ') SAMPLE(?' + prop.variable + ') AS ?' + prop.variable + '\n').join('') +
     'WHERE {\n' + 
     nodeDefinition.where.join('\n') + '\n' +
     '}\n' +
