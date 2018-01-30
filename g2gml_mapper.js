@@ -1,6 +1,15 @@
-// USAGE: $ node g2gml_mapper.js <pg|neo|pgx> <endpoint> <g2g_file> <dst_prefix>
+// USAGE: $ node g2gml_mapper.js <rq|pg|neo|pgx> <g2g_path> <dst_prefix> <endpoint>
 
-[dstFormat, endpoint, g2gPath, dstPrefix] = process.argv.slice(2);
+[dstFormat, g2gPath, dstPrefix, endpoint] = process.argv.slice(2);
+
+var path = require('path');
+
+var pgPath = dstPrefix + '.pg';
+var inputName = path.basename(g2gPath);
+
+const OUTPUT_DIR = './output/'
+const DST_DIR = OUTPUT_DIR + inputName;
+const SPARQL_DIR = DST_DIR + '/sparql/';
 
 var childProcess = require('child_process');
 
@@ -24,7 +33,13 @@ function runScript(scriptPath, callback, ...args) {
   });
 }
 
-var pgPath = dstPrefix + '.pg';
+function afterSparql(err) {
+  if(err) throw err;
+  if(dstFormat != 'rq') {
+    runScript('./src/sparql_to_pg.js', afterPg, endpoint, SPARQL_DIR, pgPath);
+  }
+}
+
 
 function afterPg(err) {
   if(err) throw err;
@@ -41,4 +56,4 @@ function afterPg(err) {
   }
 }
 
-runScript('./src/g2g_to_pg.js', afterPg, endpoint, g2gPath, pgPath);
+runScript('./src/g2g_to_sparql.js', afterSparql, g2gPath);

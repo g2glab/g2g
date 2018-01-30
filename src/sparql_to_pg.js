@@ -1,29 +1,27 @@
-// USAGE: $ node g2g_to_pg.js <endpoint> <g2g_file> <dst_pg>
-// EXAMPLE: $ node g2g_to_pg.js http://dbpedia.org/sparql examples/musicians.g2g musician.pg
+// USAGE: $ node sparql_to_pg.js <endpoint> <sparql_dir> <dst_pg>
+// EXAMPLE: $ node sparql_to_pg.js http://dbpedia.org/sparql output/musicians.g2g/sparql musician.pg
 
-var endpoint = process.argv[2];
-var g2gPath = process.argv[3];
-var dstPath = process.argv[4];
+var endpoint    = process.argv[2];
+var SPARQL_DIR  = process.argv[3];
+var dstPath     = process.argv[4];
 
 var fs = require('fs');
 var path = require('path');
 var sparqlClient = require('./sparql_client.js');
-var g2gmlToSparql = require('./g2g_to_sparql.js');
 var tsvToPg = require('./tsv_to_pg.js');
 
-var inputName = path.basename(g2gPath);
-
 const OUTPUT_DIR = './output/'
-const DST_DIR = OUTPUT_DIR + inputName;
-const SPARQL_DIR = DST_DIR + '/sparql/';
+const DST_DIR = OUTPUT_DIR + path.basename(dstPath);
 const TSV_DIR = DST_DIR + '/tsv/';
 
 tryToMkdir(OUTPUT_DIR);
 tryToMkdir(DST_DIR);
-tryToMkdir(SPARQL_DIR);
 tryToMkdir(TSV_DIR);
 
-[nodeFiles, edgeFiles] = g2gmlToSparql.g2gmlToSparql(g2gPath, SPARQL_DIR);
+var sparql_files = fs.readdirSync(SPARQL_DIR);
+
+nodeFiles = sparql_files.filter((name) => name.startsWith('nodes')).map((name) => SPARQL_DIR + name);
+edgeFiles = sparql_files.filter((name) => name.startsWith('edges')).map((name) => SPARQL_DIR + name);
 
 if(fs.existsSync(dstPath))fs.unlinkSync(dstPath);
 

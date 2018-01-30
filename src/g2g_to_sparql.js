@@ -1,7 +1,20 @@
-exports.g2gmlToSparql = g2gmlToSparql
+// USAGE: $ node g2g_to_sparql.js <g2g_file>
+// EXAMPLE: $ node g2g_to_pg.js examples/musicians.g2g
 
 var fs = require('fs');
 var path = require('path');
+
+var g2gPath = process.argv[2];
+
+var inputName = path.basename(g2gPath);
+
+const OUTPUT_DIR = './output/'
+const DST_DIR = OUTPUT_DIR + inputName;
+const SPARQL_DIR = DST_DIR + '/sparql/';
+
+tryToMkdir(OUTPUT_DIR);
+tryToMkdir(DST_DIR);
+tryToMkdir(SPARQL_DIR);
 
 function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
@@ -183,3 +196,10 @@ function writeSparqlFiles(name2SparqlMap, dstLocation, header, fileNamePrefix) {
       }
   );
 }
+
+function tryToMkdir(dst) {
+  if(!fs.existsSync(dst))fs.mkdirSync(dst);
+}
+
+
+g2gmlToSparql(g2gPath, SPARQL_DIR);
