@@ -8,10 +8,10 @@ var prefix = process.argv[3];
 var fs = require('fs');
 var readline = require('readline');
 
-var node_props = [];
-var edge_props = [];
-var node_props_type = [];
-var edge_props_type = [];
+var node_props = ['type'];
+var edge_props = ['type'];
+var node_props_type = ['string'];
+var edge_props_type = ['string'];
 
 var path_nodes = prefix + '.neo.nodes';
 var path_edges = prefix + '.neo.edges';
@@ -37,6 +37,8 @@ function listProps(callback) {
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
+      // remove types
+      line = line.replace(/\s:(\w+|"[^"]+")/g, '');
       var items = line.match(/\w+|"[^"]+"/g);
       checkItems(items);
       if (isProp(line.split(/\s+/)[1])) {
@@ -104,11 +106,23 @@ function writeHeaderEdges(callback) {
   callback();
 }
 
+function globalGroupMatch(text, pattern) {
+  var matchedArray = [];
+  var regex = pattern;
+  while(match = regex.exec(text)) {
+    matchedArray.push(match);
+  }
+  return matchedArray;
+}
+
 function writeNodesAndEdges(callback) {
   var rs = fs.createReadStream(pgp_file);
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
+      var types = globalGroupMatch(line, /\s:(\w+|"[^"]+")/g).map((m) => m[1]);
+      console.log('types:' + types);
+      line = line.replace(/\s:(\w+|"[^"]+")/g, '');
       var items = line.match(/\w+|"[^"]+"/g);
       checkItems(items);
       if (isProp(line.split(/\s+/)[1])) {
@@ -116,6 +130,7 @@ function writeNodesAndEdges(callback) {
         var id = items[0];
         var output = [];
         output[0] = id;
+        output[1] = types.join(';');
         // For each property, check its index
         for (var i=1; i<items.length-1; i=i+2) {
           var key = items[i];
@@ -137,15 +152,12 @@ function writeNodesAndEdges(callback) {
       for (var i=2; i<items.length-1; i=i+2) {
         var key = items[i];
         var val = items[i+1];
-        if (key == 'type') {
-          output[2] = val; // type
+        output[2] = types.join[';'];
+        var index = edge_props.indexOf(key);
+        if (index != -1) {
+          output[index + 2] = val;
         } else {
-          var index = edge_props.indexOf(key);
-          if (index != -1) {
-            output[index + 2] = val;
-          } else {
-            console.log('WARNING: This edge property is not defined: ' + key);
-          }
+          console.log('WARNING: This edge property is not defined: ' + key);
         }
       }
       fs.appendFile(path_edges, output.join(sep) + '\n', function (err) {});
