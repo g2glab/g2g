@@ -31,7 +31,7 @@ fs.writeFile(file_config, '', function (err) {});
 
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
-    var items = line.match(/"[^"]+"|[\d|.]+/g);
+    var items = line.match(/"[^"]+"|[^\s:]+/g); // .... or "..(inc. : or \s).." (separated by : or \s)
     checkItems(items);
     if (isProp(line.split(/\s+/)[1])) {
       // This line is a node
@@ -41,7 +41,7 @@ rl.on('line', function(line) {
       output[0] = id;
       if (items.length == 1) {
         // When this node has no property
-        output[1] = '%20';
+        output[1] = '%20'; // %20 means 'no property' in PGX syntax
         output = output.concat(format('', 'none'));
         fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
       } else {
@@ -140,7 +140,7 @@ function checkItems(items) {
 };
 
 function isProp(str) {
-  arr = str.match(/"[^"]+"|[\d|.]+/g);
+  arr = str.match(/"[^"]+"|[^:]+/g);
   if (arr.length > 1 && arr[0] != '') {
     return true;
   } else {
