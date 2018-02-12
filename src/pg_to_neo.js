@@ -96,7 +96,7 @@ function writeHeaderEdges(callback) {
   output[0] = ':START_ID';
   output[1] = ':END_ID';
   for (var i=0; i<edge_props.length; i++) {
-　　if (node_props[i] == '"type"') {
+    if (node_props[i] == '"type"') {
       output[i + 2] = ':TYPE';
     } else {
       output[i + 2] = edge_props[i];

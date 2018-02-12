@@ -37,10 +37,10 @@ rl.on('line', function(line) {
       // This line is a node
       cnt_nodes++;
       var id = items[0];
-      var output = [];
-      output[0] = id;
       if (items.length == 1) {
         // When this node has no property
+        var output = [];
+        output[0] = id;
         output[1] = '%20'; // %20 means 'no property' in PGX syntax
         output = output.concat(format('', 'none'));
         fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
@@ -50,6 +50,8 @@ rl.on('line', function(line) {
           var key = items[i]; 
           var val = items[i+1];
           var type = evalType(val);
+          var output = [];
+          output[0] = id;
           output[1] = key;
           output = output.concat(format(val, type));
           fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
@@ -70,13 +72,13 @@ rl.on('line', function(line) {
           label = items[i+1];
         }
       }
-      var output = [];
-      output[0] = cnt_edges; // edge id
-      output[1] = items[0]; // source node
-      output[2] = items[1]; // target node
-      output[3] = label;
       if (items.length == 4) {
         // When this edge has no property
+        var output = [];
+        output[0] = cnt_edges; // edge id
+        output[1] = items[0]; // source node
+        output[2] = items[1]; // target node
+        output[3] = label;
         output[4] = '%20';
         output = output.concat(format('', 'none'));
         fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
@@ -86,6 +88,11 @@ rl.on('line', function(line) {
           var key = items[i]; 
           var val = items[i+1];
           if (key != 'type') {
+            var output = [];
+            output[0] = cnt_edges; // edge id
+            output[1] = items[0]; // source node
+            output[2] = items[1]; // target node
+            output[3] = label;
             output[4] = key;
             var type = evalType(val);
             output = output.concat(format(val, type));
