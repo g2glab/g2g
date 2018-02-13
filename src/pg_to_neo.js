@@ -7,6 +7,7 @@ var prefix = process.argv[3];
 
 var fs = require('fs');
 var readline = require('readline');
+var pg = require('./pg_to.js');
 
 var node_props = ['type'];
 var edge_props = ['type'];
@@ -46,7 +47,7 @@ function listProps(callback) {
         for (var i=1; i<items.length-1; i=i+2) {
           var key = items[i];
           var val = items[i+1];
-          var type = evalType(val);
+          var type = pg.evalType(val);
           if (node_props.indexOf(key) == -1) {
             var prop = { name: key, type: type };
             node_props.push(key);
@@ -59,7 +60,7 @@ function listProps(callback) {
         for (var i=2; i<items.length-1; i=i+2) {
           var key = items[i];
           var val = items[i+1];
-          var type = evalType(val);
+          var type = pg.evalType(val);
           if (key != 'type') {
             if (edge_props.indexOf(key) == -1) {
               var prop = { name: key, type: type };
@@ -95,7 +96,7 @@ function writeHeaderEdges(callback) {
   output[0] = ':START_ID';
   output[1] = ':END_ID';
   for (var i=0; i<edge_props.length; i++) {
-    if (node_props[i] == '"type"') {
+    if (node_props[i] == 'type') {
       output[i + 2] = ':TYPE';
     } else {
       output[i + 2] = edge_props[i];
@@ -141,24 +142,24 @@ function writeNodesAndEdges(callback) {
           }
         }
         fs.appendFile(path_nodes, output.join(sep) + '\n', function (err) {});
-    } else {
-      // This line is a edge
-      var output = [];
-      output[0] = items[0]; // source node
-      output[1] = items[1]; // target node
-      // For each property, add 1 line
-      for (var i=2; i<items.length-1; i=i+2) {
-        var key = items[i];
-        var val = items[i+1];
-        output[2] = types.join[';'];
-        var index = edge_props.indexOf(key);
-        if (index != -1) {
-          output[index + 2] = val;
-        } else {
-          console.log('WARNING: This edge property is not defined: ' + key);
+      } else {
+        // This line is a edge
+        var output = [];
+        output[0] = items[0]; // source node
+        output[1] = items[1]; // target node
+        output[2] = types[0];
+        // For each property, add 1 line
+        for (var i=2; i<items.length-1; i=i+2) {
+          var key = items[i];
+          var val = items[i+1];
+          var index = edge_props.indexOf(key);
+          if (index != -1) {
+            output[index + 2] = val;
+          } else {
+            console.log('WARNING: This edge property is not defined: ' + key);
+          }
         }
-      }
-      fs.appendFile(path_edges, output.join(sep) + '\n', function (err) {});
+        fs.appendFile(path_edges, output.join(sep) + '\n', function (err) {});
       }
     }
   });
@@ -185,22 +186,3 @@ function isProp(str) {
   }
 }
 
-function evalType(str) {
-  if (isString(str)) {
-    return 'string';
-  } else {
-    return 'double';
-  }
-}
-
-function isString(str) {
-  if (typeof str == 'string') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function isInteger(x) {
-  return Math.round(x) === x;
-}

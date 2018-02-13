@@ -7,6 +7,7 @@ var prefix = process.argv[3];
 
 var fs = require('fs');
 var readline = require('readline');
+var pg = require('./pg_to.js');
 
 var rs = fs.createReadStream(pgp_file);
 var rl = readline.createInterface(rs, {});
@@ -49,7 +50,7 @@ rl.on('line', function(line) {
         for (var i=1; i<items.length-1; i=i+2) {
           var key = items[i]; 
           var val = items[i+1];
-          var type = evalType(val);
+          var type = pg.evalType(val);
           var output = [];
           output[0] = id;
           output[1] = key;
@@ -94,7 +95,7 @@ rl.on('line', function(line) {
             output[2] = items[1]; // target node
             output[3] = label;
             output[4] = key;
-            var type = evalType(val);
+            var type = pg.evalType(val);
             output = output.concat(format(val, type));
             fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
             if (edge_props.indexOf(key) == -1) {
@@ -153,22 +154,6 @@ function isProp(str) {
   } else {
     return false;
   } 
-};
-
-function evalType(str) {
-  if (isNaN(str)) {
-    return 'string';
-  } else {
-    if (isInteger(Number(str))) {
-      return 'integer';
-    } else {
-      return 'double';
-    }
-  }
-};
-
-function isInteger(num) {
-  return Math.round(num) === num;
 };
 
 function format(str, type) {
