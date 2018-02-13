@@ -37,9 +37,8 @@ function listProps(callback) {
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
-      // remove types
-      line = line.replace(/\s:(\w+|"[^"]+")/g, '');
-      var items = line.match(/\w+|"[^"]+"/g);
+      line = line.replace(/\s:(\w+|"[^"]+")/g, ''); // remove types
+      var items = line.match(/"[^"]+"|[^\s:]+/g); // "...." or .... (separated by : or \s)
       checkItems(items);
       if (isProp(line.split(/\s+/)[1])) {
         // This line is a node
@@ -121,9 +120,8 @@ function writeNodesAndEdges(callback) {
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
       var types = globalGroupMatch(line, /\s:(\w+|"[^"]+")/g).map((m) => m[1]);
-      console.log('types:' + types);
-      line = line.replace(/\s:(\w+|"[^"]+")/g, '');
-      var items = line.match(/\w+|"[^"]+"/g);
+      line = line.replace(/\s:(\w+|"[^"]+")/g, ''); // remove types
+      var items = line.match(/"[^"]+"|[^\s:]+/g); // "...." or .... (separated by : or \s)
       checkItems(items);
       if (isProp(line.split(/\s+/)[1])) {
         // This line is a node
