@@ -32,9 +32,9 @@ fs.writeFile(file_config, '', function (err) {});
 
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
-    var items = line.match(/"[^"]+"|[^\s:]+/g); // .... or "..(inc. : or \s).." (separated by : or \s)
-    checkItems(items);
-    if (isProp(line.split(/\s+/)[1])) {
+    var items = line.match(/"[^"]+"|[^\s:]+/g);
+    pg.checkItems(items);
+    if (pg.isProp(line.split(/\s+/)[1])) {
       // This line is a node
       cnt_nodes++;
       var id = items[0];
@@ -137,24 +137,6 @@ function createLoadConfig() {
 function filename(path) {
   return path.replace(/^.*[\\\/]/, '');
 }
-
-function checkItems(items) {
-  for(var i=0; i<items.length; i++){
-    items[i] = items[i].replace(/"/g,'');
-    if (items[i].match(/\t/)) {
-      console.log('WARNING: This item has tab(\\t): ' + items[i]);
-    }
-  }
-};
-
-function isProp(str) {
-  arr = str.match(/"[^"]+"|[^:]+/g);
-  if (arr.length > 1 && arr[0] != '') {
-    return true;
-  } else {
-    return false;
-  } 
-};
 
 function format(str, type) {
   var output = [];

@@ -40,8 +40,8 @@ function listProps(callback) {
     if (line.charAt(0) != '#') {
       line = line.replace(/\s:(\w+|"[^"]+")/g, ''); // remove types
       var items = line.match(/"[^"]+"|[^\s:]+/g); // "...." or .... (separated by : or \s)
-      checkItems(items);
-      if (isProp(line.split(/\s+/)[1])) {
+      pg.checkItems(items);
+      if (pg.isProp(line.split(/\s+/)[1])) {
         // This line is a node
         // For each property, check if it is listed
         for (var i=1; i<items.length-1; i=i+2) {
@@ -123,8 +123,8 @@ function writeNodesAndEdges(callback) {
       var types = globalGroupMatch(line, /\s:(\w+|"[^"]+")/g).map((m) => m[1]);
       line = line.replace(/\s:(\w+|"[^"]+")/g, ''); // remove types
       var items = line.match(/"[^"]+"|[^\s:]+/g); // "...." or .... (separated by : or \s)
-      checkItems(items);
-      if (isProp(line.split(/\s+/)[1])) {
+      pg.checkItems(items);
+      if (pg.isProp(line.split(/\s+/)[1])) {
         // This line is a node
         var id = items[0];
         var output = [];
@@ -167,22 +167,3 @@ function writeNodesAndEdges(callback) {
     callback();
   });
 }
-
-function checkItems(items) {
-  for(var i=0; i<items.length; i++){
-    //items[i] = items[i].replace(/"/g,'');
-    if (items[i].match(/\t/)) {
-      console.log('WARNING: This item has tab(\\t): ' + items[i]);
-    }
-  }
-}
-
-function isProp(str) {
-  arr = str.match(/\w+|"[^"]+"/g);
-  if (arr.length > 1 && arr[0] != '') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
