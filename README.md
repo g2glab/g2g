@@ -11,7 +11,7 @@ $ cd g2gml
 
 Install modules by npm.
 ```
-$ npm install js-yaml fs require config
+$ npm install
 ```
 
 You can check the installation by running the test script.
