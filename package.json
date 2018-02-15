@@ -1,0 +1,10 @@
+{
+  "name": "g2gml",
+  "version": "0.0.1",
+  "description": "",
+  "devDependencies": {
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "request": "^2.83.0"
+  }
+}
