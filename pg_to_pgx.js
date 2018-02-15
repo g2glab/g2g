@@ -7,7 +7,7 @@ var prefix = process.argv[3];
 
 var fs = require('fs');
 var readline = require('readline');
-var pg = require('./pg_to.js');
+var pg = require('./src/pg_to.js');
 
 var rs = fs.createReadStream(pgp_file);
 var rl = readline.createInterface(rs, {});

@@ -1,17 +1,26 @@
-// USAGE: $ node g2gml_mapper.js <rq|pg|neo|pgx> <g2g_path> <dst_prefix> <endpoint>
+// USAGE: $ node g2g.js <rq|pg|neo|pgx> <g2g_path> <endpoint>
 
-[dstFormat, g2gPath, dstPrefix, endpoint] = process.argv.slice(2);
+[dstFormat, g2gPath, endpoint] = process.argv.slice(2);
 
 var path = require('path');
 
-var pgPath = dstPrefix + '.pg';
-var inputName = path.basename(g2gPath);
+var inputName = removeExtension(path.basename(g2gPath));
 
 const OUTPUT_DIR = './output/'
 const DST_DIR = OUTPUT_DIR + inputName;
 const SPARQL_DIR = DST_DIR + '/sparql/';
+var pgPath = DST_DIR + '/' + inputName + '.pg';
 
+var fs = require('fs');
 var childProcess = require('child_process');
+
+tryToMkdir(OUTPUT_DIR);
+tryToMkdir(DST_DIR);
+tryToMkdir(SPARQL_DIR);
+
+function removeExtension(name) {
+  return name.substring(0, name.lastIndexOf('.')) || name;
+}
 
 function runScript(scriptPath, callback, ...args) {
   // keep track of whether callback has been invoked to prevent multiple invocations
@@ -36,19 +45,24 @@ function runScript(scriptPath, callback, ...args) {
 function afterSparql(err) {
   if(err) throw err;
   if(dstFormat != 'rq') {
-    runScript('./src/sparql_to_pg.js', afterPg, endpoint, SPARQL_DIR, pgPath);
+    runScript('./src/sparql_to_pg.js', afterPg, endpoint, SPARQL_DIR, DST_DIR + "/tsv/", pgPath);
   }
 }
 
 
 function afterPg(err) {
   if(err) throw err;
+  console.log('"' + pgPath + '" has been created.');
   switch(dstFormat) {
     case 'neo':
-    runScript('./src/pg_to_neo.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, dstPrefix);
+    var neoDir = DST_DIR + "/neo/";
+    tryToMkdir(neoDir);
+    runScript('./pg_to_neo.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, neoDir + inputName);
     break;
     case 'pgx':
-    runScript('./src/pg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, dstPrefix);
+    var pgxDir = DST_DIR + "/pgx/";
+    tryToMkdir(pgxDir);
+    runScript('./pg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, pgxDir + inputName);
     break;
     case 'pg':
     console.log('Done.');
@@ -56,4 +70,10 @@ function afterPg(err) {
   }
 }
 
-runScript('./src/g2g_to_sparql.js', afterSparql, g2gPath);
+function tryToMkdir(dst) {
+  if(!fs.existsSync(dst))fs.mkdirSync(dst);
+}
+
+
+
+runScript('./src/g2g_to_sparql.js', afterSparql, g2gPath, SPARQL_DIR);
