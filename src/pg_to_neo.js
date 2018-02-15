@@ -38,10 +38,10 @@ function listProps(callback) {
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
-      line = line.replace(/\s:(\w+|"[^"]+")/g, ''); // remove types
+      [line, types] = pg.extractTypes(line);
       var items = line.match(/"[^"]+"|[^\s:]+/g); // "...." or .... (separated by : or \s)
       pg.checkItems(items);
-      if (pg.isProp(line.split(/\s+/)[1])) {
+      if (pg.isNodeLine(line)) {
         // This line is a node
         // For each property, check if it is listed
         for (var i=1; i<items.length-1; i=i+2) {
@@ -61,12 +61,10 @@ function listProps(callback) {
           var key = items[i];
           var val = items[i+1];
           var type = pg.evalType(val);
-          if (key != 'type') {
-            if (edge_props.indexOf(key) == -1) {
-              var prop = { name: key, type: type };
-              edge_props.push(key);
-              edge_props_type.push(prop);
-            }
+          if (edge_props.indexOf(key) == -1) {
+            var prop = { name: key, type: type };
+            edge_props.push(key);
+            edge_props_type.push(prop);
           }
         }
       }
@@ -106,25 +104,17 @@ function writeHeaderEdges(callback) {
   callback();
 }
 
-function globalGroupMatch(text, pattern) {
-  var matchedArray = [];
-  var regex = pattern;
-  while(match = regex.exec(text)) {
-    matchedArray.push(match);
-  }
-  return matchedArray;
-}
 
 function writeNodesAndEdges(callback) {
   var rs = fs.createReadStream(pgp_file);
   var rl = readline.createInterface(rs, {});
   rl.on('line', function(line) {
     if (line.charAt(0) != '#') {
-      var types = globalGroupMatch(line, /\s:(\w+|"[^"]+")/g).map((m) => m[1]);
-      line = line.replace(/\s:(\w+|"[^"]+")/g, ''); // remove types
+      var types;
+      [line, types] = pg.extractTypes(line);
       var items = line.match(/"[^"]+"|[^\s:]+/g); // "...." or .... (separated by : or \s)
       pg.checkItems(items);
-      if (pg.isProp(line.split(/\s+/)[1])) {
+      if (pg.isNodeLine(line)) {
         // This line is a node
         var id = items[0];
         var output = [];

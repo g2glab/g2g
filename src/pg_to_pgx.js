@@ -24,20 +24,30 @@ var file_nodes = prefix + '.pgx.nodes';
 var file_edges = prefix + '.pgx.edges';
 var file_config = prefix + '.pgx.json';
 
-var sep = ',';
+var sep = '\t';
 
 fs.writeFile(file_nodes, '', function (err) {});
 fs.writeFile(file_edges, '', function (err) {});
 fs.writeFile(file_config, '', function (err) {});
 
+function flatten(array) {
+  return Array.prototype.concat.apply([], array);
+}
+
 rl.on('line', function(line) {
   if (line.charAt(0) != '#') {
+    var types;
+    [line, types] = pg.extractTypes(line);
     var items = line.match(/"[^"]+"|[^\s:]+/g);
     pg.checkItems(items);
-    if (pg.isProp(line.split(/\s+/)[1])) {
+    items = items.map(item => item.replace(/"/g,'')); // remove double quotes
+    types = types.map(type => type.replace(/"/g,'')); // remove double quotes
+    if (pg.isNodeLine(line)) {
       // This line is a node
-      cnt_nodes++;
       var id = items[0];
+      // For each property, add 1 line
+      items = items.concat(flatten(types.map(type => ['type', type])));
+      cnt_nodes++;
       if (items.length == 1) {
         // When this node has no property
         var output = [];
@@ -46,7 +56,6 @@ rl.on('line', function(line) {
         output = output.concat(format('', 'none'));
         fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
       } else {
-        // For each property, add 1 line
         for (var i=1; i<items.length-1; i=i+2) {
           var key = items[i]; 
           var val = items[i+1];
@@ -66,13 +75,7 @@ rl.on('line', function(line) {
     } else {
       // This line is a edge
       cnt_edges++;
-      var label;
-      // Find "type" property and store as "label"
-      for (var i=2; i<items.length-1; i=i+2) {
-        if (items[i] == 'type') {
-          label = items[i+1];
-        }
-      }
+      var label = types[0];
       if (items.length == 4) {
         // When this edge has no property
         var output = [];
