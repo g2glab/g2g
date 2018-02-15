@@ -28,4 +28,4 @@ PREFIX faldo: <http://biohackathon.org/resource/faldo>
     ?m ^icgc:mutation ?e . ?e icgc:gene_affected ?gene .
 
 # USAGE:
-# $ node g2gml_mapper.js gpg https://integbio.jp/rdf/sparql examples/icgc.g2g output/icgc
+# $ node g2g.js pg examples/icgc.g2g output/icgc https://integbio.jp/rdf/sparql

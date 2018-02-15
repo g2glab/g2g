@@ -15,4 +15,4 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     ?db1 rdfs:seeAlso ?db2 .
 
 # USAGE:
-# $ node g2gml_mapper.js http://integbio.jp/rdf/sparql examples/dbcatalog.g2g output/dbcatalog
+# $ node g2g.js pg examples/dbcatalog.g2g output/dbcatalog http://integbio.jp/rdf/sparql
