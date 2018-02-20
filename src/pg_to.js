@@ -20,7 +20,11 @@ exports.evalType = function (str) {
   if (isString(str)) {
     return 'string';
   } else {
-    return 'double';
+    if (isInteger(Number(str))) {
+      return 'integer';
+    } else {
+      return 'double';
+    }
   }
 }
 
@@ -54,7 +58,8 @@ function globalGroupMatch(text, pattern) {
 }
 
 function isString(str) {
-  if (typeof str == 'string') {
+  //if (typeof str == 'string') {
+  if (isNaN(str)) {
     return true;
   } else {
     return false;
