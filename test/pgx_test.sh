@@ -1,3 +1,5 @@
+#!/bin/bash
+
 OUT_DIR=./test/output/
 
 node g2g.js pgx examples/musician.g2g http://ja.dbpedia.org/sparql $OUT_DIR

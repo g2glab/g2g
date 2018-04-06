@@ -6,8 +6,6 @@ var path = require('path');
 
 [dstFormat, g2gPath, endpoint, dstDir] = process.argv.slice(2);
 
-
-
 var inputName = common.removeExtension(path.basename(g2gPath));
 
 if(dstDir == undefined) dstDir = './output/' + inputName;
