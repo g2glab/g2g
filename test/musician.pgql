@@ -1,0 +1,7 @@
+G = session.readGraphWithProperties("./test/output/pgx/musician.pgx.json")
+
+G.queryPgql(" \
+  SELECT d.id(), r.label, m.id() \
+  WHERE (d)-[r]->(m) \
+  LIMIT 30 \
+").print()
