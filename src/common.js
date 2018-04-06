@@ -26,6 +26,12 @@ exports.mkdirPath = (path) =>
   childProcess.execSync('mkdir -p ' + path);
 }
 
+exports.removeRecursive = (path) => 
+{
+  childProcess.execSync('rm -r ' + path);
+}
+
+
 exports.removeExtension = (name) => 
 {
   return name.substring(0, name.lastIndexOf('.')) || name;
