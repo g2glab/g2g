@@ -20,3 +20,14 @@ exports.runScript = (scriptPath, callback, ...args) =>
     callback(err);
   });
 };
+
+exports.mkdirPath = (path) => 
+{
+  childProcess.execSync('mkdir -p ' + path);
+}
+
+exports.removeExtension = (name) => 
+{
+  return name.substring(0, name.lastIndexOf('.')) || name;
+}
+
