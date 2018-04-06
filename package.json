@@ -5,6 +5,10 @@
   "devDependencies": {
     "fs": "0.0.1-security",
     "path": "^0.12.7",
-    "request": "^2.83.0"
+    "request": "^2.85.0"
+  },
+  "dependencies": {
+    "config": "^1.30.0",
+    "js-yaml": "^3.11.0"
   }
 }
