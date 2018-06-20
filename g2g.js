@@ -1,4 +1,4 @@
-// USAGE: $ node g2g.js <rq|pg|neo|pgx> <g2g_path> <endpoint|local_file> <output_dir(optional)>
+// USAGE: $ node g2g.js <rq|pg|neo|pgx|dot> <g2g_path> <endpoint|local_file> <output_dir(optional)>
 // TODO: add option to use a local file
 
 var fs = require('fs');
@@ -36,12 +36,15 @@ function afterPg(err) {
     case 'neo':
     var neoDir = dstDir + "/neo/";
     common.mkdirPath(neoDir);
-    common.runScript('./pg_to_neo.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, neoDir + inputName);
+    common.runScript('./pg_to_neo.js', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     break;
     case 'pgx':
     var pgxDir = dstDir + "/pgx/";
     common.mkdirPath(pgxDir);
-    common.runScript('./pg_to_pgx.js', (err) => {if(err) throw err; console.log('Done.');}, pgPath, pgxDir + inputName);
+    common.runScript('./pg_to_pgx.js', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
+    break;
+    case 'dot':
+    common.runScript('./pg_to_dot.js', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     break;
     case 'pg':
     console.log('Done.');
