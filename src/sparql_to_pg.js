@@ -8,6 +8,7 @@ var dstPath     = process.argv[5];
 
 var fs = require('fs');
 var path = require('path');
+var validUrl = require('valid-url');
 var childProcess = require('child_process');
 var sparqlClient = require('./sparql_client.js');
 var tsvToPg = require('./tsv_to_pg.js');
@@ -26,7 +27,16 @@ edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge));
 
 function queryTsv(file, callback) {
   var tsvPath = tsvDir + path.basename(file) + '.tsv'
-  if(fs.existsSync(dataSrc)){ // use ARQ
+  if(validUrl.isUri(dataSrc)){ // use remote endpoint
+    sparqlClient.query(dataSrc, file, tsvPath, () => {
+      console.log('"' + tsvPath + '" has been created.');
+      callback(tsvPath, dstPath)
+    });
+  } else { // use ARQ
+    if(!fs.existsSync(dataSrc)) {
+      console.log('ERROR: "' + dataSrc + '" does not exist.' );
+      process.exit(-1);
+    }
     var arq_result = childProcess.execSync('arq --data ' + dataSrc + ' --query ' + file + ' --results=tsv').toString();
     arq_result = arq_result.replace(/</g, '"');
     arq_result = arq_result.replace(/>/g, '"');
@@ -36,12 +46,6 @@ function queryTsv(file, callback) {
         }
         callback(tsvPath, dstPath);
       });
-
-  } else { // use remote endpoint
-    sparqlClient.query(dataSrc, file, tsvPath, () => {
-      console.log('"' + tsvPath + '" has been created.');
-      callback(tsvPath, dstPath)
-    });
   }
 }
 
