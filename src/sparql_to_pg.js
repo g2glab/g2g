@@ -1,13 +1,14 @@
-// USAGE: $ node sparql_to_pg.js <endpoint> <sparql_dir> <tsv_dir> <pg_path>
+// USAGE: $ node sparql_to_pg.js <endpoint|local_file> <sparql_dir> <tsv_dir> <pg_path>
 // EXAMPLE: $ node sparql_to_pg.js http://dbpedia.org/sparql output/musician/
 
-var endpoint    = process.argv[2];
+var dataSrc    = process.argv[2];
 var sparqlDir  = process.argv[3];
 var tsvDir     = process.argv[4];
 var dstPath     = process.argv[5];
 
 var fs = require('fs');
 var path = require('path');
+var childProcess = require('child_process');
 var sparqlClient = require('./sparql_client.js');
 var tsvToPg = require('./tsv_to_pg.js');
 
@@ -25,10 +26,23 @@ edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge));
 
 function queryTsv(file, callback) {
   var tsvPath = tsvDir + path.basename(file) + '.tsv'
-  sparqlClient.query(endpoint, file, tsvPath, () => {
+  if(fs.existsSync(dataSrc)){ // use ARQ
+    var arq_result = childProcess.execSync('arq --data ' + dataSrc + ' --query ' + file + ' --results=tsv').toString();
+    arq_result = arq_result.replace(/</g, '"');
+    arq_result = arq_result.replace(/>/g, '"');
+    fs.writeFile(tsvPath, arq_result, 'utf8', function (err)      {
+        if (err != null) {
+          console.log(err);
+        }
+        callback(tsvPath, dstPath);
+      });
+
+  } else { // use remote endpoint
+    sparqlClient.query(dataSrc, file, tsvPath, () => {
       console.log('"' + tsvPath + '" has been created.');
       callback(tsvPath, dstPath)
     });
+  }
 }
 
 function tryToMkdir(dst) {
