@@ -14,12 +14,6 @@ Install modules by npm.
 $ npm install
 ```
 
-You can check the installation by running the test script (Optional).
-
-```
-$ ./full_test.sh
-```
-
 Execute an example g2g for musicians on "ja.dbpedia.org".
 
 ```
