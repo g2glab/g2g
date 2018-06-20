@@ -45,7 +45,7 @@ function edgeSelectClause(edge, nodes) {
   return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)\n' +
     edge.properties.map(
       (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ')' + ' SAMPLE(?' + prop.variable + ') AS ?' + prop.variable + '\n').join('') +
+        '       ("' + prop.name + '" AS ?P' + index + ')' + ' (SAMPLE(?' + prop.variable + ') AS ?_' + prop.variable + ')\n').join('') +
     'WHERE {\n' +
     whereClause + '\n' +
     '}\n' +
@@ -83,7 +83,7 @@ function nodeSelectClause(nodeDefinition) {
   return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
       (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ') SAMPLE(?' + prop.variable + ') AS ?' + prop.variable + '\n').join('') +
+        '       ("' + prop.name + '" AS ?P' + index + ') (SAMPLE(?' + prop.variable + ') AS ?_' + prop.variable + ')\n').join('') +
     'WHERE {\n' + 
     nodeDefinition.where.join('\n') + '\n' +
     '}\n' +

@@ -3,6 +3,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX prop-ja: <http://ja.dbpedia.org/property/>
 PREFIX schema: <http://schema.org/>
 PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 # Node mappings
 (mus:Musician {label:nam, born:dat, hometown:twn, pageLength:len})
