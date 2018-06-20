@@ -2,7 +2,7 @@
 
 G2GML: Semantic Graph to Property Graph Mapping Language
 
-# Getting Started
+## Getting Started
 
 Go into the project directory.
 ```
