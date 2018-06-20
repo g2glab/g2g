@@ -45,7 +45,7 @@ rl.on('line', function(line) {
       }
       content += '"]\n'
     } else {
-      content += '"' + items[0] + '" -> "' + items[1] + '" [label="' + types.join(';') + "'\\l";
+      content += '"' + items[0] + '" -> "' + items[1] + '" [label="' + types.join(';') + "\\l";
       for (var i=2; i<items.length-1; i=i+2) {
         content += items[i] + ': ' + items[i+1] + '\\l'; 
       }
