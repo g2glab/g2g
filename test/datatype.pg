@@ -1,3 +1,4 @@
-"node01"	prop_int:1234	prop_double:1234.0	prop_string:"1234"
-"node02"	prop_int:1234   prop_double:1234.0      prop_string:"1234"
-"node01"	"node02"	prop_int:1234   prop_double:1234.0      prop_string:"1234"
+"node01"	prop_int:1234	prop_double:1234.0	prop_string:"1234"	prop_string:abcd
+"node02"	"prop_int":1234   "prop_double":1234.0      "prop_string":"1234"	"prop_string":abcd
+"node01"	"node02"	:friend_of	prop_int:1234   prop_double:1234.0      prop_string:"1234"	prop_string:abcd
+"node01"	"node02"	:"boss_of"	"prop_int":1234   "prop_double":1234.0      "prop_string":"1234"	prop_string:abcd

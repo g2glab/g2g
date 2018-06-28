@@ -15,10 +15,10 @@ var rl = readline.createInterface(rs, {});
 var cnt_nodes = 0;
 var cnt_edges = 0;
 
-var node_props = [];
-var edge_props = [];
-var node_props_type = [];
-var edge_props_type = [];
+var arr_node_prop = [];
+var arr_edge_prop = [];
+var arr_node_prop_type = [];
+var arr_edge_prop_type = [];
 
 var file_nodes = prefix + '.pgx.nodes';
 var file_edges = prefix + '.pgx.edges';
@@ -40,11 +40,11 @@ rl.on('line', function(line) {
     [line, types] = pg.extractTypes(line);
     var items = line.match(/"[^"]+"|[^\s:]+/g);
     pg.checkItems(items);
-    items = items.map(item => item.replace(/"/g,'')); // remove double quotes
-    types = types.map(type => type.replace(/"/g,'')); // remove double quotes
+    //items = items.map(item => item.replace(/"/g,'')); // remove double quotes
+    //types = types.map(type => type.replace(/"/g,'')); // remove double quotes
     if (pg.isNodeLine(line)) {
       // This line is a node
-      var id = items[0];
+      var id = items[0].replace(/"/g,'');
       // For each property, add 1 line
       items = items.concat(flatten(types.map(type => ['type', type])));
       cnt_nodes++;
@@ -57,31 +57,31 @@ rl.on('line', function(line) {
         fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
       } else {
         for (var i=1; i<items.length-1; i=i+2) {
-          var key = items[i]; 
-          var val = items[i+1];
-          var type = pg.evalType(val);
+          var key = items[i].replace(/"/g,''); 
+          var val = items[i+1].replace(/"/g,'');
+          var type = pg.evalType(items[i+1]);
           var output = [];
           output[0] = id;
           output[1] = key;
           output = output.concat(format(val, type));
           fs.appendFile(file_nodes, output.join(sep) + '\n', function (err) {});
-          if (node_props.indexOf(key) == -1) {
+          if (arr_node_prop.indexOf(key) == -1) {
             var prop = { name: key, type: type };
-            node_props.push(key); 
-            node_props_type.push(prop); 
+            arr_node_prop.push(key); 
+            arr_node_prop_type.push(prop); 
           }
         }
       }
     } else {
       // This line is a edge
       cnt_edges++;
-      var label = types[0];
+      var label = types[0].replace(/"/g,'');
       if (items.length == 4) {
         // When this edge has no property
         var output = [];
         output[0] = cnt_edges; // edge id
-        output[1] = items[0]; // source node
-        output[2] = items[1]; // target node
+        output[1] = items[0].replace(/"/g,''); // source node
+        output[2] = items[1].replace(/"/g,''); // target node
         output[3] = label;
         output[4] = '%20';
         output = output.concat(format('', 'none'));
@@ -89,22 +89,22 @@ rl.on('line', function(line) {
       } else {
         // For each property, add 1 line
         for (var i=2; i<items.length-1; i=i+2) {
-          var key = items[i]; 
-          var val = items[i+1];
+          var key = items[i].replace(/"/g,''); 
+          var val = items[i+1].replace(/"/g,'');
           if (key != 'type') {
             var output = [];
             output[0] = cnt_edges; // edge id
-            output[1] = items[0]; // source node
-            output[2] = items[1]; // target node
+            output[1] = items[0].replace(/"/g,''); // source node
+            output[2] = items[1].replace(/"/g,''); // target node
             output[3] = label;
             output[4] = key;
-            var type = pg.evalType(val);
+            var type = pg.evalType(items[i+1]);
             output = output.concat(format(val, type));
             fs.appendFile(file_edges, output.join(sep) + '\n', function (err) {});
-            if (edge_props.indexOf(key) == -1) {
+            if (arr_edge_prop.indexOf(key) == -1) {
               var prop = { name: key, type: type };
-              edge_props.push(key); 
-              edge_props_type.push(prop); 
+              arr_edge_prop.push(key); 
+              arr_edge_prop_type.push(prop); 
             }
           }
         }
@@ -126,8 +126,8 @@ function createLoadConfig() {
   , format: "flat_file"
   , node_id_type: "string"
   , edge_label: true
-  , vertex_props: node_props_type
-  , edge_props: edge_props_type
+  , vertex_props: arr_node_prop_type
+  , edge_props: arr_edge_prop_type
   , separator: sep
   , loading: {
       load_edge_label:true
