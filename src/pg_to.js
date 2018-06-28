@@ -1,7 +1,7 @@
 exports.checkItems = function (items) {
   for(var i=0; i<items.length; i++){
     if (items[i].match(/\t/)) {
-      console.log('WARNING: This item has tab(\\t): ' + items[i]);
+      console.log('WARNING: This item has unexpected tab(\\t): [' + items[i] + '] after [' + items[i-1] + ']');
     }
   }
 }
@@ -38,15 +38,23 @@ exports.extractTypes = function (line) {
 // This method assums to be called after extractTypes
 exports.isNodeLine = function (line) {
   var tokens = line.split(/\s+/);
-  if(tokens.length <= 1) return true;
-  var str = tokens[1];
-  if (str.startsWith('"') && str.endsWith('"') && (str.match(/"/g) || []).length == 2) { // if it is a simple string
+  if (tokens.length <= 1) return true;
+  var str = tokens[1]; // the second item in the line
+  if (isSimpleStringItem(str)) {
+//  if (str.startsWith('"') && str.endsWith('"') && (str.match(/"/g) || []).length == 2) { // if it is a simple string
     return false;
   } else {
     return true;
   }
 }
 
+function isSimpleStringItem(str) {
+  if (str.startsWith('"') && str.endsWith('"') && (str.match(/"/g) || []).length == 2) { // string item has to be double quoated
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function globalGroupMatch(text, pattern) {
   var matchedArray = [];
