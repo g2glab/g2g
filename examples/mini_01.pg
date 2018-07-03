@@ -1,0 +1,3 @@
+"http://example.org/person1"	 :"Person"
+"http://example.org/person2"	 :"Person"
+"http://example.org/person1"	"http://example.org/person2"	 :"follows"

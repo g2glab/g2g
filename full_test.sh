@@ -6,5 +6,5 @@ if [ $? != 0 ]; then
 fi
 
 ./test/pgx_test.sh
-
 ./test/neo4j_test.sh
+./test/mini_01.sh
