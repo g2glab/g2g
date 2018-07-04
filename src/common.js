@@ -21,6 +21,14 @@ exports.runScript = (scriptPath, callback, ...args) =>
   });
 };
 
+exports.runSpawnSync = (command, callback, ...args) =>
+{
+  childProcess.spawnSync(command, args);
+  // TODO: STDOUT
+  // TODO: STDERR
+  // TODO: CALLBACK
+}
+
 exports.mkdirPath = (path) => 
 {
   childProcess.execSync('mkdir -p ' + path);
@@ -30,7 +38,6 @@ exports.removeRecursive = (path) =>
 {
   childProcess.execSync('rm -r ' + path);
 }
-
 
 exports.removeExtension = (name) => 
 {
