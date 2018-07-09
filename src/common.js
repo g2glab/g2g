@@ -27,6 +27,7 @@ exports.runSpawnSync = (command, callback, ...args) =>
   // TODO: STDOUT
   // TODO: STDERR
   // TODO: CALLBACK
+  callback();
 }
 
 exports.mkdirPath = (path) => 

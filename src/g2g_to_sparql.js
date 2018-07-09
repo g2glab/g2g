@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // USAGE: $ node g2g_to_sparql.js <g2g_file> <sparql_dir>
 // EXAMPLE: $ node g2g_to_pg.js examples/musicians.g2g
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // USAGE: $ node sparql_to_pg.js <endpoint|local_file> <sparql_dir> <tsv_dir> <pg_path>
 // EXAMPLE: $ node sparql_to_pg.js http://dbpedia.org/sparql output/musician/
 

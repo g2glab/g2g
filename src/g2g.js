@@ -23,7 +23,8 @@ common.mkdirPath(SPARQL_DIR);
 function afterSparql(err) {
   if(err) throw err;
   if(dstFormat != 'rq') {
-    common.runScript('./sparql_to_pg.js', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
+    //common.runScript('./sparql_to_pg.js', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
+    common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
   } else {
     console.log('Done.');
   }
@@ -57,4 +58,5 @@ function afterPg(err) {
   }
 }
 
-common.runScript('./g2g_to_sparql.js', afterSparql, g2gPath, SPARQL_DIR);
+//common.runScript('./g2g_to_sparql.js', afterSparql, g2gPath, SPARQL_DIR);
+common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);
