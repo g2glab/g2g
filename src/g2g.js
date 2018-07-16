@@ -10,7 +10,7 @@ var commander = require('commander').version(require("../package.json").version)
       dataSrc = data_source;
     })
     .option('-f, --format [format]', 'format of results <rq|pg|pgx|neo|dot|all (default: pg)>', /^(rq|pg|pgx|neo|dot|all)$/i)
-    .option('--output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)');
+    .option('-o, --output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)');
 
 commander.parse(process.argv)
 
