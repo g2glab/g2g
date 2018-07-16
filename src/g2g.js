@@ -23,7 +23,6 @@ common.mkdirPath(SPARQL_DIR);
 function afterSparql(err) {
   if(err) throw err;
   if(dstFormat != 'rq') {
-    //common.runScript('./sparql_to_pg.js', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
     common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
   } else {
     console.log('Done.');
@@ -39,17 +38,14 @@ function afterPg(err) {
     case 'neo':
     var neoDir = dstDir + "/neo/";
     common.mkdirPath(neoDir);
-    //common.runScript('./pg_to_neo.js', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     common.runSpawnSync('pg_to_neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     break;
     case 'pgx':
     var pgxDir = dstDir + "/pgx/";
     common.mkdirPath(pgxDir);
-    //common.runScript('./pg_to_pgx.js', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
     common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
     break;
     case 'dot':
-    //common.runScript('./pg_to_dot.js', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     common.runSpawnSync('pg_to_dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     break;
     case 'pg':
@@ -58,5 +54,4 @@ function afterPg(err) {
   }
 }
 
-//common.runScript('./g2g_to_sparql.js', afterSparql, g2gPath, SPARQL_DIR);
 common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);
