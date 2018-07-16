@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-// USAGE: $ node g2g_to_sparql.js <g2g_file> <sparql_dir>
-// EXAMPLE: $ node g2g_to_pg.js examples/musicians.g2g
+// USAGE: $ g2g_to_sparql.js <g2g_file>
 
 var fs = require('fs');
 var path = require('path');

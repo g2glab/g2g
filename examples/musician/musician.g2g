@@ -28,4 +28,4 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     ?mus1 dbpedia-owl:influenced ?mus2 .
 
 # USAGE:
-# $ node g2g.js pg examples/musician.g2g output/musician http://ja.dbpedia.org/sparql
+# $ g2g examples/musician/musician.g2g http://ja.dbpedia.org/sparql

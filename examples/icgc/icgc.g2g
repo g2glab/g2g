@@ -1,3 +1,5 @@
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:	<http://www.w3.org/2000/01/rdf-schema#>
 PREFIX icgc: <http://icgc.link/vocab/>
 PREFIX icgc-class: <http://icgc.link/>
 PREFIX faldo: <http://biohackathon.org/resource/faldo>
@@ -28,4 +30,4 @@ PREFIX faldo: <http://biohackathon.org/resource/faldo>
     ?m ^icgc:mutation ?e . ?e icgc:gene_affected ?gene .
 
 # USAGE:
-# $ node g2g.js pg examples/icgc.g2g output/icgc https://integbio.jp/rdf/sparql
+# $ g2g -f pg examples/icgc/icgc.g2g https://integbio.jp/rdf/sparql

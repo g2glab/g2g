@@ -14,4 +14,4 @@ PREFIX coxpresdb: <http://coxpresdb.jp/rdf/def/0.1/>
     FILTER(?cc >= 0.85)
 
 # USAGE:
-# $ node g2g.js pg examples/coxpresdb.g2g output/coxpresdb http://coxpresdb.jp/sparql
+# $ g2g -f pg examples/coxpresdb/coxpresdb.g2g http://coxpresdb.jp/sparql
