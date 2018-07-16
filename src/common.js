@@ -23,11 +23,14 @@ exports.runScript = (scriptPath, callback, ...args) =>
 
 exports.runSpawnSync = (command, callback, ...args) =>
 {
-  childProcess.spawnSync(command, args);
-  // TODO: STDOUT
-  // TODO: STDERR
-  // TODO: CALLBACK
-  callback();
+  var result = childProcess.spawnSync(command, args);
+  process.stdout.write(result.stdout);
+  process.stderr.write(result.stderr);
+  if(result.status === 0) {
+    callback();
+  } else {
+    callback(new Error('exit code ' + result.status));
+  }
 }
 
 exports.mkdirPath = (path) => 
