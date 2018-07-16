@@ -1,17 +1,35 @@
 #!/usr/bin/env node
 
-// USAGE: $ node g2g.js <rq|pg|neo|pgx|dot> <g2g_path> <endpoint|local_file> <output_dir(optional)>
-// TODO: add option to use a local file
-
 var fs = require('fs');
 var common = require('./common.js');
 var path = require('path');
+var commander = require('commander').version(require("../package.json").version)
+    .arguments('<g2gml_file> <data_source>')
+    .action(function (g2gml_file, data_source) {
+      g2gPath = g2gml_file;
+      dataSrc = data_source;
+    })
+    .option('-f, --format [format]', 'format of results <rq|pg|pgx|neo|dot|all (default: pg)>', /^(rq|pg|pgx|neo|dot|all)$/i)
+    .option('--output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)');
 
-[dstFormat, g2gPath, dataSrc, dstDir] = process.argv.slice(2);
+commander.parse(process.argv)
+
+if(commander.args.length === 0) {
+  console.error("Error: no arguments are given!");
+  commander.help();
+}
 
 var inputName = common.removeExtension(path.basename(g2gPath));
+var dstDir = commander.output_dir || './output/' + inputName;
 
-if(dstDir == undefined) dstDir = './output/' + inputName;
+if(commander.format === undefined) {
+  var dstFormat = 'pg'; // default value
+} else if(commander.format === true) {
+  console.error('Error: invalid format!');
+  commander.help();
+} else {
+  var dstFormat = commander.format;
+}
 
 const SPARQL_DIR = dstDir + '/sparql/';
 var pgPath = dstDir + '/' + inputName + '.pg';
@@ -34,14 +52,14 @@ function afterPg(err) {
   if(err) throw err;
   // TODO: output this log only if pg has been sucessfully created
   console.log('"' + pgPath + '" has been created.');
+  var neoDir = dstDir + "/neo/";
+  var pgxDir = dstDir + "/pgx/";
   switch(dstFormat) {
     case 'neo':
-    var neoDir = dstDir + "/neo/";
     common.mkdirPath(neoDir);
     common.runSpawnSync('pg_to_neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     break;
     case 'pgx':
-    var pgxDir = dstDir + "/pgx/";
     common.mkdirPath(pgxDir);
     common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
     break;
@@ -50,6 +68,13 @@ function afterPg(err) {
     break;
     case 'pg':
     console.log('Done.');
+    break;
+    case 'all':
+    common.mkdirPath(neoDir);
+    common.runSpawnSync('pg_to_neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
+    common.mkdirPath(pgxDir);
+    common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
+    common.runSpawnSync('pg_to_dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     break;
   }
 }

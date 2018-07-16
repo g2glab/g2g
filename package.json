@@ -8,6 +8,7 @@
     "request": "^2.85.0"
   },
   "dependencies": {
+    "commander": "^2.16.0",
     "config": "^1.30.0",
     "js-yaml": "^3.11.0",
     "mocha": "^5.2.0",
