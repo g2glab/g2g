@@ -1,6 +1,0 @@
-@prefix : <http://example.org/> .
-:person1 a :Person .
-:person2 a :Person .
-[] :follower  :person1 ; 
-   :following :person2 ; 
-   :since "2016-12-20" .
