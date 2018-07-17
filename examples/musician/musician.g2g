@@ -9,7 +9,6 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 (mus:Musician {label:nam, born:dat, hometown:twn, pageLength:len})
     ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
     ?mus rdfs:label ?nam .
-    FILTER regex(str(?nam), "^A.*") .
     FILTER(lang(?nam) = "ja") .
     OPTIONAL { ?mus prop-ja:born ?dat }
     OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn }

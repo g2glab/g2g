@@ -1,0 +1,222 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dbpedia-ja:	<http://ja.dbpedia.org/resource/> .
+@prefix foaf:	<http://xmlns.com/foaf/0.1/> .
+dbpedia-ja:Sister_MAYO	rdf:type	foaf:Person .
+@prefix dbpedia-owl:	<http://dbpedia.org/ontology/> .
+dbpedia-ja:Sister_MAYO	rdf:type	dbpedia-owl:MusicalArtist .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+dbpedia-ja:Sister_MAYO	rdfs:label	"Sister MAYO"@ja ;
+	dbpedia-owl:hometown	_:b25646597 ,
+		_:b25646600 .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+dbpedia-ja:Sister_MAYO	dbpedia-owl:wikiPageLength	"6325"^^xsd:nonNegativeInteger .
+@prefix prop-ja:	<http://ja.dbpedia.org/property/> .
+dbpedia-ja:Sister_MAYO	prop-ja:born	"--07-26"^^xsd:gMonthDay .
+dbpedia-ja:ジョン・ペトルーシ	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30B8\u30E7\u30F3\u30FB\u30DA\u30C8\u30EB\u30FC\u30B7"@ja ;
+	dbpedia-owl:hometown	_:b25646573 ,
+		_:b25646588 ,
+		_:b25646585 ,
+		_:b25646579 ;
+	dbpedia-owl:wikiPageLength	"5944"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"--07-12"^^xsd:gMonthDay .
+dbpedia-ja:ジョーダン・ルーデス	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30B8\u30E7\u30FC\u30C0\u30F3\u30FB\u30EB\u30FC\u30C7\u30B9"@ja ;
+	dbpedia-owl:hometown	_:b25646594 ,
+		_:b25646591 ,
+		_:b25646582 ,
+		_:b25646576 ;
+	dbpedia-owl:wikiPageLength	"8236"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"--11-04"^^xsd:gMonthDay .
+@prefix schema:	<http://schema.org/> .
+dbpedia-ja:ドリーム・シアター	rdf:type	schema:MusicGroup ;
+	rdfs:label	"\u30C9\u30EA\u30FC\u30E0\u30FB\u30B7\u30A2\u30BF\u30FC"@ja ;
+	dbpedia-owl:bandMember	dbpedia-ja:マイク・マンジーニ ,
+		dbpedia-ja:ジョン・ペトルーシ ,
+		dbpedia-ja:ジョーダン・ルーデス ;
+	dbpedia-owl:hometown	_:b25646593 ,
+		_:b25646578 ,
+		_:b25646590 ,
+		_:b25646584 ;
+	dbpedia-owl:wikiPageLength	"14706"^^xsd:nonNegativeInteger .
+dbpedia-ja:トニー・レヴィン	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30C8\u30CB\u30FC\u30FB\u30EC\u30F4\u30A3\u30F3"@ja ;
+	dbpedia-owl:hometown	_:b25646589 ,
+		_:b25646583 ;
+	dbpedia-owl:wikiPageLength	"7108"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1946-06-06"^^xsd:date .
+dbpedia-ja:マイク・ポートノイ	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30DE\u30A4\u30AF\u30FB\u30DD\u30FC\u30C8\u30CE\u30A4"@ja ;
+	dbpedia-owl:hometown	_:b25646574 ,
+		_:b25646577 ;
+	dbpedia-owl:wikiPageLength	"7899"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1967-04-20"^^xsd:date .
+dbpedia-ja:亀山耕一郎	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u4E80\u5C71\u8015\u4E00\u90CE"@ja ;
+	dbpedia-owl:hometown	_:b25646598 ;
+	dbpedia-owl:wikiPageLength	"6969"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1962-07-18"^^xsd:date .
+dbpedia-ja:谷本貴義	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u8C37\u672C\u8CB4\u7FA9"@ja ;
+	dbpedia-owl:hometown	_:b25646601 ;
+	dbpedia-owl:wikiPageLength	"6757"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1975-04-14"^^xsd:date .
+<http://ja.dbpedia.org/resource/Project.R>	rdf:type	schema:MusicGroup ;
+	rdfs:label	"Project.R"@ja ;
+	dbpedia-owl:bandMember	dbpedia-ja:亀山耕一郎 ,
+		dbpedia-ja:Sister_MAYO ,
+		dbpedia-ja:谷本貴義 ;
+	dbpedia-owl:hometown	_:b25646599 ,
+		_:b25646596 ;
+	dbpedia-owl:wikiPageLength	"17587"^^xsd:nonNegativeInteger .
+dbpedia-ja:リキッド・テンション・エクスペリメント	rdf:type	schema:MusicGroup ;
+	rdfs:label	"\u30EA\u30AD\u30C3\u30C9\u30FB\u30C6\u30F3\u30B7\u30E7\u30F3\u30FB\u30A8\u30AF\u30B9\u30DA\u30EA\u30E1\u30F3\u30C8"@ja ;
+	dbpedia-owl:bandMember	dbpedia-ja:マイク・ポートノイ ,
+		dbpedia-ja:ジョン・ペトルーシ ,
+		dbpedia-ja:ジョーダン・ルーデス ,
+		dbpedia-ja:トニー・レヴィン ;
+	dbpedia-owl:hometown	_:b25646575 ,
+		_:b25646572 ,
+		_:b25646587 ,
+		_:b25646581 ;
+	dbpedia-owl:wikiPageLength	"3118"^^xsd:nonNegativeInteger .
+dbpedia-ja:マイク・マンジーニ	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30DE\u30A4\u30AF\u30FB\u30DE\u30F3\u30B8\u30FC\u30CB"@ja ;
+	dbpedia-owl:hometown	_:b25646586 ,
+		_:b25646580 ,
+		_:b25646595 ,
+		_:b25646592 ;
+	dbpedia-owl:wikiPageLength	"4223"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1963-04-18"^^xsd:date .
+_:b25646572	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646574	rdfs:label	"\u30CB\u30E5\u30FC\u30E8\u30FC\u30AF\u5DDE"@ja .
+_:b25646575	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646577	rdfs:label	"\u30CB\u30E5\u30FC\u30E8\u30FC\u30AF\u5DDE"@ja .
+_:b25646578	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646580	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646581	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646583	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646584	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646586	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646587	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646589	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646590	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646592	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646593	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646595	rdfs:label	"\u30DE\u30B5\u30C1\u30E5\u30FC\u30BB\u30C3\u30C4\u5DDE"@ja .
+_:b25646596	rdfs:label	"\u65E5\u672C"@ja .
+_:b25646598	rdfs:label	"\u5175\u5EAB\u770C"@ja .
+_:b25646599	rdfs:label	"\u65E5\u672C"@ja .
+_:b25646601	rdfs:label	"\u5E83\u5CF6\u770C"@ja .@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dbpedia-ja:	<http://ja.dbpedia.org/resource/> .
+@prefix foaf:	<http://xmlns.com/foaf/0.1/> .
+dbpedia-ja:エルヴィス・プレスリー	rdf:type	foaf:Person .
+@prefix dbpedia-owl:	<http://dbpedia.org/ontology/> .
+dbpedia-ja:エルヴィス・プレスリー	rdf:type	dbpedia-owl:MusicalArtist .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+dbpedia-ja:エルヴィス・プレスリー	rdfs:label	"\u30A8\u30EB\u30F4\u30A3\u30B9\u30FB\u30D7\u30EC\u30B9\u30EA\u30FC"@ja ;
+	dbpedia-owl:hometown	_:b25646554 ,
+		_:b25646556 .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+dbpedia-ja:エルヴィス・プレスリー	dbpedia-owl:wikiPageLength	"41161"^^xsd:nonNegativeInteger .
+@prefix prop-ja:	<http://ja.dbpedia.org/property/> .
+dbpedia-ja:エルヴィス・プレスリー	prop-ja:born	"--01-08"^^xsd:gMonthDay .
+dbpedia-ja:ケイト・ブッシュ	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30B1\u30A4\u30C8\u30FB\u30D6\u30C3\u30B7\u30E5"@ja ;
+	dbpedia-owl:hometown	_:b25646571 ;
+	dbpedia-owl:influenced	dbpedia-ja:ビリー・ホリデイ ;
+	dbpedia-owl:wikiPageLength	"5926"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1958-07-30"^^xsd:date .
+dbpedia-ja:ジェフ・ベック	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30B8\u30A7\u30D5\u30FB\u30D9\u30C3\u30AF"@ja ;
+	dbpedia-owl:hometown	_:b25646553 ;
+	dbpedia-owl:influenced	dbpedia-ja:チェット・アトキンス ;
+	dbpedia-owl:wikiPageLength	"14335"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1944-06-24"^^xsd:date .
+dbpedia-ja:ジョン・レノン	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30B8\u30E7\u30F3\u30FB\u30EC\u30CE\u30F3"@ja ;
+	dbpedia-owl:hometown	_:b25646559 ,
+		_:b25646557 ,
+		_:b25646555 ,
+		_:b25646567 ,
+		_:b25646565 ,
+		_:b25646563 ,
+		_:b25646561 ;
+	dbpedia-owl:influenced	dbpedia-ja:チャック・ベリー ,
+		dbpedia-ja:バディ・ホリー ,
+		dbpedia-ja:エルヴィス・プレスリー ,
+		dbpedia-ja:トゥーツ・シールマンス ;
+	dbpedia-owl:wikiPageLength	"36959"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"--10-09"^^xsd:gMonthDay .
+dbpedia-ja:ジョージ・ハリスン	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30B8\u30E7\u30FC\u30B8\u30FB\u30CF\u30EA\u30B9\u30F3"@ja ;
+	dbpedia-owl:hometown	_:b25646569 ;
+	dbpedia-owl:influenced	dbpedia-ja:チェット・アトキンス ;
+	dbpedia-owl:wikiPageLength	"29143"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"--02-25"^^xsd:gMonthDay .
+dbpedia-ja:ビリー・ホリデイ	rdf:type	dbpedia-owl:MusicalArtist ,
+		foaf:Person ;
+	rdfs:label	"\u30D3\u30EA\u30FC\u30FB\u30DB\u30EA\u30C7\u30A4"@ja ;
+	dbpedia-owl:hometown	_:b25646570 ;
+	dbpedia-owl:wikiPageLength	"23091"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"--04-07"^^xsd:gMonthDay .
+dbpedia-ja:チャック・ベリー	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30C1\u30E3\u30C3\u30AF\u30FB\u30D9\u30EA\u30FC"@ja ;
+	dbpedia-owl:hometown	_:b25646558 ;
+	dbpedia-owl:wikiPageLength	"12020"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"1926-10-18"^^xsd:date .
+dbpedia-ja:バディ・ホリー	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30D0\u30C7\u30A3\u30FB\u30DB\u30EA\u30FC"@ja ;
+	dbpedia-owl:hometown	_:b25646562 ,
+		_:b25646560 ;
+	dbpedia-owl:wikiPageLength	"6946"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"\u30C6\u30AD\u30B5\u30B9\u5DDE\u30E9\u30DC\u30C3\u30AF"@ja ,
+		"--09-07"^^xsd:gMonthDay .
+dbpedia-ja:チェット・アトキンス	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30C1\u30A7\u30C3\u30C8\u30FB\u30A2\u30C8\u30AD\u30F3\u30B9"@ja ;
+	dbpedia-owl:hometown	_:b25646568 ,
+		_:b25646552 ;
+	dbpedia-owl:wikiPageLength	"6276"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"--06-20"^^xsd:gMonthDay .
+dbpedia-ja:トゥーツ・シールマンス	rdf:type	foaf:Person ,
+		dbpedia-owl:MusicalArtist ;
+	rdfs:label	"\u30C8\u30A5\u30FC\u30C4\u30FB\u30B7\u30FC\u30EB\u30DE\u30F3\u30B9"@ja ;
+	dbpedia-owl:hometown	_:b25646566 ,
+		_:b25646564 ;
+	dbpedia-owl:wikiPageLength	"5864"^^xsd:nonNegativeInteger ;
+	prop-ja:born	"\u30D6\u30EA\u30E5\u30C3\u30BB\u30EB"@ja ,
+		"1922-04-29"^^xsd:date .
+_:b25646552	rdfs:label	"\u30C6\u30CD\u30B7\u30FC\u5DDE"@ja .
+_:b25646553	rdfs:label	"\u30A4\u30F3\u30B0\u30E9\u30F3\u30C9"@ja .
+_:b25646554	rdfs:label	"\u30DF\u30B7\u30B7\u30C3\u30D4\u5DDE"@ja .
+_:b25646555	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646556	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646557	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646558	rdfs:label	"\u30DF\u30BA\u30FC\u30EA\u5DDE"@ja .
+_:b25646559	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646560	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646561	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646562	rdfs:label	"\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD"@ja .
+_:b25646563	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646564	rdfs:label	"\u30D6\u30EA\u30E5\u30C3\u30BB\u30EB"@ja .
+_:b25646565	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646566	rdfs:label	"\u30D6\u30EA\u30E5\u30C3\u30BB\u30EB"@ja .
+_:b25646567	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646568	rdfs:label	"\u30C6\u30CD\u30B7\u30FC\u5DDE"@ja .
+_:b25646569	rdfs:label	"\u30EA\u30F4\u30A1\u30D7\u30FC\u30EB"@ja .
+_:b25646570	rdfs:label	"\u30E1\u30EA\u30FC\u30E9\u30F3\u30C9\u5DDE"@ja .
+_:b25646571	rdfs:label	"\u30ED\u30F3\u30C9\u30F3"@ja .
