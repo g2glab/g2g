@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// USAGE: $ g2g_to_sparql.js <g2g_file>
+// USAGE: $ g2g_to_sparql <g2g_file>
 
 var fs = require('fs');
 var path = require('path');
@@ -15,8 +15,6 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
   var blocks = [];
   var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
-  const NODES = 'nodes';
-  const EDGES = 'edges';
   var currentBlock = [];
   g2g.split(/\r\n|\r|\n/).forEach(
     (line) => {
@@ -91,7 +89,6 @@ function nodeSelectClause(nodeDefinition) {
     'GROUP BY ?' + nodeDefinition.label.variable + '\n';
 }
 
-// {nodes: {<name>: {required: ~, where: ~, label: {}, properties: []}, edges: {<name>: {node1: {name: ~, variable: ~ }, where: ~, node2: {}, label: {name: ~. props: []}} }
 function parseBlocks(blocks) {
   var map = {nodes: {}, edges: {}};
   blocks.forEach((block) => parseBlock(block, map));
@@ -110,10 +107,9 @@ function parseBlocks(blocks) {
 }
 
 function parseBlock(block, map) {
-  var header = block[0];
   var whereClauses = block.slice(1, block.length);
   var nodeDeclaration, edgeDeclaration;
-  [nodeDeclaration, edgeDeclaration] = parseDeclaration(header);
+  [nodeDeclaration, edgeDeclaration] = parseDeclaration(block[0]);
   if(nodeDeclaration != null) {
     var requiredClauses = whereClauses.filter((line) => !line.trim().startsWith('OPTIONAL'));
     map.nodes[nodeDeclaration.label.name] = {required: requiredClauses,
@@ -141,20 +137,20 @@ function getVariables(str) {
   return unique(vars);
 }
 
-function parseDeclaration(header) {
+function parseDeclaration(decl) {
   var edgeRegex = /\((.+)\)\-\[(.+)\]-\((.+)\)/;
-  var matched = header.match(edgeRegex)
+  var matched = decl.match(edgeRegex)
   if(matched) {
     var edgeMap = parseElement(matched[2]);
     edgeMap.node1 = parseElement(matched[1]).label;
     edgeMap.node2 = parseElement(matched[3]).label;
     return [null, edgeMap];
   }
-  else return [parseElement(header.slice(1, header.length - 1)), null];
+  else return [parseElement(decl.slice(1, decl.length - 1)), null];
 }
 
-// input: string like "<variable>:<label> {<variable>:<property> (, <variable>:<property>)*}"
-// output: object like {label: {name: <label>, variable: <variable>}, properties: [{name: <label>, variable: <variable>}, ...] }
+// input: string like "<var_0>:<label> {(<var_i>:<prop_i>, ...)}"
+// output: object like {label: {name: <label>, variable: <var_0>}, properties: [{name: <prop_i>, variable: <var_i>}, ...] }
 function parseElement(element) {
   var labelPart, propertyPart, labelVariable, labelName;
   [labelPart, propertyPart] = element.split('{');
