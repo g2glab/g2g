@@ -42,6 +42,8 @@ function queryTsv(file, callback) {
     var arq_result = childProcess.execSync('arq --data ' + dataSrc + ' --query ' + file + ' --results=tsv').toString();
     arq_result = arq_result.replace(/</g, '"');
     arq_result = arq_result.replace(/>/g, '"');
+    arq_result = arq_result.replace(/"\^\^[^\t\n]+/g, '"');  //remove xsd
+    arq_result = arq_result.replace(/"\@[^\t\n]+/g, '"');  //remove language tag
     fs.writeFile(tsvPath, arq_result, 'utf8', function (err)      {
         if (err != null) {
           console.log(err);
