@@ -1,7 +1,7 @@
 PREFIX coxpresdb: <http://coxpresdb.jp/rdf/def/0.1/>
 
 # Node mappings
-(g:Gene {gene_id: id})
+(g:Gene {vis_label: id})
     <http://coxpresdb.jp/rdf/db/Sce.v12> coxpresdb:gene_id ?g .
     BIND(strafter(str(?g), "http://bio2rdf.org/geneid:") AS ?id)
 

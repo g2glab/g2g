@@ -6,7 +6,7 @@ PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 # Node mappings
-(mus:Musician {label:nam, born:dat, hometown:twn, pageLength:len})
+(mus:Musician {vis_label:nam, born:dat, hometown:twn, pageLength:len})
     ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
     ?mus rdfs:label ?nam .
     FILTER(lang(?nam) = "ja") .

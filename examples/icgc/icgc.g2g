@@ -6,13 +6,13 @@ PREFIX faldo: <http://biohackathon.org/resource/faldo>
 
 # Node mappings
 
-(d:donor {label:l, age:a, gender:g} )
+(d:donor {vis_label:l, age:a, gender:g} )
     ?d rdf:type icgc-class:Donor .
     OPTIONAL { ?d rdfs:label ?l }
     OPTIONAL { ?d icgc:age_at_diagnosis ?a }
     OPTIONAL { ?d icgc:sex ?g }
 
-(m:mutation {label:l, start_position:s} )
+(m:mutation {vis_label:l, start_position:s} )
     ?m rdf:type icgc-class:Mutation .
     OPTIONAL { ?m rdfs:label ?l }
     OPTIONAL { ?m faldo:region ?r . ?r faldo:begin ?b . ?b faldo:position ?s }
