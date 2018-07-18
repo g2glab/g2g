@@ -1,17 +1,11 @@
 @prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ns1:	<http://icgc.link/Mutation/> .
 @prefix ns2:	<http://icgc.link/> .
-ns1:MU1686727	rdf:type	ns2:Mutation .
+ns1:MU1953679	rdf:type	ns2:Mutation .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
-ns1:MU1686727	rdfs:label	"DO52432" .
-ns1:MU1953679	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
+ns1:MU1953679	rdfs:label	"MU1953679" .
 ns1:MU29555503	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555738	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555873	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
+	rdfs:label	"MU29555503" .
 @prefix ns4:	<http://icgc.link/vocab/> .
 @prefix ns5:	<http://icgc.link/Detection/> .
 @prefix ns6:	<http://icgc.link/Donor/> .
@@ -21,80 +15,11 @@ ns5:DO52429_MU29546025_SP116085	ns4:donor	ns6:DO52429 ;
 		"225.01029995664" .
 ns5:DO52430_MU1953679_SP116086	ns4:donor	ns6:DO52430 ;
 	ns4:mutation	ns1:MU1953679 ;
-	ns4:quality_score	"225.01029995664" ,
-		"225.0103" .
-ns5:DO52430_MU29555292_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555292 ;
-	ns4:quality_score	"119.0103" ,
-		"119.01029995664" .
-ns5:DO52430_MU29555337_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555337 ;
-	ns4:quality_score	"112.01029995664" ,
-		"112.0103" .
-ns5:DO52430_MU29555392_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555392 ;
 	ns4:quality_score	"225.0103" ,
 		"225.01029995664" .
-ns5:DO52430_MU29555425_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555425 ;
-	ns4:quality_score	"95.01029996" ,
-		"95.0102999566398" .
 ns5:DO52430_MU29555503_SP116086	ns4:donor	ns6:DO52430 ;
 	ns4:mutation	ns1:MU29555503 ;
-	ns4:quality_score	"225.01029995664" ,
-		"225.0103" .
-ns5:DO52430_MU29555513_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555513 ;
-	ns4:quality_score	"152.0103" ,
-		"152.01029995664" .
-ns5:DO52430_MU29555554_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555554 ;
-	ns4:quality_score	"162.0103" ,
-		"162.01029995664" .
-ns5:DO52430_MU29555630_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555630 ;
-	ns4:quality_score	"225.01029995664" ,
-		"225.0103" .
-ns5:DO52430_MU29555738_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555738 ;
-	ns4:quality_score	"225.0103" ,
-		"225.01029995664" .
-ns5:DO52430_MU29555782_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555782 ;
-	ns4:quality_score	"110.01029995664" ,
-		"110.0103" .
-ns5:DO52430_MU29555807_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555807 ;
-	ns4:quality_score	"225.0103" ,
-		"225.01029995664" .
-ns5:DO52430_MU29555873_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555873 ;
-	ns4:quality_score	"156.0103" ,
-		"156.01029995664" .
-ns5:DO52430_MU29555888_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555888 ;
-	ns4:quality_score	"225.01029995664" ,
-		"225.0103" .
-ns5:DO52430_MU29555908_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU29555908 ;
-	ns4:quality_score	"225.0103" ,
-		"225.01029995664" .
-ns5:DO52430_MU4363919_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU4363919 ;
-	ns4:quality_score	"98.0102999566398" ,
-		"98.01029996" .
-ns5:DO52430_MU4504770_SP116086	ns4:donor	ns6:DO52430 ;
-	ns4:mutation	ns1:MU4504770 ;
-	ns4:quality_score	"225.01029995664" ,
-		"225.0103" .
-ns5:DO52431_MU1876269_SP116087	ns4:donor	ns6:DO52431 ;
-	ns4:mutation	ns1:MU1876269 ;
-	ns4:quality_score	"65.01029996" ,
-		"65.0102999566398" .
-ns5:DO52432_MU1686727_SP116088	ns4:donor	ns6:DO52432 ;
-	ns4:mutation	ns1:MU1686727 ;
-	ns4:quality_score	"99.01029996" ,
-		"99.0102999566398" .
+	ns4:quality_score	"225.01029995664" .
 ns6:DO52429	rdf:type	ns2:Donor ;
 	rdfs:label	"DO52429" ;
 	ns4:age_at_diagnosis	"38" ;
@@ -103,41 +28,28 @@ ns6:DO52430	rdf:type	ns2:Donor ;
 	rdfs:label	"DO52430" ;
 	ns4:age_at_diagnosis	"26" ;
 	ns4:sex	"male" .
-ns6:DO52431	rdf:type	ns2:Donor ;
-	rdfs:label	"DO52431" ;
-	ns4:age_at_diagnosis	"62" ;
-	ns4:sex	"female" .
-ns6:DO52432	rdf:type	ns2:Donor ;
-	rdfs:label	"DO52432" ;
-	ns4:age_at_diagnosis	"77" ;
-	ns4:sex	"female" .
-ns1:MU1876269	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52431" .
 ns1:MU29546025	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52429" .
-ns1:MU29555392	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555425	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555513	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555630	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555782	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555807	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555908	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU4363919	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU4504770	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555292	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555337	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555554	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
-ns1:MU29555888	rdf:type	ns2:Mutation ;
-	rdfs:label	"DO52430" .
+	rdfs:label	"MU29546025" .@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ns1:	<http://icgc.link/Effect/> .
+@prefix ns2:	<http://icgc.link/> .
+ns1:MU101326_ENST00000261443	rdf:type	ns2:Effect .
+@prefix ns3:	<http://icgc.link/vocab/> .
+@prefix ns4:	<http://icgc.link/Gene/> .
+ns1:MU101326_ENST00000261443	ns3:gene_affected	ns4:ENSG00000009307 .
+@prefix ns5:	<http://icgc.link/Mutation/> .
+ns1:MU101326_ENST00000261443	ns3:mutation	ns5:MU101326 .
+ns1:MU101326_ENST00000339438	rdf:type	ns2:Effect ;
+	ns3:gene_affected	ns4:ENSG00000009307 ;
+	ns3:mutation	ns5:MU101326 .
+ns1:MU101326_ENST00000358528	rdf:type	ns2:Effect ;
+	ns3:gene_affected	ns4:ENSG00000009307 ;
+	ns3:mutation	ns5:MU101326 .
+ns1:MU101326_ENST00000369530	rdf:type	ns2:Effect ;
+	ns3:gene_affected	ns4:ENSG00000009307 ;
+	ns3:mutation	ns5:MU101326 .
+ns1:MU101326_ENST00000369535	rdf:type	ns2:Effect ;
+	ns3:gene_affected	ns4:ENSG00000213281 ;
+	ns3:mutation	ns5:MU101326 .
+ns5:MU101326	rdf:type	ns2:Mutation .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+ns5:MU101326	rdfs:label	"MU101326" .
