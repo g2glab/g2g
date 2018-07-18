@@ -1,5 +1,6 @@
 [
   {"val":"mini_01","text":"RDF predicate >> PG edge"},
   {"val":"mini_02","text":"RDF resource >> PG edge"},
-  {"val":"icgc", "text":"Linked ICGC Dataset"}
+  {"val":"icgc", "text":"Linked ICGC Dataset"},
+  {"val":"coxpresdb", "text":"COXPRESdb Dataset"}
 ]

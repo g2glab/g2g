@@ -1,206 +1,31 @@
 @prefix ns0:	<http://coxpresdb.jp/rdf/def/0.1/> .
-<http://coxpresdb.jp/rdf/db/Sce.v12>	ns0:gene_id	<http://bio2rdf.org/geneid:852742> ,
-		<http://bio2rdf.org/geneid:852076> ,
-		<http://bio2rdf.org/geneid:851509> ,
-		<http://bio2rdf.org/geneid:850820> ,
-		<http://bio2rdf.org/geneid:850449> ,
-		<http://bio2rdf.org/geneid:852206> ,
-		<http://bio2rdf.org/geneid:850435> ,
-		<http://bio2rdf.org/geneid:852853> ,
-		<http://bio2rdf.org/geneid:854881> ,
-		<http://bio2rdf.org/geneid:855826> ,
-		<http://bio2rdf.org/geneid:850625> ,
-		<http://bio2rdf.org/geneid:855173> ,
-		<http://bio2rdf.org/geneid:852995> ,
-		<http://bio2rdf.org/geneid:854844> ,
-		<http://bio2rdf.org/geneid:850590> ,
-		<http://bio2rdf.org/geneid:855335> ,
-		<http://bio2rdf.org/geneid:855914> ,
-		<http://bio2rdf.org/geneid:855591> ,
-		<http://bio2rdf.org/geneid:855269> ,
-		<http://bio2rdf.org/geneid:851403> ,
-		<http://bio2rdf.org/geneid:853674> ,
-		<http://bio2rdf.org/geneid:853677> ,
-		<http://bio2rdf.org/geneid:854717> ,
-		<http://bio2rdf.org/geneid:850695> ,
-		<http://bio2rdf.org/geneid:850682> ,
-		<http://bio2rdf.org/geneid:850688> ,
-		<http://bio2rdf.org/geneid:850293> ,
-		<http://bio2rdf.org/geneid:854902> ,
-		<http://bio2rdf.org/geneid:850298> ,
-		<http://bio2rdf.org/geneid:850652> ,
-		<http://bio2rdf.org/geneid:850304> ,
-		<http://bio2rdf.org/geneid:850919> ,
-		<http://bio2rdf.org/geneid:856723> ,
-		<http://bio2rdf.org/geneid:851087> ,
-		<http://bio2rdf.org/geneid:850422> ,
-		<http://bio2rdf.org/geneid:853160> ,
-		<http://bio2rdf.org/geneid:850397> ,
-		<http://bio2rdf.org/geneid:850400> ,
-		<http://bio2rdf.org/geneid:855161> ,
-		<http://bio2rdf.org/geneid:852775> ,
-		<http://bio2rdf.org/geneid:852107> ,
-		<http://bio2rdf.org/geneid:853864> ,
-		<http://bio2rdf.org/geneid:854519> ,
-		<http://bio2rdf.org/geneid:852754> .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850293-853677>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850293> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:853677> .
+<http://coxpresdb.jp/rdf/pair/Sce.v12-851756-850297>	ns0:gene_id_1	<http://bio2rdf.org/geneid:851756> ;
+	ns0:gene_id_2	<http://bio2rdf.org/geneid:850297> .
 @prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850293-853677>	ns0:mutual_rank	2.0 ;
-	ns0:pcc	0.88600000000000000977 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850293-855914>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850293> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855914> ;
-	ns0:mutual_rank	1.0 ;
-	ns0:pcc	0.91400000000000003464 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-850449>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850449> ;
-	ns0:mutual_rank	1.3999999999999999112 ;
-	ns0:pcc	0.89000000000000001332 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-851403>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:851403> ;
-	ns0:mutual_rank	7.0 ;
-	ns0:pcc	0.86499999999999999112 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-851509>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:851509> ;
-	ns0:mutual_rank	6.5999999999999996447 ;
-	ns0:pcc	0.8579999999999999849 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-852076>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852076> ;
-	ns0:mutual_rank	3.7999999999999998224 ;
-	ns0:pcc	0.88000000000000000444 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-852995>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852995> ;
-	ns0:mutual_rank	1.0 ;
-	ns0:pcc	0.9090000000000000302 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-853160>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:853160> ;
-	ns0:mutual_rank	14.0 ;
-	ns0:pcc	0.85999999999999998668 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-854519>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:854519> ;
-	ns0:mutual_rank	14.400000000000000355 ;
-	ns0:pcc	0.8499999999999999778 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-854844>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:854844> ;
-	ns0:mutual_rank	8.4000000000000003553 ;
-	ns0:pcc	0.85499999999999998224 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-855161>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855161> ;
-	ns0:mutual_rank	10.699999999999999289 ;
-	ns0:pcc	0.86999999999999999556 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-855269>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855269> ;
-	ns0:mutual_rank	10.900000000000000355 ;
-	ns0:pcc	0.86399999999999999023 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-855335>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855335> ;
-	ns0:mutual_rank	6.5999999999999996447 ;
-	ns0:pcc	0.87600000000000000089 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-855591>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855591> ;
-	ns0:mutual_rank	12.400000000000000355 ;
-	ns0:pcc	0.86699999999999999289 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850298-856723>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850298> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:856723> ;
-	ns0:mutual_rank	13.699999999999999289 ;
-	ns0:pcc	0.85899999999999998579 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850304-850422>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850304> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850422> ;
-	ns0:mutual_rank	9.0 ;
-	ns0:pcc	0.86799999999999999378 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850304-850820>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850304> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850820> ;
-	ns0:mutual_rank	12.199999999999999289 ;
-	ns0:pcc	0.85699999999999998401 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850304-850919>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850304> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850919> ;
-	ns0:mutual_rank	13.900000000000000355 ;
-	ns0:pcc	0.8579999999999999849 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850304-852107>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850304> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852107> ;
-	ns0:mutual_rank	12.400000000000000355 ;
-	ns0:pcc	0.86099999999999998757 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850304-854717>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850304> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:854717> ;
-	ns0:mutual_rank	5.2000000000000001776 ;
-	ns0:pcc	0.88000000000000000444 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850304-854881>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850304> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:854881> ;
-	ns0:mutual_rank	3.7000000000000001776 ;
-	ns0:pcc	0.88800000000000001155 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-850590>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850590> ;
-	ns0:mutual_rank	10.0 ;
-	ns0:pcc	0.86299999999999998934 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-850682>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850682> ;
-	ns0:mutual_rank	4.4000000000000003553 ;
-	ns0:pcc	0.88200000000000000622 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-852206>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852206> ;
-	ns0:mutual_rank	5.4000000000000003553 ;
-	ns0:pcc	0.87399999999999999911 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-852742>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852742> ;
-	ns0:mutual_rank	9.0999999999999996447 ;
-	ns0:pcc	0.86099999999999998757 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-852754>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852754> ;
-	ns0:mutual_rank	9.3000000000000007105 ;
-	ns0:pcc	0.85699999999999998401 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-852775>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852775> ;
-	ns0:mutual_rank	9.4000000000000003553 ;
-	ns0:pcc	0.85199999999999997957 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-852853>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:852853> ;
-	ns0:mutual_rank	5.0 ;
-	ns0:pcc	0.86399999999999999023 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-853674>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:853674> ;
-	ns0:mutual_rank	25.399999999999998579 ;
-	ns0:pcc	0.85099999999999997868 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-853864>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:853864> ;
-	ns0:mutual_rank	21.600000000000001421 ;
-	ns0:pcc	0.85199999999999997957 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-854902>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:854902> ;
-	ns0:mutual_rank	23.399999999999998579 ;
-	ns0:pcc	0.85099999999999997868 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-855173>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855173> ;
-	ns0:mutual_rank	2.6000000000000000888 ;
-	ns0:pcc	0.89600000000000001865 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850397-855826>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850397> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:855826> ;
-	ns0:mutual_rank	5.5999999999999996447 ;
-	ns0:pcc	0.86799999999999999378 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850400-851087>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850400> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:851087> ;
-	ns0:mutual_rank	1.0 ;
-	ns0:pcc	0.85099999999999997868 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850422-850304>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850422> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850304> ;
-	ns0:mutual_rank	9.0 ;
-	ns0:pcc	0.86799999999999999378 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850422-850435>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850422> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850435> ;
-	ns0:mutual_rank	13.0 ;
-	ns0:pcc	0.85999999999999998668 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850422-850625>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850422> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850625> ;
-	ns0:mutual_rank	4.2000000000000001776 ;
-	ns0:pcc	0.9000000000000000222 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850422-850652>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850422> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850652> ;
-	ns0:mutual_rank	27.800000000000000711 ;
-	ns0:pcc	0.87900000000000000355 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850422-850688>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850422> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850688> ;
-	ns0:mutual_rank	4.0 ;
-	ns0:pcc	0.90600000000000002753 .
-<http://coxpresdb.jp/rdf/pair/Sce.v12-850422-850695>	ns0:gene_id_1	<http://bio2rdf.org/geneid:850422> ;
-	ns0:gene_id_2	<http://bio2rdf.org/geneid:850695> ;
-	ns0:mutual_rank	37.799999999999997158 ;
-	ns0:pcc	0.85899999999999998579 .
+<http://coxpresdb.jp/rdf/pair/Sce.v12-851756-850297>	ns0:mutual_rank	66.200000000000002842 ;
+	ns0:pcc	0.49399999999999999467 .
+<http://coxpresdb.jp/rdf/pair/Sce.v12-851758-850300>	ns0:gene_id_1	<http://bio2rdf.org/geneid:851758> ;
+	ns0:gene_id_2	<http://bio2rdf.org/geneid:850300> ;
+	ns0:mutual_rank	5.7999999999999998224 ;
+	ns0:pcc	0.67900000000000004796 .
+<http://coxpresdb.jp/rdf/pair/Sce.v12-851759-1466445>	ns0:gene_id_1	<http://bio2rdf.org/geneid:851759> ;
+	ns0:gene_id_2	<http://bio2rdf.org/geneid:1466445> ;
+	ns0:mutual_rank	42.700000000000002842 ;
+	ns0:pcc	0.51600000000000001421 .
+<http://coxpresdb.jp/rdf/pair/Sce.v12-851762-850297>	ns0:gene_id_1	<http://bio2rdf.org/geneid:851762> ;
+	ns0:gene_id_2	<http://bio2rdf.org/geneid:850297> ;
+	ns0:mutual_rank	77.400000000000005684 ;
+	ns0:pcc	0.4500000000000000111 .
+<http://coxpresdb.jp/rdf/pair/Sce.v12-851772-850303>	ns0:gene_id_1	<http://bio2rdf.org/geneid:851772> ;
+	ns0:gene_id_2	<http://bio2rdf.org/geneid:850303> ;
+	ns0:mutual_rank	77.299999999999997158 ;
+	ns0:pcc	0.32900000000000001465 .
+<http://coxpresdb.jp/rdf/db/Sce.v12>	ns0:gene_id	<http://bio2rdf.org/geneid:851772> ,
+		<http://bio2rdf.org/geneid:851756> ,
+		<http://bio2rdf.org/geneid:850297> ,
+		<http://bio2rdf.org/geneid:851758> ,
+		<http://bio2rdf.org/geneid:851759> ,
+		<http://bio2rdf.org/geneid:850300> ,
+		<http://bio2rdf.org/geneid:851762> ,
+		<http://bio2rdf.org/geneid:850303> ,
+		<http://bio2rdf.org/geneid:1466445> .
