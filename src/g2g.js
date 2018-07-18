@@ -9,7 +9,7 @@ var commander = require('commander').version(require("../package.json").version)
       g2gPath = g2gml_file;
       dataSrc = data_source;
     })
-    .option('-f, --format [format]', 'format of results <rq|pg|pgx|neo|dot|all (default: pg)>', /^(rq|pg|pgx|neo|dot|all)$/i)
+    .option('-f, --format [format]', 'format of results <rq|pg|pgx|neo|dot|aws|all (default: pg)>', /^(rq|pg|pgx|neo|dot|aws|all)$/i)
     .option('-o, --output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)');
 
 commander.parse(process.argv)
@@ -54,6 +54,7 @@ function afterPg(err) {
   console.log('"' + pgPath + '" has been created.');
   var neoDir = dstDir + "/neo/";
   var pgxDir = dstDir + "/pgx/";
+  var awsDir = dstDir + "/aws/";
   switch(dstFormat) {
     case 'neo':
     common.mkdirPath(neoDir);
@@ -62,6 +63,10 @@ function afterPg(err) {
     case 'pgx':
     common.mkdirPath(pgxDir);
     common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
+    break;
+    case 'aws':
+    common.mkdirPath(awsDir);
+    common.runSpawnSync('pg_to_aws', (err) => {if(err) throw err;}, pgPath, awsDir + inputName);
     break;
     case 'dot':
     common.runSpawnSync('pg_to_dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
@@ -74,6 +79,8 @@ function afterPg(err) {
     common.runSpawnSync('pg_to_neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     common.mkdirPath(pgxDir);
     common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
+    common.mkdirPath(awsDir);
+    common.runSpawnSync('pg_to_aws', (err) => {if(err) throw err;}, pgPath, awsDir + inputName);
     common.runSpawnSync('pg_to_dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     break;
   }
