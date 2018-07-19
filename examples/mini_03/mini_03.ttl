@@ -1,0 +1,6 @@
+@prefix : <http://example.org/> .
+:person1 a :Person .
+:person2 a :Person .
+:person3 a :Person .
+:person1 :isParentOf :person2.
+:person2 :isParentOf :person3.
