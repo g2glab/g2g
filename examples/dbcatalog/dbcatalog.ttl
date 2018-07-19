@@ -1,0 +1,42 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ns1:	<http://purl.jp/bio/03/dbcatalog/> .
+@prefix ns2:	<http://www.w3.org/ns/dcat#> .
+ns1:nbdc01685	rdf:type	ns2:Dataset .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+ns1:nbdc01685	rdfs:seeAlso	ns1:nbdc01689 .
+@prefix dcterms:	<http://purl.org/dc/terms/> .
+ns1:nbdc01685	dcterms:title	"D-iOrgansAtlas"@en ,
+		"D-iOrgansAtlas"@ja ;
+	dcterms:identifier	"NBDC01685" .
+ns1:nbdc01686	rdf:type	ns2:Dataset ;
+	rdfs:seeAlso	ns1:nbdc01687 ;
+	dcterms:title	"\u30A6\u30A7\u30D6\u7248\u8840\u7BA1\u708E\u75C5\u7406\u30A2\u30C8\u30E9\u30B9"@ja ;
+	dcterms:identifier	"NBDC01686" .
+ns1:nbdc01687	rdf:type	ns2:Dataset ;
+	rdfs:seeAlso	ns1:nbdc01686 ;
+	dcterms:title	"Minds\u30AC\u30A4\u30C9\u30E9\u30A4\u30F3\u30E9\u30A4\u30D6\u30E9\u30EA"@ja ;
+	dcterms:identifier	"NBDC01687" .
+ns1:nbdc01689	rdf:type	ns2:Dataset ;
+	rdfs:seeAlso	ns1:nbdc01685 ;
+	dcterms:title	"Melonet DB"@ja ,
+		"Melonet DB"@en ;
+	dcterms:identifier	"NBDC01689" .
+ns1:nbdc02346	rdf:type	ns2:Dataset ;
+	rdfs:seeAlso	ns1:nbdc02350 ;
+	dcterms:title	"MiFuP Safety"@en ;
+	dcterms:identifier	"NBDC02346" .
+ns1:nbdc02350	rdf:type	ns2:Dataset ;
+	dcterms:title	"MeKO"@ja ,
+		"MeKO"@en ;
+	dcterms:identifier	"NBDC02350" .
+ns1:nbdc02353	rdf:type	ns2:Dataset ;
+	rdfs:seeAlso	ns1:nbdc01686 ,
+		ns1:nbdc01687 ;
+	dcterms:title	"PubCaseFinder"@en ,
+		"PubCaseFinder"@ja ;
+	dcterms:identifier	"NBDC02353" .
+ns1:nbdc02354	rdf:type	ns2:Dataset ;
+	rdfs:seeAlso	ns1:nbdc01689 ;
+	dcterms:title	"DropViz"@en ,
+		"DropViz"@ja ;
+	dcterms:identifier	"NBDC02354" .
