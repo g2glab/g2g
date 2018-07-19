@@ -1,0 +1,16 @@
+{
+  "vertex_uri_list": [ "../output/pgx/icgc.opv" ],
+  "edge_uri_list": [ "../output/pgx/icgc.ope" ],
+  "format": "flat_file",
+  "vertex_id_type": "string",
+  "separator": ",",
+  "node_props":[
+    { "name":"type", "type":"string" }
+  , { "name":"label", "type":"string" }
+  , { "name":"age", "type":"integer" }
+  , { "name":"gender", "type":"string" }
+  ],
+  "edge_props":[
+    { "name":"label", "type":"string" }
+  ]
+}

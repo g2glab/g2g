@@ -1,0 +1,10 @@
+
+SELECT ?m ?e ("affects" AS ?type)
+WHERE {
+    ?m ^icgc:mutation ?e . ?e icgc:gene_affected ?gene .
+
+    ?m_ rdf:type icgc-class:Mutation .
+
+    ?e_ rdf:type icgc-class:Effect.
+}
+GROUP BY ?m ?e ?type

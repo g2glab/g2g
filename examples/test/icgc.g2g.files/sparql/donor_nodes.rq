@@ -1,0 +1,12 @@
+
+SELECT (?d AS ?nid) ("donor" AS ?type)
+       ("label" AS ?P0) SAMPLE(?l)
+       ("age" AS ?P1) SAMPLE(?a)
+       ("gender" AS ?P2) SAMPLE(?g)
+WHERE {
+    ?d rdf:type icgc-class:Donor .
+    OPTIONAL { ?d rdfs:label ?l }
+    OPTIONAL { ?d icgc:age_at_diagnosis ?a }
+    OPTIONAL { ?d icgc:sex ?g }
+}
+GROUP BY ?d

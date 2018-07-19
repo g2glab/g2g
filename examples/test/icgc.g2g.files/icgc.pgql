@@ -1,0 +1,14 @@
+G = session.readGraphWithProperties("examples/icgc.json")
+
+G.queryPgql(" \
+  SELECT d.id(), r.label, m.id() \
+  WHERE (d)-[r]->(m), d.id()='http___icgc_link_Donor_DO8690' \
+  LIMIT 30 \
+").print()
+
+G.queryPgql(" \
+  SELECT d1.id(), d2.id(), count(*) \
+  WHERE (d1)-->(m)<--(d2), d2 != d1, d1.id()='http___icgc_link_Donor_DO8690' \
+  GROUP BY (d1), (d2) ORDER BY count(*) DESC LIMIT 30\
+").print()
+

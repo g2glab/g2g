@@ -1,0 +1,6 @@
+
+SELECT (?REFIX faldo AS ?nid) ("<http" AS ?type)
+WHERE {
+
+}
+GROUP BY ?REFIX faldo
