@@ -1,0 +1,14 @@
+PREFIX : <http://example.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+(p:Person {age: a, vis_label: l})
+    ?p a :Person ;
+       rdfs:label ?l ;
+       :age ?a.
+
+(p1:Person)-[:follows {since: d, until: u}]-(p2:Person)
+    ?f :follower ?p1 ;
+       :following ?p2 ;
+       :until ?u ;
+       :since ?d .
+

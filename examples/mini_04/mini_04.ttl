@@ -1,0 +1,14 @@
+@prefix : <http://example.org/> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+
+:person1 a :Person ;
+         rdfs:label "Alice" ;
+         :age "22".
+:person2 a :Person ;
+         rdfs:label "Bob" ;
+         :age "20".
+
+[] :follower  :person1 ; 
+   :following :person2 ;
+   :until "2018-12-20" ; 
+   :since "2016-12-20" .
