@@ -138,7 +138,7 @@ function getVariables(str) {
 }
 
 function parseDeclaration(decl) {
-  var edgeRegex = /\((.+)\)\-\[(.+)\]-\((.+)\)/;
+  var edgeRegex = /\((.+)\)\-\[(.+)\]->\((.+)\)/;
   var matched = decl.match(edgeRegex)
   if(matched) {
     var edgeMap = parseElement(matched[2]);
