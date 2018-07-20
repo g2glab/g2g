@@ -1,6 +1,0 @@
-
-SELECT (?e AS ?nid) ("effect" AS ?type)
-WHERE {
-    ?e rdf:type icgc-class:Effect.
-}
-GROUP BY ?e

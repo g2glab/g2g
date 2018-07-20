@@ -3,8 +3,8 @@ PREFIX : <http://example.org/>
 (p:Person)
     ?p a :Person .
 
-(p1:Person)-[:isParentOf]-(p2:Person)
+(p1:Person)-[:isParentOf]->(p2:Person)
     ?p1 :isParentOf ?p2.
 
-(p1:Person)-[:isGrandParentOf]-(p2:Person)
+(p1:Person)-[:isGrandParentOf]->(p2:Person)
     ?p1 :isParentOf/:isParentOf ?p2.

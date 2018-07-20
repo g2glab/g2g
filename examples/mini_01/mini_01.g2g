@@ -3,5 +3,5 @@ PREFIX : <http://example.org/>
 (p:Person)
     ?p a :Person .
 
-(p1:Person)-[:follows]-(p2:Person)
+(p1:Person)-[:follows]->(p2:Person)
     ?p1 :follows ?p2 .

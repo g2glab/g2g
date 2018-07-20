@@ -6,7 +6,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
        rdfs:label ?l ;
        :age ?a.
 
-(p1:Person)-[:follows {since: d, until: u}]-(p2:Person)
+(p1:Person)-[:follows {since: d, until: u}]->(p2:Person)
     ?f :follower ?p1 ;
        :following ?p2 ;
        :until ?u ;
