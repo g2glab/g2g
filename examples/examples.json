@@ -1,8 +1,10 @@
 [
-  {"val":"mini_01","text":"RDF predicate >> PG edge"},
-  {"val":"mini_02","text":"RDF resource >> PG edge"},
-  {"val":"mini_03","text":"Squash RDF edges into one PG edge"},
-  {"val":"mini_04","text":"Multiple properties"},
+  {"val":"mini-01","text":"RDF resource >> PG node"},
+  {"val":"mini-02","text":"RDF datatype property >> PG node property"},
+  {"val":"mini-03","text":"RDF object property >> PG edge"},
+  {"val":"mini-04","text":"RDF resource >> PG edge"},
+  {"val":"mini-05","text":"RDF datatype property >> PG edge property"},
+  {"val":"inf-01","text":"Inference and add new edges"},
   {"val":"icgc", "text":"Linked ICGC Dataset"},
   {"val":"coxpresdb", "text":"COXPRESdb Dataset"},
   {"val":"dbcatalog", "text":"Integbio Database Catalog Dataset"}

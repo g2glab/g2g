@@ -1,4 +1,3 @@
 @prefix : <http://example.org/> .
 :person1 a :Person .
-:person2 a :Person .
-:person1 :follows :person2 .
+:person1 :age 30 .

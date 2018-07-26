@@ -1,0 +1,8 @@
+PREFIX : <http://example.org/>
+(p:Person)
+    ?p a :Person .
+(p1:Person)-[:follow {since:s}]->(p2:Person)
+    ?f :follower ?p1 ;
+       :followed ?p2 ;
+       :since ?s .
+

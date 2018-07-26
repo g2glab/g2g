@@ -1,0 +1,7 @@
+@prefix : <http://example.org/> .
+:person1 a :Person .
+:person2 a :Person .
+[] a :Follow ;
+   :follower :person1 ;
+   :followed :person2 .
+
