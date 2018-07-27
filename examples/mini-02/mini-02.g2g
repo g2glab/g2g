@@ -1,5 +1,5 @@
 PREFIX : <http://example.org/>
-(p:Person {age:a})
+
+(p:person {age:a})
     ?p a :Person .
     ?p :age ?a .
-
