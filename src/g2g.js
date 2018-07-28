@@ -58,30 +58,30 @@ function afterPg(err) {
   switch(dstFormat) {
     case 'neo':
     common.mkdirPath(neoDir);
-    common.runSpawnSync('pg_to_neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
+    common.runSpawnSync('pg2neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     break;
     case 'pgx':
     common.mkdirPath(pgxDir);
-    common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
+    common.runSpawnSync('pg2pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
     break;
     case 'aws':
     common.mkdirPath(awsDir);
-    common.runSpawnSync('pg_to_aws', (err) => {if(err) throw err;}, pgPath, awsDir + inputName);
+    common.runSpawnSync('pg2aws', (err) => {if(err) throw err;}, pgPath, awsDir + inputName);
     break;
     case 'dot':
-    common.runSpawnSync('pg_to_dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
+    common.runSpawnSync('pg2dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     break;
     case 'pg':
     console.log('Done.');
     break;
     case 'all':
     common.mkdirPath(neoDir);
-    common.runSpawnSync('pg_to_neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
+    common.runSpawnSync('pg2neo', (err) => {if(err) throw err;}, pgPath, neoDir + inputName);
     common.mkdirPath(pgxDir);
-    common.runSpawnSync('pg_to_pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
+    common.runSpawnSync('pg2pgx', (err) => {if(err) throw err;}, pgPath, pgxDir + inputName);
     common.mkdirPath(awsDir);
-    common.runSpawnSync('pg_to_aws', (err) => {if(err) throw err;}, pgPath, awsDir + inputName);
-    common.runSpawnSync('pg_to_dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
+    common.runSpawnSync('pg2aws', (err) => {if(err) throw err;}, pgPath, awsDir + inputName);
+    common.runSpawnSync('pg2dot', (err) => {if(err) throw err;}, pgPath, dstDir + '/' + inputName);
     break;
   }
 }
