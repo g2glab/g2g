@@ -1,7 +1,12 @@
 {
   "name": "g2gml",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.1.0",
+  "description": "g2gml",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/g2gml/g2g.git"
+  },
   "devDependencies": {
     "fs": "0.0.1-security",
     "path": "^0.12.7",
