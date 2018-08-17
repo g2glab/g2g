@@ -1,5 +1,7 @@
 # G2G Mapper
 
+version 0.1.0
+
 ## Pre-requirement
 
 * Git
@@ -8,7 +10,7 @@
 
 ## Install
 
-    $ git clone https://github.com/g2gml/g2g.git
+    $ git clone -b v0.1.0 https://github.com/g2gml/g2g.git
     $ cd g2g
     $ npm install
     $ nmp link
