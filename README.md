@@ -1,12 +1,13 @@
-# G2G Mapper
+# G2G Mapping Engine
 
 version 0.1.0
 
-## Pre-requirement
+## Requirements
 
 * Git
 * Node
-* Jena (+ Java)　* optional
+* Java + Jena 　(optional)
+* PG (optional)
 
 ## Install
 
