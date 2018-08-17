@@ -6,7 +6,7 @@ version 0.1.0
 
 * Git
 * Node
-* Java + Jena 　(optional)
+* Java + Jena (optional)
 * PG (optional)
 
 ## Install
