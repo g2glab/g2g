@@ -6,8 +6,8 @@ version 0.1.0
 
 * Git
 * Node
-* Java + Jena (optional)
-* PG (optional)
+* Java + [Jena ARQ](https://jena.apache.org/documentation/query/index.html) (for local file mode)
+* PG (for converting to various formats)
 
 ## Install
 
@@ -26,13 +26,17 @@ For more information:
 
 ### Endpoint Mode
 
-Execute an example g2g for musicians on "ja.dbpedia.org".
+Execute a g2g mapping against **SPARQL endpoint** "ja.dbpedia.org".
 
-    $ g2g -f pg examples/musician.g2g http://ja.dbpedia.org/sparql
+    $ g2g examples/musician.g2g http://ja.dbpedia.org/sparql
 
 ### Local File Mode
 
-If you have installed Apache Jena ARQ (https://jena.apache.org/documentation/query/index.html), you can directly handle local RDF data.
-The following command converts ```examples/ttl/people.ttl``` by ```examples/people.g2g```.
+Execute a g2g mapping against **RDF data file** "people.ttl".
 
-    $ g2g -f pg examples/people.g2g examples/ttl/people.ttl
+    $ g2g examples/people.g2g examples/ttl/people.ttl
+
+## Docker Container
+
+    $ docker run -v `pwd`:/shared ryotas/g2g:0.1.0 \
+      g2g g2g/examples/musician/musician.g2g http://ja.dbpedia.org/sparql -o /shared/output
