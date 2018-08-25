@@ -13,6 +13,8 @@
     "request": "^2.85.0"
   },
   "dependencies": {
+    "chai": "^4.1.2",
+    "chai-fs": "^2.0.0",
     "commander": "^2.16.0",
     "config": "^1.30.0",
     "js-yaml": "^3.11.0",
