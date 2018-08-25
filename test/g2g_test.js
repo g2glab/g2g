@@ -54,7 +54,6 @@ describe('g2g', function() {
       assert.pathExists(OUTPUT_LOC + 'sparql');
     });
 
-
     after(function() {
       common.removeRecursive(BASE_DIR);
     });

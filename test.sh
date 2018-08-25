@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./node_modules/mocha/bin/mocha --timeout=10000
+./node_modules/mocha/bin/mocha
 if [ $? != 0 ]; then
   exit
 fi
