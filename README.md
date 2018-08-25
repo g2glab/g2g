@@ -14,7 +14,7 @@ version 0.1.0
     $ git clone -b v0.1.0 https://github.com/g2gml/g2g.git
     $ cd g2g
     $ npm install
-    $ nmp link
+    $ npm link
 
 ## Run
 
