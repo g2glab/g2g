@@ -24,15 +24,11 @@ For more information:
 
     $ g2g --help
 
-### Endpoint Mode
-
-Execute a g2g mapping against **SPARQL endpoint** "ja.dbpedia.org".
+**Endpoint Mode:** g2g mapping against SPARQL endpoint "ja.dbpedia.org".
 
     $ g2g examples/musician.g2g http://ja.dbpedia.org/sparql
 
-### Local File Mode
-
-Execute a g2g mapping against **RDF data file** "people.ttl".
+**Local File Mode:** g2g mapping against RDF data file "people.ttl".
 
     $ g2g examples/people.g2g examples/ttl/people.ttl
 
