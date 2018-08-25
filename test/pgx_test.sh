@@ -2,7 +2,7 @@
 
 OUT_DIR=./test/output/
 
-g2g -f pgx examples/musician.g2g http://ja.dbpedia.org/sparql $OUT_DIR
+g2g -f pgx examples/musician/musician.g2g examples/musician/musician.ttl -o $OUT_DIR
 
 cat ./test/musician.pgql | pgx
 

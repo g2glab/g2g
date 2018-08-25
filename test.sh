@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./node_modules/mocha/bin/mocha --timeout=5000
+./node_modules/mocha/bin/mocha --timeout=10000
 if [ $? != 0 ]; then
   exit
 fi
@@ -12,4 +12,4 @@ sh ./test/example.sh mini-04
 sh ./test/example.sh mini-05
 
 ./test/pgx_test.sh
-./test/neo4j_test.sh
+./test/neo_test.sh
