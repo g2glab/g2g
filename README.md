@@ -26,11 +26,11 @@ For more information:
 
 **Endpoint Mode:** g2g mapping against SPARQL endpoint "ja.dbpedia.org".
 
-    $ g2g examples/musician.g2g http://ja.dbpedia.org/sparql
+    $ g2g examples/musician/musician.g2g http://ja.dbpedia.org/sparql
 
-**Local File Mode:** g2g mapping against RDF data file "people.ttl".
+**Local File Mode:** g2g mapping against RDF data file "mini-01.ttl".
 
-    $ g2g examples/people.g2g examples/ttl/people.ttl
+    $ g2g examples/mini-01/mini-01.g2g examples/mini-01/mini-01.ttl
 
 ## Docker Container
 
