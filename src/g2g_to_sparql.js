@@ -39,8 +39,8 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
 
 function edgeSelectClause(edge, nodes) {
   var whereClause = edge.where.join('\n');
-  whereClause = addNodeRequired(whereClause, edge.node1, nodes);
-  whereClause = addNodeRequired(whereClause, edge.node2, nodes);
+  whereClause = addNodeRequired(whereClause, edge.node1, nodes, getVariables(whereClause));
+  whereClause = addNodeRequired(whereClause, edge.node2, nodes, getVariables(whereClause));
   return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)\n' +
     edge.properties.map(
       (prop, index) =>
@@ -52,10 +52,9 @@ function edgeSelectClause(edge, nodes) {
 }
 
 // TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
-function addNodeRequired(whereClause, addedNode, nodes) {
+function addNodeRequired(whereClause, addedNode, nodes, existingVars) {
   var nodeDef = nodes[addedNode.name]
   var required = nodeDef.required.join('\n');
-  var existingVars = getVariables(whereClause);
   var localVars = getVariables(required);
   var varsToReplace = [];
   localVars.forEach( (v) => {
@@ -78,13 +77,31 @@ function replaceVariable(srcStr, from, to) {
   return srcStr.replace(new RegExp('(\\W|^)\\'+ from + '(\\W|$)', "g"), '$1' + to + '$2');
 }
 
-function nodeSelectClause(nodeDefinition) {
+function nodeSelectClause(nodeDefinition, edges, nodes) {
+  whereClause = nodeDefinition.where.join('\n') + '\n';
+  edgeConstraints = []
+  Object.keys(edges).forEach( (edge_name) => {
+    var edge = edges[edge_name];
+    if(edge.node1.name == nodeDefinition.label.name) {
+      constraint = replaceVariable(edge.required.join('\n'), edge.node1.variable, nodeDefinition.label.variable);
+      constraint = addNodeRequired(constraint, edge.node2, nodes, getVariables(whereClause + edgeConstraints.join('\n')));
+      edgeConstraints.push(constraint);
+    }
+    if(edge.node2.name == nodeDefinition.label.name) {
+      constraint = replaceVariable(edge.required.join('\n'), edge.node1.variable, nodeDefinition.label.variable);
+      constraint = addNodeRequired(constraint, edge.node1, nodes, getVariables(whereClause + edgeConstraints.join('\n')));
+      edgeConstraints.push(constraint);
+    }
+  });
+  whereClause += edgeConstraints.map((c) => '{' + c + '}').join('UNION');
+
   return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
       (prop, index) =>
         '       ("' + prop.name + '" AS ?P' + index + ') (SAMPLE(?' + prop.variable + ') AS ?_' + prop.variable + ')\n').join('') +
     'WHERE {\n' + 
-    nodeDefinition.where.join('\n') + '\n' +
+      whereClause + '\n' +
+    
     '}\n' +
     'GROUP BY ?' + nodeDefinition.label.variable + '\n';
 }
@@ -97,7 +114,7 @@ function parseBlocks(blocks) {
   var edgeSparqls = {};
 
   Object.keys(map.nodes).forEach( (node) => {
-    nodeSparqls[node] = nodeSelectClause(map.nodes[node]); 
+    nodeSparqls[node] = nodeSelectClause(map.nodes[node], map.edges, map.nodes); 
   });
 
   Object.keys(map.edges).forEach( (edge) => {
@@ -110,14 +127,15 @@ function parseBlock(block, map) {
   var whereClauses = block.slice(1, block.length);
   var nodeDeclaration, edgeDeclaration;
   [nodeDeclaration, edgeDeclaration] = parseDeclaration(block[0]);
+  var requiredClauses = whereClauses.filter((line) => !line.trim().startsWith('OPTIONAL'));
   if(nodeDeclaration != null) {
-    var requiredClauses = whereClauses.filter((line) => !line.trim().startsWith('OPTIONAL'));
     map.nodes[nodeDeclaration.label.name] = {required: requiredClauses,
                                               where: whereClauses,
                                               label: nodeDeclaration.label,
                                               properties: nodeDeclaration.properties};
   } else {
     edgeDeclaration.where = whereClauses;
+    edgeDeclaration.required = requiredClauses;
     map.edges[edgeDeclaration.label.name] = edgeDeclaration;
   }
 }
