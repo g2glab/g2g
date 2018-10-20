@@ -36,6 +36,7 @@ var pgPath = dstDir + '/' + inputName + '.pg';
 
 
 common.mkdirPath(dstDir);
+common.removeRecursive(SPARQL_DIR);
 common.mkdirPath(SPARQL_DIR);
 
 function afterSparql(err) {
