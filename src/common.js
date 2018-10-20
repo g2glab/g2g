@@ -40,7 +40,7 @@ exports.mkdirPath = (path) =>
 
 exports.removeRecursive = (path) => 
 {
-  childProcess.execSync('rm -r ' + path);
+  childProcess.execSync('rm -rf ' + path);
 }
 
 exports.removeExtension = (name) => 
