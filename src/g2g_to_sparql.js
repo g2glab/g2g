@@ -88,7 +88,7 @@ function nodeSelectClause(nodeDefinition, edges, nodes) {
       edgeConstraints.push(constraint);
     }
     if(edge.node2.name == nodeDefinition.label.name) {
-      constraint = replaceVariable(edge.required.join('\n'), edge.node1.variable, nodeDefinition.label.variable);
+      constraint = replaceVariable(edge.required.join('\n'), edge.node2.variable, nodeDefinition.label.variable);
       constraint = addNodeRequired(constraint, edge.node1, nodes, getVariables(whereClause + edgeConstraints.join('\n')));
       edgeConstraints.push(constraint);
     }
