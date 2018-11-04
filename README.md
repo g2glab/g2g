@@ -1,4 +1,4 @@
-# G2G Mapping Engine
+# G2G Mapper
 
 version 0.1.0
 
@@ -13,11 +13,11 @@ Get example files:
     $ git clone -b v0.1.0 https://github.com/g2gml/g2g.git
     $ cd g2g
 
-**Endpoint Mode:** g2g mapping against SPARQL endpoint *ja.dbpedia.org*.
+Run in **endpoint mode** (mapping against SPARQL endpoint *ja.dbpedia.org*):
 
     $ g2g examples/musician/musician.g2g http://ja.dbpedia.org/sparql
 
-**Local File Mode:** g2g mapping against RDF data file *mini-01.ttl*.
+Run in **local file mode** (mapping against RDF data file *mini-01.ttl*):
 
     $ g2g examples/mini-01/mini-01.g2g examples/mini-01/mini-01.ttl
 
