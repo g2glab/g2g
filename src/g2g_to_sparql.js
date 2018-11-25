@@ -55,7 +55,13 @@ function edgeSelectClause(edge, nodes) {
 function addNodeRequired(whereClause, addedNode, nodes, existingVars) {
   var nodeDef = nodes[addedNode.name]
   var required = nodeDef.required.join('\n');
-  var localVars = getVariables(required);
+  var replaced = replaceConflictVars(required, existingVars);
+  replaced = replaceVariable(replaced, "?" + nodeDef.label.variable, "?" + addedNode.variable);
+  return whereClause + '\n\n' + replaced;
+}
+
+function replaceConflictVars(clause, existingVars) {
+  var localVars = getVariables(clause);
   var varsToReplace = [];
   localVars.forEach( (v) => {
     if(!existingVars.includes(v)) return;
@@ -66,15 +72,24 @@ function addNodeRequired(whereClause, addedNode, nodes, existingVars) {
     varsToReplace.push({from: v, to: newName});
     existingVars.push(newName);
   });
-  var replaced = replaceVariable(required, "?" + nodeDef.label.variable, "?" + addedNode.variable);
+  var replaced = clause;
   varsToReplace.forEach((v) => {
     replaced = replaceVariable(replaced, v.from, v.to);
   });
-  return whereClause + '\n\n' + replaced;
+  return replaced;
 }
 
 function replaceVariable(srcStr, from, to) {
   return srcStr.replace(new RegExp('(\\W|^)\\'+ from + '(\\W|$)', "g"), '$1' + to + '$2');
+}
+
+function createEdgeConstraintForNode(existingConstraints, edge, targetEdgeNode, anotherEdgeNode, nodeVar, nodes) {
+  nodeVar = "?" + nodeVar;
+  var existingVars = getVariables(existingConstraints).filter((v) => v != nodeVar);
+  constraint = replaceVariable(edge.required.join('\n'), "?" + targetEdgeNode.variable, nodeVar);
+  constraint = replaceConflictVars(constraint, existingVars);
+  constraint = addNodeRequired(constraint, anotherEdgeNode, nodes, existingVars);
+  return constraint;
 }
 
 function nodeSelectClause(nodeDefinition, edges, nodes) {
@@ -83,17 +98,17 @@ function nodeSelectClause(nodeDefinition, edges, nodes) {
   Object.keys(edges).forEach( (edge_name) => {
     var edge = edges[edge_name];
     if(edge.node1.name == nodeDefinition.label.name) {
-      constraint = replaceVariable(edge.required.join('\n'), edge.node1.variable, nodeDefinition.label.variable);
-      constraint = addNodeRequired(constraint, edge.node2, nodes, getVariables(whereClause + edgeConstraints.join('\n')));
-      edgeConstraints.push(constraint);
+      edgeConstraints.push(
+        createEdgeConstraintForNode(whereClause + edgeConstraints.join('\n'), edge,
+                                    edge.node1, edge.node2, nodeDefinition.label.variable, nodes));
     }
     if(edge.node2.name == nodeDefinition.label.name) {
-      constraint = replaceVariable(edge.required.join('\n'), edge.node2.variable, nodeDefinition.label.variable);
-      constraint = addNodeRequired(constraint, edge.node1, nodes, getVariables(whereClause + edgeConstraints.join('\n')));
-      edgeConstraints.push(constraint);
+      edgeConstraints.push(
+        createEdgeConstraintForNode(whereClause + edgeConstraints.join('\n'), edge,
+                                    edge.node2, edge.node1, nodeDefinition.label.variable, nodes));
     }
   });
-  whereClause += edgeConstraints.map((c) => '{' + c + '}').join('UNION');
+  whereClause += edgeConstraints.map((c) => '{' + c + '}').join('\nUNION');
 
   return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
