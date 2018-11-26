@@ -1,16 +1,16 @@
 # G2G Mapper
 
-version 0.1.0
+version 0.2.0
 
 ## Quick Start
 
 Set an alias to run docker container:
 
-    $ alias g2g='docker run --rm -v $PWD:/work g2gml/g2g:0.1.0 g2g'
+    $ alias g2g='docker run --rm -v $PWD:/work g2gml/g2g:0.2.0 g2g'
 
 Get example files:
 
-    $ git clone -b v0.1.0 https://github.com/g2gml/g2g.git
+    $ git clone -b v0.2.0 https://github.com/g2gml/g2g.git
     $ cd g2g
 
 Run in **endpoint mode** (mapping against SPARQL endpoint *ja.dbpedia.org*):
@@ -36,7 +36,7 @@ Requirements:
 
 Install:
 
-    $ git clone -b v0.1.0 https://github.com/g2gml/g2g.git
+    $ git clone -b v0.2.0 https://github.com/g2gml/g2g.git
     $ cd g2g
     $ npm install
     $ npm link
