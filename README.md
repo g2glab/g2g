@@ -10,8 +10,7 @@ Set an alias to run docker container:
 
 Get example files:
 
-    $ git clone -b v0.2.0 https://github.com/g2gml/g2g.git
-    $ cd g2g
+    $ wget https://raw.githubusercontent.com/g2gml/g2g/master/examples/musician/musician.g2g
 
 Run in **endpoint mode** (mapping against SPARQL endpoint *ja.dbpedia.org*):
 
