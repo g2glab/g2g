@@ -8,7 +8,7 @@ Set an alias to run docker container:
 
     $ alias g2g='docker run --rm -v $PWD:/work g2gml/g2g:0.2.0 g2g'
 
-For running in **endpoint mode** (mapping against SPARQL endpoint *ja.dbpedia.org*):
+Run in **endpoint mode** (mapping against SPARQL endpoint *ja.dbpedia.org*):
 
     $ # Get example g2g file
     $ wget https://raw.githubusercontent.com/g2gml/g2g/master/examples/musician/musician.g2g
