@@ -8,6 +8,9 @@ function query(endpoint, sparqlFile, outFile, callback) {
   var options = {
     uri: endpoint,
     form: {query: query, format: "text/tab-separated-values"},
+    headers:{ 
+      "Accept": "text/tab-separated-values"
+    }
   };
   request.post(options, function(error, response, body){
     if (!error && response.statusCode == 200) {
