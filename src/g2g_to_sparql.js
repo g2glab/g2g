@@ -55,12 +55,9 @@ function edgeSelectClause(edge, nodes) {
 function addNodeRequired(whereClause, addedNode, nodes, existingVars) {
   var nodeDef = nodes[addedNode.name]
   var required = nodeDef.required.join('\n');
-  if(addedNode.variable == nodeDef.label.variable){
-    // Don't replace variable for node itself
-    existingVars = existingVars.filter((v) => v != "?" + addedNode.variable);
-  }
-  var replaced = replaceConflictVars(required, existingVars);
-  replaced = replaceVariable(replaced, "?" + nodeDef.label.variable, "?" + addedNode.variable);
+  existingVars = existingVars.filter((v) => v != "?" + addedNode.variable);
+  var replaced = replaceVariable(required, "?" + nodeDef.label.variable, "?" + addedNode.variable);
+  [replaced, _] = replaceConflictVars(replaced, existingVars);
   return whereClause + '\n\n' + replaced;
 }
 
@@ -80,7 +77,7 @@ function replaceConflictVars(clause, existingVars) {
   varsToReplace.forEach((v) => {
     replaced = replaceVariable(replaced, v.from, v.to);
   });
-  return replaced;
+  return [replaced, varsToReplace];
 }
 
 function replaceVariable(srcStr, from, to) {
@@ -89,10 +86,16 @@ function replaceVariable(srcStr, from, to) {
 
 function createEdgeConstraintForNode(existingConstraints, edge, targetEdgeNode, anotherEdgeNode, nodeVar, nodes) {
   nodeVar = "?" + nodeVar;
-  var existingVars = getVariables(existingConstraints).filter((v) => v != nodeVar);
-  constraint = replaceVariable(edge.required.join('\n'), "?" + targetEdgeNode.variable, nodeVar);
-  constraint = replaceConflictVars(constraint, existingVars);
-  constraint = addNodeRequired(constraint, anotherEdgeNode, nodes, existingVars);
+  var existingVars = getVariables(existingConstraints);
+  [constraint, varsToReplace] = replaceConflictVars(edge.required.join('\n'), existingVars.filter((v) => v != "?" + targetEdgeNode.variable));
+  constraint = replaceVariable(constraint, "?" + targetEdgeNode.variable, nodeVar);
+  anotherEdgeNode = Object.assign({}, anotherEdgeNode); // clone
+  varsToReplace.forEach((v) => {
+                        if(v.from == "?" + anotherEdgeNode.variable){
+                          anotherEdgeNode.variable = v.to.replace("?", "");
+                        }
+  });
+  constraint = addNodeRequired(constraint, anotherEdgeNode, nodes, existingVars, true);
   return constraint;
 }
 
@@ -164,6 +167,7 @@ function unique(array) {
 }
 
 function getVariables(str) {
+  //TODO: remove question mark from name of variables
   var vars = [];
   var regex = /(\?.+?)\W/g
   var matched = regex.exec(str);
