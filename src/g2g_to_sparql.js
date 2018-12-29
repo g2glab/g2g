@@ -55,6 +55,10 @@ function edgeSelectClause(edge, nodes) {
 function addNodeRequired(whereClause, addedNode, nodes, existingVars) {
   var nodeDef = nodes[addedNode.name]
   var required = nodeDef.required.join('\n');
+  if(addedNode.variable == nodeDef.label.variable){
+    // Don't replace variable for node itself
+    existingVars = existingVars.filter((v) => v != "?" + addedNode.variable);
+  }
   var replaced = replaceConflictVars(required, existingVars);
   replaced = replaceVariable(replaced, "?" + nodeDef.label.variable, "?" + addedNode.variable);
   return whereClause + '\n\n' + replaced;
@@ -108,7 +112,7 @@ function nodeSelectClause(nodeDefinition, edges, nodes) {
                                     edge.node2, edge.node1, nodeDefinition.label.variable, nodes));
     }
   });
-  whereClause += edgeConstraints.map((c) => '{' + c + '}').join('\nUNION');
+  whereClause += edgeConstraints.map((c) => '{\n' + c + '\n}').join('\nUNION\n');
 
   return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
