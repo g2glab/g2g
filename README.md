@@ -25,7 +25,7 @@ Run in **local file mode** (mapping against RDF data file *mini-01.ttl*):
     $ wget https://raw.githubusercontent.com/g2gml/g2g/master/examples/mini-05/mini-05.g2g
     
     Run
-    $ g2g examples/mini-01/mini-01.g2g examples/mini-01/mini-01.ttl
+    $ g2g mini-01.g2g mini-01.ttl
 
 For more information:
 
