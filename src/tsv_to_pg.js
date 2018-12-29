@@ -1,6 +1,10 @@
 var fs = require('fs');
 var path = require('path');
 
+function replaceAngleBracketsWithQuotes(src) {
+  return src.trim().replace(/^</, "\"").replace(/>$/, "\"");
+}
+
 function removeQuotes(src) {
   return src.substring(1, src.length - 1);
 }
@@ -20,6 +24,7 @@ function translateNode(src, dst) {
   lines = rows.map((row) => {
     data = row.replace(/""/g, '\\"').split('\t');
     for (var i = 0; i < data.length; i++) {
+      data[i] = replaceAngleBracketsWithQuotes(data[i]);
       if (isStringQuotesRemovable(data[i])) {
         data[i] = removeQuotes(data[i]);
       }
@@ -44,6 +49,7 @@ function translateEdge(src, dst) {
   lines = rows.map((row) => {
     data = row.replace(/""/g, '\\"').split('\t');
     for (var i = 0; i < data.length; i++) {
+      data[i] = replaceAngleBracketsWithQuotes(data[i]);
       if (isStringQuotesRemovable(data[i])) {
         data[i] = removeQuotes(data[i]);
       }
