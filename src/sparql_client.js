@@ -7,7 +7,7 @@ function query(endpoint, sparqlFile, outFile, callback) {
   var query = fs.readFileSync(sparqlFile, 'utf8');
   var options = {
     uri: endpoint,
-    form: {query: query, format: "text/tab-separated-values"},
+    form: {query: query},
     headers:{ 
       "Accept": "text/tab-separated-values"
     }
