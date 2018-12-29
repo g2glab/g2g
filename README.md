@@ -10,21 +10,18 @@ Set an alias to run docker container:
 
 For running in **endpoint mode** (mapping against SPARQL endpoint *ja.dbpedia.org*):
 
-Get an example g2g file.
-
+    $ # Get example g2g file
     $ wget https://raw.githubusercontent.com/g2gml/g2g/master/examples/musician/musician.g2g
-
-Run g2g command.
-
+    $ # Run
     $ g2g musician.g2g http://ja.dbpedia.org/sparql
 
 Run in **local file mode** (mapping against RDF data file *mini-01.ttl*):
 
-Get an example g2g file and a turtle file.
-
-
-Run g2g command.
-
+    $ # Get example turtle file.
+    $ https://raw.githubusercontent.com/g2gml/g2g/master/examples/mini-05/mini-05.ttl
+    $ # Get example g2g file
+    $ https://raw.githubusercontent.com/g2gml/g2g/master/examples/mini-05/mini-05.g2g
+    $ # Run
     $ g2g examples/mini-01/mini-01.g2g examples/mini-01/mini-01.ttl
 
 For more information:
