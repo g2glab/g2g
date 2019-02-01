@@ -5,17 +5,24 @@ function replaceAngleBracketsWithQuotes(src) {
   return src.trim().replace(/^</, "\"").replace(/>$/, "\"");
 }
 
-function removeQuotes(src) {
-  return src.substring(1, src.length - 1);
+function removeLanguageTag(src) {
+  return src.replace(/@\w*$/, "");
 }
 
-function isStringQuotesRemovable(str) {
-  if (str.match(/\".*\"/)) {        // if str is double-quoated, it is a string
-    if (! str.match(/:|\s/)) {      // if str does not include colon (:) or spaces or tabs
-      return true;
+
+/// Add quotes if neseccary and remove quotes if not necessary
+function addOrRemoveQuotes(src) {
+  if (src.match(/^\".*\"$/)) {  // if src is double-quoated, it is a srcing
+    if (! src.match(/:|\s/)) {  // if src does not include colon (:) or spaces or tabs
+      return src.substring(1, src.length - 1);
     }
   }
-  return false;
+  else {
+    if (src.match(/:|\s/)) {
+      return '"' + src + '"';
+    }
+  }
+  return src;
 }
 
 function translateNode(src, dst) {
@@ -25,9 +32,8 @@ function translateNode(src, dst) {
     data = row.replace(/""/g, '\\"').split('\t');
     for (var i = 0; i < data.length; i++) {
       data[i] = replaceAngleBracketsWithQuotes(data[i]);
-      if (isStringQuotesRemovable(data[i])) {
-        data[i] = removeQuotes(data[i]);
-      }
+      data[i] = removeLanguageTag(data[i]);
+      data[i] = addOrRemoveQuotes(data[i]);
     }
     if (data.length < 2) return;
     var line = data[0] + '\t:' + data[1]; // id + label
@@ -50,9 +56,8 @@ function translateEdge(src, dst) {
     data = row.replace(/""/g, '\\"').split('\t');
     for (var i = 0; i < data.length; i++) {
       data[i] = replaceAngleBracketsWithQuotes(data[i]);
-      if (isStringQuotesRemovable(data[i])) {
-        data[i] = removeQuotes(data[i]);
-      }
+      data[i] = removeLanguageTag(data[i]);
+      data[i] = addOrRemoveQuotes(data[i]);
     }
     if (data.length < 3) return;
     var line = data[0] + '\t' + data[1] + '\t:' + data[2];
