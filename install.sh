@@ -8,6 +8,7 @@ npm install
 npm link
 
 # install pg
+git submodule update --init --recursive
 cd pg
 npm install
 npm link
