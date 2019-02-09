@@ -43,11 +43,9 @@ Requirements:
 * Git
 * Node
 * Java JDK 8 + [Jena ARQ](https://jena.apache.org/documentation/query/index.html) (for local file mode)
-* [PG](https://github.com/g2gml/pg) (for converting to various formats)
 
 Install:
 
-    $ git clone -b v0.2.1 https://github.com/g2gml/g2g.git
+    $ git clone -b v0.2.1 --recursive https://github.com/g2gml/g2g.git
     $ cd g2g
-    $ npm install
-    $ npm link
+    $ ./install.sh
