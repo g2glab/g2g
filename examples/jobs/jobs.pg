@@ -1,6 +1,6 @@
 "http://example.org/job1"	:job
 "http://example.org/job2"	:job
 "http://example.org/job3"	:job
-"http://example.org/job1" -- "http://example.org/job2"	:imcompatible
-"http://example.org/job1" -> "http://example.org/job3"	:precede
-"http://example.org/job2" -> "http://example.org/job3"	:precede
+"http://example.org/job1" --  "http://example.org/job2"	:imcompatible
+"http://example.org/job1" ->  "http://example.org/job3"	:precede
+"http://example.org/job2" ->  "http://example.org/job3"	:precede

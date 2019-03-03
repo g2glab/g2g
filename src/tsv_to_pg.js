@@ -60,7 +60,7 @@ function translateEdge(src, dst) {
     }
     if (data.length < 4) return;
     var edgeSymbol = data[3] == 'true' ? '--' : '->';
-    line = data[0] + ' ' + edgeSymbol + ' ' + data[1] + '\t:' + data[2];
+    line = data[0] + '\t' + edgeSymbol + '\t' + data[1] + '\t:' + data[2];
     for (var i = 4; i < data.length; i += 2) {
       if (data[i+1] != '') line += '\t' + data[i] + ':' + data[i+1];
     }
