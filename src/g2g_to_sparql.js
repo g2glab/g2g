@@ -41,7 +41,8 @@ function edgeSelectClause(edge, nodes) {
   var whereClause = edge.where.join('\n');
   whereClause = addNodeRequired(whereClause, edge.node1, nodes, getVariables(whereClause));
   whereClause = addNodeRequired(whereClause, edge.node2, nodes, getVariables(whereClause));
-  return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)\n' +
+  return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)'
+    + ' ("' + edge.undirected + '" AS ?undirected)\n' +
     edge.properties.map(
       (prop, index) =>
         '       ("' + prop.name + '" AS ?P' + index + ')' + ' (SAMPLE(?' + prop.variable + ') AS ?_' + prop.variable + ')\n').join('') +
@@ -179,13 +180,14 @@ function getVariables(str) {
 }
 
 function parseDeclaration(decl) {
-  var edgeRegex = /\((.+)\)\-\[(.+)\]->\((.+)\)/;
+  var edgeRegex = /\((.+)\)\-\[(.+)\](->|-)\((.+)\)/;
   var matched = decl.match(edgeRegex)
   if(matched) {
-    var edgeMap = parseElement(matched[2]);
-    edgeMap.node1 = parseElement(matched[1]).label;
-    edgeMap.node2 = parseElement(matched[3]).label;
-    return [null, edgeMap];
+    var edge = parseElement(matched[2]);
+    edge.node1 = parseElement(matched[1]).label;
+    edge.node2 = parseElement(matched[4]).label;
+    edge.undirected = matched[3] == '-';
+    return [null, edge];
   }
   else return [parseElement(decl.slice(1, decl.length - 1)), null];
 }

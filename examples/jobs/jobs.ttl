@@ -1,0 +1,9 @@
+@prefix : <http://example.org/> .
+
+:job1 a :Job;
+        :imcompatible :job2;
+        :precede :job3.
+:job2 a :Job; 
+        :imcompatible :job1;
+        :precede :job3.
+:job3 a :Job.

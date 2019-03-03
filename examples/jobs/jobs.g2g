@@ -1,0 +1,12 @@
+PREFIX : <http://example.org/>
+
+(j:job)
+    ?j a :Job .
+
+(j1:job)-[:imcompatible]-(j2:job)
+    ?j1 :imcompatible ?j2.
+    ?j2 :imcompatible ?j1.
+    FILTER (STR(?j1) < STR(?j2)).
+
+(j1:job)-[:precede]->(j2:job)
+    ?j1 :precede ?j2.
