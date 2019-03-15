@@ -1,4 +1,4 @@
-FROM g2gml/pg:0.3.0
+FROM g2gml/pg:0.3.1
 
 RUN cd /opt \
  && wget http://ftp.jaist.ac.jp/pub/apache/jena/binaries/apache-jena-3.10.0.zip \
@@ -6,7 +6,7 @@ RUN cd /opt \
 ENV PATH $PATH:$PWD/apache-jena-3.10.0/bin
 
 RUN cd /opt \
- && git clone -b v0.3.0 https://github.com/g2gml/g2g.git \
+ && git clone -b v0.3.1 https://github.com/g2gml/g2g.git \
  && cd g2g \
  && npm install \
  && npm link
