@@ -41,6 +41,9 @@ function edgeSelectClause(edge, nodes) {
   var whereClause = edge.where.join('\n');
   whereClause = addNodeRequired(whereClause, edge.node1, nodes, getVariables(whereClause));
   whereClause = addNodeRequired(whereClause, edge.node2, nodes, getVariables(whereClause));
+  if(edge.undirected) {
+    whereClause += "\nFILTER(STR(?" + edge.node1.variable + ") < STR(?" + edge.node2.variable + "))."
+  }
   return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)'
     + ' ("' + edge.undirected + '" AS ?undirected)\n' +
     edge.properties.map(

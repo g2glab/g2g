@@ -1,32 +1,10 @@
-"http://ja.dbpedia.org/resource/ジョン・レノン"	"http://ja.dbpedia.org/resource/エルヴィス・プレスリー"	:influenced
-"http://ja.dbpedia.org/resource/ジェフ・ベック"	"http://ja.dbpedia.org/resource/チェット・アトキンス"	:influenced
-"http://ja.dbpedia.org/resource/ジョン・レノン"	"http://ja.dbpedia.org/resource/バディ・ホリー"	:influenced
-"http://ja.dbpedia.org/resource/ケイト・ブッシュ"	"http://ja.dbpedia.org/resource/ビリー・ホリデイ"	:influenced
-"http://ja.dbpedia.org/resource/ジョージ・ハリスン"	"http://ja.dbpedia.org/resource/チェット・アトキンス"	:influenced
-"http://ja.dbpedia.org/resource/ジョン・レノン"	"http://ja.dbpedia.org/resource/チャック・ベリー"	:influenced
-"http://ja.dbpedia.org/resource/ジョン・レノン"	"http://ja.dbpedia.org/resource/トゥーツ・シールマンス"	:influenced
-"http://ja.dbpedia.org/resource/亀山耕一郎"	"http://ja.dbpedia.org/resource/Sister_MAYO"	:same_group	label:Project.R	hometown:日本	pageLength:17587
-"http://ja.dbpedia.org/resource/Sister_MAYO"	"http://ja.dbpedia.org/resource/亀山耕一郎"	:same_group	label:Project.R	hometown:日本	pageLength:17587
-"http://ja.dbpedia.org/resource/Sister_MAYO"	"http://ja.dbpedia.org/resource/谷本貴義"	:same_group	label:Project.R	hometown:日本	pageLength:17587
-"http://ja.dbpedia.org/resource/谷本貴義"	"http://ja.dbpedia.org/resource/Sister_MAYO"	:same_group	label:Project.R	hometown:日本	pageLength:17587
-"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
-"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
-"http://ja.dbpedia.org/resource/亀山耕一郎"	"http://ja.dbpedia.org/resource/谷本貴義"	:same_group	label:Project.R	hometown:日本	pageLength:17587
-"http://ja.dbpedia.org/resource/谷本貴義"	"http://ja.dbpedia.org/resource/亀山耕一郎"	:same_group	label:Project.R	hometown:日本	pageLength:17587
-"http://ja.dbpedia.org/resource/マイク・マンジーニ"	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
-"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	"http://ja.dbpedia.org/resource/マイク・マンジーニ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
-"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	"http://ja.dbpedia.org/resource/マイク・ポートノイ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/マイク・ポートノイ"	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	"http://ja.dbpedia.org/resource/マイク・マンジーニ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
-"http://ja.dbpedia.org/resource/マイク・マンジーニ"	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
-"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	"http://ja.dbpedia.org/resource/マイク・ポートノイ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/マイク・ポートノイ"	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/トニー・レヴィン"	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	"http://ja.dbpedia.org/resource/トニー・レヴィン"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	"http://ja.dbpedia.org/resource/トニー・レヴィン"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/トニー・レヴィン"	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/トニー・レヴィン"	"http://ja.dbpedia.org/resource/マイク・ポートノイ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
-"http://ja.dbpedia.org/resource/マイク・ポートノイ"	"http://ja.dbpedia.org/resource/トニー・レヴィン"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/ジョン・レノン"	->	"http://ja.dbpedia.org/resource/エルヴィス・プレスリー"	:influenced
+"http://ja.dbpedia.org/resource/ジェフ・ベック"	->	"http://ja.dbpedia.org/resource/チェット・アトキンス"	:influenced
+"http://ja.dbpedia.org/resource/ジョン・レノン"	->	"http://ja.dbpedia.org/resource/バディ・ホリー"	:influenced
+"http://ja.dbpedia.org/resource/ケイト・ブッシュ"	->	"http://ja.dbpedia.org/resource/ビリー・ホリデイ"	:influenced
+"http://ja.dbpedia.org/resource/ジョージ・ハリスン"	->	"http://ja.dbpedia.org/resource/チェット・アトキンス"	:influenced
+"http://ja.dbpedia.org/resource/ジョン・レノン"	->	"http://ja.dbpedia.org/resource/チャック・ベリー"	:influenced
+"http://ja.dbpedia.org/resource/ジョン・レノン"	->	"http://ja.dbpedia.org/resource/トゥーツ・シールマンス"	:influenced
 "http://ja.dbpedia.org/resource/エルヴィス・プレスリー"	:Musician	vis_label:エルヴィス・プレスリー	born:--01-08	hometown:アメリカ合衆国	pageLength:41161
 "http://ja.dbpedia.org/resource/Sister_MAYO"	:Musician	vis_label:"Sister MAYO"	born:--07-26	pageLength:6325
 "http://ja.dbpedia.org/resource/ジェフ・ベック"	:Musician	vis_label:ジェフ・ベック	born:1944-06-24	hometown:イングランド	pageLength:14335
@@ -45,3 +23,25 @@
 "http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:Musician	vis_label:ジョーダン・ルーデス	born:--11-04	pageLength:8236
 "http://ja.dbpedia.org/resource/トゥーツ・シールマンス"	:Musician	vis_label:トゥーツ・シールマンス	born:1922-04-29	hometown:ブリュッセル	pageLength:5864
 "http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:Musician	vis_label:ジョン・ペトルーシ	born:--07-12	pageLength:5944
+"http://ja.dbpedia.org/resource/亀山耕一郎"	->	"http://ja.dbpedia.org/resource/Sister_MAYO"	:same_group	label:Project.R	hometown:日本	pageLength:17587
+"http://ja.dbpedia.org/resource/Sister_MAYO"	->	"http://ja.dbpedia.org/resource/亀山耕一郎"	:same_group	label:Project.R	hometown:日本	pageLength:17587
+"http://ja.dbpedia.org/resource/Sister_MAYO"	->	"http://ja.dbpedia.org/resource/谷本貴義"	:same_group	label:Project.R	hometown:日本	pageLength:17587
+"http://ja.dbpedia.org/resource/谷本貴義"	->	"http://ja.dbpedia.org/resource/Sister_MAYO"	:same_group	label:Project.R	hometown:日本	pageLength:17587
+"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	->	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
+"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	->	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
+"http://ja.dbpedia.org/resource/亀山耕一郎"	->	"http://ja.dbpedia.org/resource/谷本貴義"	:same_group	label:Project.R	hometown:日本	pageLength:17587
+"http://ja.dbpedia.org/resource/谷本貴義"	->	"http://ja.dbpedia.org/resource/亀山耕一郎"	:same_group	label:Project.R	hometown:日本	pageLength:17587
+"http://ja.dbpedia.org/resource/マイク・マンジーニ"	->	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
+"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	->	"http://ja.dbpedia.org/resource/マイク・マンジーニ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
+"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	->	"http://ja.dbpedia.org/resource/マイク・ポートノイ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/マイク・ポートノイ"	->	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	->	"http://ja.dbpedia.org/resource/マイク・マンジーニ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
+"http://ja.dbpedia.org/resource/マイク・マンジーニ"	->	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:ドリーム・シアター	hometown:アメリカ合衆国	pageLength:14706
+"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	->	"http://ja.dbpedia.org/resource/マイク・ポートノイ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/マイク・ポートノイ"	->	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/トニー・レヴィン"	->	"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/ジョーダン・ルーデス"	->	"http://ja.dbpedia.org/resource/トニー・レヴィン"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	->	"http://ja.dbpedia.org/resource/トニー・レヴィン"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/トニー・レヴィン"	->	"http://ja.dbpedia.org/resource/ジョン・ペトルーシ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/トニー・レヴィン"	->	"http://ja.dbpedia.org/resource/マイク・ポートノイ"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118
+"http://ja.dbpedia.org/resource/マイク・ポートノイ"	->	"http://ja.dbpedia.org/resource/トニー・レヴィン"	:same_group	label:リキッド・テンション・エクスペリメント	hometown:アメリカ合衆国	pageLength:3118

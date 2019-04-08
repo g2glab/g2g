@@ -9,8 +9,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 (mus:Musician {vis_label:nam, born:dat, hometown:twn, pageLength:len})
     ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
     ?mus rdfs:label ?nam .
-    FILTER(lang(?nam) = "ja") .
-    FILTER REGEX(?nam, '^A').
+    FILTER(lang(?nam) = "en") .
     OPTIONAL { ?mus prop-ja:born ?dat }
     OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn }
     OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
@@ -20,7 +19,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     ?grp a schema:MusicGroup ;
          dbpedia-owl:bandMember ?mus1 , ?mus2 .
     FILTER(?mus1 != ?mus2)
-    OPTIONAL { ?grp rdfs:label ?nam. FILTER(lang(?nam) = "ja")}
+    OPTIONAL { ?grp rdfs:label ?nam. FILTER(lang(?nam) = "en")}
     OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn }
     OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
@@ -28,4 +27,4 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     ?mus1 dbpedia-owl:influenced ?mus2 .
 
 # USAGE:
-# $ g2g examples/musician/musician.g2g http://ja.dbpedia.org/sparql
+# $ g2g examples/musician/musician.g2g http://dbpedia.org/sparql
