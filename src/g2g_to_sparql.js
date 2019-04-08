@@ -96,6 +96,7 @@ function createEdgeConstraintForNode(existingConstraints, edge, targetEdgeNode, 
                           anotherEdgeNode.variable = v.to.replace("?", "");
                         }
   });
+  existingVars = existingVars.concat(getVariables(constraint));
   constraint = addNodeRequired(constraint, anotherEdgeNode, nodes, existingVars, true);
   return constraint;
 }
