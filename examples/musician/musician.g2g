@@ -11,7 +11,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     ?mus rdfs:label ?nam .
     FILTER(lang(?nam) = "en") .
     OPTIONAL { ?mus prop-ja:born ?dat }
-    OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn }
+    OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
     OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
 
 # Edge mappings
@@ -20,7 +20,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
          dbpedia-owl:bandMember ?mus1 , ?mus2 .
     FILTER(?mus1 != ?mus2)
     OPTIONAL { ?grp rdfs:label ?nam. FILTER(lang(?nam) = "en")}
-    OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn }
+    OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
     OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
 (mus1:Musician)-[:influenced]->(mus2:Musician)

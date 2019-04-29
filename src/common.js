@@ -48,3 +48,4 @@ exports.removeExtension = (name) =>
   return name.substring(0, name.lastIndexOf('.')) || name;
 }
 
+exports.g2g_separator = "$g2g_sep$";

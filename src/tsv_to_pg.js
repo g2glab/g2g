@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var common = require('./common.js');
 
 function replaceAngleBracketsWithQuotes(src) {
   return src.trim().replace(/^</, "\"").replace(/>$/, "\"");
@@ -24,20 +25,27 @@ function addOrRemoveQuotes(src) {
   return src;
 }
 
+function preprocessText(txt) {
+  txt = replaceAngleBracketsWithQuotes(txt);
+  txt = removeLanguageTag(txt);
+  return addOrRemoveQuotes(txt).replace(/^\".*"".*$\"/g, '\\"');
+}
+
 function translateNode(src, dst) {
   rows = fs.readFileSync(src, 'utf8').split('\n');
   rows.shift();
   lines = rows.map((row) => {
-    data = row.replace(/""/g, '\\"').split('\t');
-    for (var i = 0; i < data.length; i++) {
-      data[i] = replaceAngleBracketsWithQuotes(data[i]);
-      data[i] = removeLanguageTag(data[i]);
-      data[i] = addOrRemoveQuotes(data[i]);
-    }
+    data = row.split('\t');
     if (data.length < 2) return;
-    var line = data[0] + '\t:' + data[1]; // id + label
+    var line = preprocessText(data[0]) + '\t:' + preprocessText(data[1]); // id + label
     for (var i = 2; i < data.length; i += 2) {
-      if (data[i+1] != '') line += '\t' + data[i] + ':' + data[i+1]; // properties
+      var key = preprocessText(data[i]);
+      var props = data[i+1].replace(/^\"/, "").replace(/\"$/, "");
+      if (props != '') {
+        props.split(common.g2g_separator).forEach((prop) => {
+          line += '\t' + key + ':' + preprocessText(prop);
+        });
+      } // properties
     }
     return line;
   });
@@ -52,17 +60,18 @@ function translateEdge(src, dst) {
   var rows = fs.readFileSync(src, 'utf8').split('\n');
   rows.shift();
   var lines = rows.map((row) => {
-    data = row.replace(/""/g, '\\"').split('\t');
-    for (var i = 0; i < data.length; i++) {
-      data[i] = replaceAngleBracketsWithQuotes(data[i]);
-      data[i] = removeLanguageTag(data[i]);
-      data[i] = addOrRemoveQuotes(data[i]);
-    }
+    data = row.split('\t');
     if (data.length < 4) return;
     var edgeSymbol = data[3] == 'true' ? '--' : '->';
-    line = data[0] + '\t' + edgeSymbol + '\t' + data[1] + '\t:' + data[2];
+    line = preprocessText(data[0]) + '\t' + edgeSymbol + '\t' + preprocessText(data[1]) + '\t:' + preprocessText(data[2]);
     for (var i = 4; i < data.length; i += 2) {
-      if (data[i+1] != '') line += '\t' + data[i] + ':' + data[i+1];
+      var key = preprocessText(data[i]);
+      var props = data[i+1].replace(/^\"/, "").replace(/\"$/, "");
+      if (props != '') {
+        props.split(common.g2g_separator).forEach((prop) => {
+          line += '\t' + key + ':' + preprocessText(prop);
+        });
+      } // properties
     }
     return line;
   });

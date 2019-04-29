@@ -5,6 +5,8 @@
 var fs = require('fs');
 var path = require('path');
 
+var common = require('./common.js');
+
 var SPARQL_DIR = process.argv[3];
 
 var g2gPath = process.argv[2];
@@ -48,7 +50,7 @@ function edgeSelectClause(edge, nodes) {
     + ' ("' + edge.undirected + '" AS ?undirected)\n' +
     edge.properties.map(
       (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ')' + ' (SAMPLE(?' + prop.variable + ') AS ?_' + prop.variable + ')\n').join('') +
+        '       ("' + prop.name + '" AS ?P' + index + ')' + ' (group_concat(distinct ?' + prop.variable + ';separator="' + common.g2g_separator + '") AS ?_' + prop.variable + ')\n').join('') +
     'WHERE {\n' +
     whereClause + '\n' +
     '}\n' +
@@ -125,7 +127,7 @@ function nodeSelectClause(nodeDefinition, edges, nodes) {
   return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
     nodeDefinition.properties.map(
       (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ') (SAMPLE(?' + prop.variable + ') AS ?_' + prop.variable + ')\n').join('') +
+        '       ("' + prop.name + '" AS ?P' + index + ') (group_concat(distinct ?' + prop.variable + ';separator="' + common.g2g_separator + '") AS ?_' + prop.variable + ')\n').join('') +
     'WHERE {\n' + 
       whereClause + '\n' +
     
