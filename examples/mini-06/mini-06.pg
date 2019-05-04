@@ -1,0 +1,3 @@
+"http://example.org/person1"	:person	speaks:Japanese	speaks:English
+"http://example.org/person2"	:person	speaks:English
+"http://example.org/person1"	->	"http://example.org/person2"	:follows	reason:friend	reason:colleague

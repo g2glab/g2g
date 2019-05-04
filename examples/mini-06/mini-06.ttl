@@ -1,0 +1,11 @@
+@prefix : <http://example.org/> .
+:person1 a :Person .
+:person1 :speaks "Japanese", "English".
+:person2 a :Person .
+:person2 :speaks "English".
+[] a :Follow ;
+   :follower :person1 ;
+   :followed :person2 ;
+   :reason "friend";
+   :reason "colleague".
+
