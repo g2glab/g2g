@@ -9,7 +9,7 @@ var commander = require('commander').version(require("../package.json").version)
       g2gPath = g2gml_file;
       dataSrc = data_source;
     })
-    .option('-f, --format [format]', 'format of results <rq|pg|pgx|neo|dot|aws|all (default: pg)>', /^(rq|pg|pgx|neo|dot|aws|all)$/i)
+    .option('-f, --format [format]', 'format of results <rq|pg|json|pgx|neo|dot|aws|all (default: pg)>', /^(rq|pg|json|pgx|neo|dot|aws|all)$/i)
     .option('-o, --output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)');
 
 commander.parse(process.argv)
@@ -71,6 +71,9 @@ function afterPg(err) {
     break;
     case 'dot':
     common.runSpawnSync('pg2dot', (err) => {if(err) throw err;}, pgPath, '-o', dstDir);
+    break;
+    case 'json':
+    common.runSpawnSync('pg2json', (err) => {if(err) throw err;}, pgPath, '-o', dstDir);
     break;
     case 'pg':
     console.log('Done.');
