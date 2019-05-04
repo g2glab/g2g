@@ -62,7 +62,7 @@ function translateEdge(src, dst) {
   var lines = rows.map((row) => {
     data = row.split('\t');
     if (data.length < 4) return;
-    var edgeSymbol = data[3] == 'true' ? '--' : '->';
+    var edgeSymbol = data[3] == '"true"' ? '--' : '->';
     line = preprocessText(data[0]) + '\t' + edgeSymbol + '\t' + preprocessText(data[1]) + '\t:' + preprocessText(data[2]);
     for (var i = 4; i < data.length; i += 2) {
       var key = preprocessText(data[i]);
