@@ -1,0 +1,21 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+# Node mappings
+(art:Artist {vis_label:name})
+    ?art wdt:P106 ?occ.
+    ?art rdfs:label ?name.
+    ?occ wdt:P279 wd:Q483501.# occupation is subclass of artist
+    FILTER(lang(?name) = 'en').
+
+(art1:Artist)-[:influenced]->(art2:Artist)
+   ?art2 wdt:P737 ?art1 .
+
+# USAGE:
+# $ g2g examples/musician_wikidata/musician_wikidata.g2g https://query.wikidata.org/sparql
