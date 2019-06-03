@@ -6,7 +6,7 @@ RUN cd /opt \
 ENV PATH $PATH:/opt/apache-jena-3.10.0/bin
 
 RUN cd /opt \
- && git clone -b v0.3.3 https://github.com/g2gml/g2g.git \
+ && git clone -b v0.3.3 https://github.com/g2glab/g2g.git \
  && cd g2g \
  && npm install \
  && npm link
