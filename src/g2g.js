@@ -3,6 +3,7 @@
 var fs = require('fs');
 var common = require('./common.js');
 var path = require('path');
+var g2gmlToSparql = require('./g2g_to_sparql.js');
 var commander = require('commander').version(require("../package.json").version)
     .arguments('<g2gml_file> <data_source>')
     .action(function (g2gml_file, data_source) {
@@ -90,4 +91,10 @@ function afterPg(err) {
   }
 }
 
-common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);
+if(!g2gmlToSparql(g2gPath, SPARQL_DIR))
+{
+  process.exit(-1);
+}
+common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
+
+//common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);

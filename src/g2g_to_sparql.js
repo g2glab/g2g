@@ -2,10 +2,13 @@
 
 // USAGE: $ g2g_to_sparql <g2g_file>
 
+module.exports = g2gmlToSparql;
+
 var fs = require('fs');
 var path = require('path');
 
 var peg = require('./parser.js');
+var comment_parser = require('./comment_parser.js');
 
 var common = require('./common.js');
 
@@ -20,9 +23,22 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   var blocks = [];
   var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
   var currentBlock = [];
+  g2g = comment_parser.parse(g2g); // remove comments
+  console.log(g2g);
+  try {
+    var parse_result = peg.parse(g2g);
+    console.log(JSON.stringify(parse_result, null, "\t"));
+  } catch (e) {
+    if (e instanceof peg.SyntaxError) {
+      console.log(e);
+      return false;
+    } else {
+      throw e;
+    }
+  }
+
   g2g.split(/\r\n|\r|\n/).forEach(
     (line) => {
-      if(line.startsWith('#')) return;
       if(line.startsWith('PREFIX')) prefixPart += line + '\n';
       else if(line.trim().length > 0) {
         if(!line.startsWith(' ') && currentBlock.length > 0) {
@@ -38,7 +54,7 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   [node2Sparql, edge2Sparql] = parseBlocks(blocks);
   var nodeFiles = writeSparqlFiles(node2Sparql, dstLocation, prefixPart, 'nodes');
   var edgeFiles = writeSparqlFiles(edge2Sparql, dstLocation, prefixPart, 'edges');
-  return [nodeFiles, edgeFiles];
+  return true;
 }
 
 function edgeSelectClause(edge, nodes) {
@@ -239,4 +255,8 @@ function writeSparqlFiles(name2SparqlMap, dstLocation, header, fileNamePrefix) {
   );
 }
 
-g2gmlToSparql(g2gPath, SPARQL_DIR);
+if (typeof require != 'undefined' && require.main==module) {
+  g2gmlToSparql(g2gPath, SPARQL_DIR);
+}
+
+
