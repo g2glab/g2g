@@ -2,14 +2,14 @@ G2GML = prefixes: (PrefixLine*) _ mappings:Mappings { return { "prefixes": prefi
 
 PrefixLine = "PREFIX" __ prefix:(PrefixName?) _ ":" _ "<" url:([^\n<>]+)  ">"  "\n"
   {
-    return `PREFIX ${prefix ? prefix : ''}: ${url.join('')}`
+    return `PREFIX ${prefix ? prefix : ''}: <${url.join('')}>`
   }
 
 Mappings =  (_ node:NodeMapping  _{ return node; }
 / _ edge:EdgeMapping _{ return edge; } )+
 
 NodeMapping = 
-  pgPattern:NodeDefinition "\n" rdfPattern:(RDFPattern+)
+  pgPattern:NodeDefinition  ___ "\n" rdfPattern:(RDFPattern+)
   {
     return {
     	"type": "node",
@@ -19,7 +19,7 @@ NodeMapping =
   }
 
 EdgeMapping = 
-  pgPattern:EdgeDefinition "\n" rdfPattern:RDFPattern+
+  pgPattern:EdgeDefinition ___ "\n" rdfPattern:RDFPattern+
   {
     return {
     	"type": "edge",
@@ -43,7 +43,7 @@ RDFPattern = __ pattern:([^\n]*) EndOfLine
 	return pattern.join('');
 }
 
-NodeDefinition = "(" _ name:Name":" _ label:Name _ properties:PropertyPart ")"
+NodeDefinition = "(" _ name:Name":" _ label:Name _ properties:PropertyPart _ ")"
 {
 	return {
     	'name': name,
@@ -69,9 +69,14 @@ Name = head:[a-zA-Z]tail:([0-9a-zA-Z_]*)
 	return	head + tail.join('');
 }
 
-PrefixName =  [a-zA-Z][0-9a-zA-Z_-]*
+PrefixName =  head:[a-zA-Z]tail:[0-9a-zA-Z_-]* {
+	return head + tail.join('');
+}
 
 EndOfLine = !. / "\n"
+
+___ "spacer without neline"
+  = [ \t]*
 
 __ "tab or spaces"
   = [ \t]+
