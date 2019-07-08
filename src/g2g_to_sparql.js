@@ -5,6 +5,8 @@
 var fs = require('fs');
 var path = require('path');
 
+var peg = require('./parser.js');
+
 var common = require('./common.js');
 
 var SPARQL_DIR = process.argv[3];
