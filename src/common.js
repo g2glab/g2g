@@ -48,4 +48,11 @@ exports.removeExtension = (name) =>
   return name.substring(0, name.lastIndexOf('.')) || name;
 }
 
+exports.redText = (text) =>
+{
+  var red     = '\u001b[31m';
+  var reset   = '\u001b[0m';
+  return red + text + reset; 
+}
+
 exports.g2g_separator = "$g2g_sep$";

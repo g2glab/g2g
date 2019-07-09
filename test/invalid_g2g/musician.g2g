@@ -1,0 +1,31 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX prop-ja: <http://ja.dbpedia.org/property/>
+PREFIX schema: <http://schema.org/>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+# Node mappings
+(mus:Musician {vis_label:nam, born:dat, hometown:twn, pageLength:len})
+    ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
+    ?mus rdfs:label ?nam .
+    FILTER(lang(?nam) = "en") .
+    OPTIONAL { ?mus prop-ja:born ?dat }
+    OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
+    OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
+
+# Edge mappings
+(mus1:Musician)-[:same_group {label:nam, hometown:twn, pageLength:len}]->(mus2:Musician)
+    ?grp a schema:MusicGroup ;
+         dbpedia-owl:bandMember ?mus1 , ?mus2 .
+    FILTER(?mus1 != ?mus2)
+    OPTIONAL { ?grp rdfs:label ?nam. FILTER(lang(?nam) = "en")}
+    OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
+    OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
+
+(mus1:Mus  ician)-[:influenced]->(mus2:Musician)
+    ?mus1 dbpedia-owl:influenced ?mus2 .
+
+
+# USAGE:
+# $ g2g examples/musician/musician.g2g http://dbpedia.org/sparql

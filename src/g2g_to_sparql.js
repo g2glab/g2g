@@ -6,16 +6,19 @@ module.exports = g2gmlToSparql;
 
 var fs = require('fs');
 var path = require('path');
+var tty = require('tty');
 
 var peg = require('./parser.js');
 var comment_parser = require('./comment_parser.js');
 var common = require('./common.js');
+
 
 function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
   var blocks = [];
   var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
   var currentBlock = [];
+  var originalG2g = g2g;
   g2g = comment_parser.parse(g2g); // remove comments
   try {
     var parseResult = peg.parse(g2g);
@@ -39,7 +42,7 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
     return true;
   } catch (e) {
     if (e instanceof peg.SyntaxError) {
-      console.log(e);
+      console.log(prettyErrorMessage(e, originalG2g));
       return false;
     } else {
       throw e;
@@ -176,6 +179,26 @@ function writeSparqlFiles(name2SparqlMap, dstLocation, header, fileNamePrefix) {
   );
 }
 
+
+
+function prettyErrorMessage(e, src)
+{
+  var columnWidth = 30;  // TODO: get actual width from tty
+  var message = 'Syntax error!\n\n';
+  message += e.message;
+  message += `\n\nlocation: line ${e.location.start.line}, column ${e.location.start.column}`;
+  message += `\n${"=".repeat(columnWidth)}\n` // delimiter
+  var lines = src.split('\n');
+  var start = Math.max(0, e.location.start.line - 9);
+  var end = Math.min(lines.length - 1, e.location.end.line + 7);
+  message += lines.slice(start, e.location.start.line - 1).join('\n') + '\n';
+  message += lines[e.location.start.line - 1].substring(0, e.location.start.column - 1);
+  message += common.redText(lines[e.location.start.line - 1].substring(e.location.start.column - 1, e.location.end.column - 1));
+  message += lines[e.location.start.line - 1].substring(e.location.end.column - 1) + '\n';
+  message += lines.slice(e.location.start.line, end).join('\n');
+  message += `\n${"=".repeat(columnWidth)}\n` // delimiter
+  return message;
+}
 
 if (typeof require != 'undefined' && require.main==module) {
   var SPARQL_DIR = process.argv[3];
