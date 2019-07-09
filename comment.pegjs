@@ -1,6 +1,6 @@
 WithComment = contents:(
 	(content:Content (Comment EndOfLine)? { return content; } 
-    / Comment EndOfLine { return ''; })*
+		/ Comment EndOfLine { return ''; })*
 )
 {
 	return contents.join("\n");
@@ -13,10 +13,10 @@ Content = content:((literal:Literal { return literal.join(''); }/ [^#"<])+)
 	return content.join('');
 }
 
-Literal = "\"" (quoted:([^"] / "\\\"")* { return quoted.join(""); })   "\""
-	/ "<" (angled:([^>]*) { return angled.join(""); } )  ">"
+Literal = "\"" (quoted:([^"] / "\\\"")* { return quoted.join(""); })	 "\""
+	/ "<" (angled:([^>]*) { return angled.join(""); } )	 ">"
 
 EndOfLine = "\n" / !.
 
 _ "spacer"
-  = [ \t\n\r]*
+	= [ \t\n\r]*
