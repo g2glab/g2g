@@ -1,0 +1,10 @@
+PREFIX : <http://example.org/>
+
+(p:Person)
+    ?p a :Person.
+
+(p1:Person)-[:predicate]->(p3:Person)
+    ?p1 ?predicate ?p2.
+
+# (p1:Person)-[:relation {pred: predicate}]->(p3:Person)
+#     ?p1 ?predicate ?p2.

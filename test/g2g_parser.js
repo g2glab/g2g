@@ -7,7 +7,6 @@ var chai = require('chai');
 chai.use(require('chai-fs'));
 var assert = chai.assert;
  
-
 var assertParseFile = function(path, expected) {
   return function() {
     assert.equal(g2gmlToSparql(path), expected);
@@ -16,19 +15,6 @@ var assertParseFile = function(path, expected) {
 
 describe('g2g', function() {
   describe('g2gmlToSparql', function() {
-    describe('example g2gs', function() {
-      var files = fs.readdirSync('examples/');
-      files.forEach( (file) => {
-        name = path.basename(file);
-        g2gPath = `examples/${file}/${name}.g2g`
-        if(fs.existsSync(g2gPath)) {
-          it(`${name} should be parsed.`,
-             assertParseFile(g2gPath, true)
-          );
-        }
-      });
-    });
-
     describe('valid strange g2gs', function() {
       var files = fs.readdirSync('test/valid_g2g');
       files.forEach( (file) => {

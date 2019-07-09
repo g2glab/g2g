@@ -1,0 +1,7 @@
+PREFIX : <http://example.org/>
+
+(p:person)
+    ?p a :Person .
+
+(p1:person)-[:follows]->(p2:person)
+    ?p1 :follows ?p2 .

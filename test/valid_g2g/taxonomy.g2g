@@ -1,0 +1,13 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX taxo: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+(tax:Taxon { id: id , rank: rank , name: name } )
+   ?tax a taxo:Taxon ;
+        dct:identifier ?id ;
+        taxo:rank/rdfs:label ?rank ;
+        taxo:scientificName ?name .
+
+(tax1:Taxon)-[:subClassOf]->(tax2:Taxon)
+   ?tax1 rdfs:subClassOf ?tax2 .

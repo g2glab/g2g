@@ -1,0 +1,5 @@
+PREFIX : <http://example.org/>
+
+(p:person {age:a})
+    ?p a :Person .
+    ?p :age ?a .

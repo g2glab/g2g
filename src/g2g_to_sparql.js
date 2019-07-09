@@ -183,11 +183,11 @@ function writeSparqlFiles(name2SparqlMap, dstLocation, header, fileNamePrefix) {
 
 function prettyErrorMessage(e, src)
 {
-  var columnWidth = 30;  // TODO: get actual width from tty
+  var delimiterWidth = 30;
   var message = 'Syntax error!\n\n';
   message += e.message;
   message += `\n\nlocation: line ${e.location.start.line}, column ${e.location.start.column}`;
-  message += `\n${"=".repeat(columnWidth)}\n` // delimiter
+  message += `\n${"=".repeat(delimiterWidth)}\n` // delimiter
   var lines = src.split('\n');
   var start = Math.max(0, e.location.start.line - 9);
   var end = Math.min(lines.length - 1, e.location.end.line + 7);
@@ -196,7 +196,7 @@ function prettyErrorMessage(e, src)
   message += common.redText('->') + common.redBackgroundText(lines[e.location.start.line - 1].substring(e.location.start.column - 1, e.location.end.column - 1));
   message += lines[e.location.start.line - 1].substring(e.location.end.column - 1) + '\n';
   message += lines.slice(e.location.start.line, end).join('\n');
-  message += `\n${"=".repeat(columnWidth)}\n` // delimiter
+  message += `\n${"=".repeat(delimiterWidth)}\n` // delimiter
   return message;
 }
 
