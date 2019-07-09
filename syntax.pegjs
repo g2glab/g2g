@@ -14,7 +14,7 @@ NodeMapping =
 		return {
 			"type": "node",
 			"pg": pgPattern,
-				"rdf": rdfPattern
+			"rdf": rdfPattern
 		};
 	}
 
@@ -24,31 +24,32 @@ EdgeMapping =
 		return {
 			"type": "edge",
 			"pg": pgPattern,
-				"rdf": rdfPattern
+			"rdf": rdfPattern
 		};
 	}
 
-EdgeDefinition = src:NodeDefinition _ "-" _ "[" _ ":" label:Name _ properties:PropertyPart _ "]" _ "-" ">"? _ dst:NodeDefinition
+EdgeDefinition = src:NodeDefinition _ "-" _ "[" _ ":" label:Name _ properties:PropertyPart _ "]" _ arrow:("-" ">"?) _ dst:NodeDefinition
 {
 	return {
 				'src': src,
 				'dst': dst,
 				'label': label,
+                'undirected': arrow.join('') != '->',
 				'properties': properties
 		};
 }
 
-RDFPattern = __ pattern:([^\n]*) EndOfLine
+RDFPattern = pattern:((indent:__ {return indent.join('');}) (content:([^\n]*) { return content.join(''); })) EndOfLine
 {
 	return pattern.join('');
 }
 
-NodeDefinition = "(" _ name:Name":" _ label:Name _ properties:PropertyPart _ ")"
+NodeDefinition = "(" _ variable:Name":" _ label:Name _ properties:PropertyPart _ ")"
 {
 	return {
-			'name': name,
-				'label': label,
-				'properties': properties
+			'variable': variable,
+			'label': label,
+			'properties': properties
 		};
 }
 
@@ -56,8 +57,8 @@ PropertyPart = "{" _ properties:PropertyList _ "}" { return properties; }
 	/ "" { return []; }
 
 PropertyList =
-	head:Property _ "," _ tail:PropertyList { return [head] + tail; } /
-	Property
+	head:Property _ "," _ tail:PropertyList { return [head].concat(tail); } /
+	prop:Property { return [prop]; }
 	
 Property = key:Name _ ":" _ val:Name
 {
