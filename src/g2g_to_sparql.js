@@ -193,7 +193,7 @@ function prettyErrorMessage(e, src)
   var end = Math.min(lines.length - 1, e.location.end.line + 7);
   message += lines.slice(start, e.location.start.line - 1).join('\n') + '\n';
   message += lines[e.location.start.line - 1].substring(0, e.location.start.column - 1);
-  message += common.redText(lines[e.location.start.line - 1].substring(e.location.start.column - 1, e.location.end.column - 1));
+  message += common.redText('->') + common.redBackgroundText(lines[e.location.start.line - 1].substring(e.location.start.column - 1, e.location.end.column - 1));
   message += lines[e.location.start.line - 1].substring(e.location.end.column - 1) + '\n';
   message += lines.slice(e.location.start.line, end).join('\n');
   message += `\n${"=".repeat(columnWidth)}\n` // delimiter

@@ -55,4 +55,12 @@ exports.redText = (text) =>
   return red + text + reset; 
 }
 
+exports.redBackgroundText = (text) =>
+{
+  var redBack  = '\u001b[41m';
+  var reset   = '\u001b[0m';
+  return redBack + text + reset; 
+}
+
+
 exports.g2g_separator = "$g2g_sep$";
