@@ -9,14 +9,7 @@ var path = require('path');
 
 var peg = require('./parser.js');
 var comment_parser = require('./comment_parser.js');
-
 var common = require('./common.js');
-
-var SPARQL_DIR = process.argv[3];
-
-var g2gPath = process.argv[2];
-
-var inputName = path.basename(g2gPath);
 
 function g2gmlToSparql(g2gmlPath, dstLocation) {
   var prefixPart = "";
@@ -24,10 +17,26 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
   var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
   var currentBlock = [];
   g2g = comment_parser.parse(g2g); // remove comments
-  console.log(g2g);
   try {
-    var parse_result = peg.parse(g2g);
-    console.log(JSON.stringify(parse_result, null, "\t"));
+    var parseResult = peg.parse(g2g);
+    prefixPart = parseResult.prefixes.join("\n");
+    var node2Sparql = {}, edge2Sparql = {};
+
+    parseResult.mappings.forEach((mapping) =>
+    {
+      var mappingName = mapping.pg.label;
+      if(mapping.type == 'node') {
+        node2Sparql[mappingName] = generateNodeSparql(mapping, parseResult.mappings);
+      } else {
+        edge2Sparql[mappingName] = generateEdgeSparql(mapping, parseResult.mappings);
+      }
+    });
+
+    if(dstLocation) {
+      writeSparqlFiles(node2Sparql, dstLocation, prefixPart, 'nodes');
+      writeSparqlFiles(edge2Sparql, dstLocation, prefixPart, 'edges');
+    }
+    return true;
   } catch (e) {
     if (e instanceof peg.SyntaxError) {
       console.log(e);
@@ -36,56 +45,24 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
       throw e;
     }
   }
-
-  g2g.split(/\r\n|\r|\n/).forEach(
-    (line) => {
-      if(line.startsWith('PREFIX')) prefixPart += line + '\n';
-      else if(line.trim().length > 0) {
-        if(!line.startsWith(' ') && currentBlock.length > 0) {
-          blocks.push(currentBlock);
-          currentBlock = [];
-        }
-        currentBlock.push(line);
-      }
-    }
-  )
-  if(currentBlock.length > 0) blocks.push(currentBlock);
-  var node2Sparql, edge2Sparql;
-  [node2Sparql, edge2Sparql] = parseBlocks(blocks);
-  var nodeFiles = writeSparqlFiles(node2Sparql, dstLocation, prefixPart, 'nodes');
-  var edgeFiles = writeSparqlFiles(edge2Sparql, dstLocation, prefixPart, 'edges');
-  return true;
-}
-
-function edgeSelectClause(edge, nodes) {
-  var whereClause = edge.where.join('\n');
-  whereClause = addNodeRequired(whereClause, edge.node1, nodes, getVariables(whereClause));
-  whereClause = addNodeRequired(whereClause, edge.node2, nodes, getVariables(whereClause));
-  if(edge.undirected) {
-    whereClause += "\nFILTER(STR(?" + edge.node1.variable + ") < STR(?" + edge.node2.variable + "))."
-  }
-  return 'SELECT' + ' ?' + edge.node1.variable + ' ?' + edge.node2.variable + ' ("' + edge.label.name + '" AS ?type)'
-    + ' ("' + edge.undirected + '" AS ?undirected)\n' +
-    edge.properties.map(
-      (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ')' + ' (group_concat(distinct ?' + prop.variable + ';separator="' + common.g2g_separator + '") AS ?_' + prop.variable + ')\n').join('') +
-    'WHERE {\n' +
-    whereClause + '\n' +
-    '}\n' +
-    'GROUP BY ?' + edge.node1.variable + ' ?' + edge.node2.variable + '\n';
 }
 
 // TODO: Local variables in sparqls of nodes should be added some prefix to avoid conflict with native variable in edges
-function addNodeRequired(whereClause, addedNode, nodes, existingVars) {
-  var nodeDef = nodes[addedNode.name]
-  var required = nodeDef.required.join('\n');
-  existingVars = existingVars.filter((v) => v != "?" + addedNode.variable);
-  var replaced = replaceVariable(required, "?" + nodeDef.label.variable, "?" + addedNode.variable);
-  [replaced, _] = replaceConflictVars(replaced, existingVars);
-  return whereClause + '\n\n' + replaced;
+function addNodeRequired(whereClause, addedNode, allMappings, existingVars) {
+  for(i = 0; i < allMappings.length; i++) {
+    var mapping = allMappings[i];
+    if(mapping.type == 'node' && mapping.pg.label == addedNode.label) {
+      var required = requiredClause(mapping.rdf);
+      existingVars = existingVars.filter((v) => v != "?" + addedNode.variable);
+      var replaced = replaceVariable(required, "?" + mapping.pg.variable, "?" + addedNode.variable);
+      [replaced, _] = replaceDuplicateVars(replaced, existingVars);
+      return whereClause + '\n\n' + replaced;
+    }
+  }
+  //TODO: throw exception
 }
 
-function replaceConflictVars(clause, existingVars) {
+function replaceDuplicateVars(clause, existingVars) {
   var localVars = getVariables(clause);
   var varsToReplace = [];
   localVars.forEach( (v) => {
@@ -108,83 +85,68 @@ function replaceVariable(srcStr, from, to) {
   return srcStr.replace(new RegExp('(\\W|^)\\'+ from + '(\\W|$)', "g"), '$1' + to + '$2');
 }
 
-function createEdgeConstraintForNode(existingConstraints, edge, targetEdgeNode, anotherEdgeNode, nodeVar, nodes) {
-  nodeVar = "?" + nodeVar;
+function requiredClause(constraints) {
+  return constraints.filter((line) => !line.trim().startsWith('OPTIONAL')).join('\n');
+}
+
+function createEdgeConstraintForNode(existingConstraints, edgeMapping, nodeVar, nodes, forSrc) {
+  var targetEdgeNode = forSrc ? edgeMapping.pg.src : edgeMapping.pg.dst;
+  var anotherEdgeNode = forSrc ? edgeMapping.pg.dst : edgeMapping.pg.src;
   var existingVars = getVariables(existingConstraints);
-  [constraint, varsToReplace] = replaceConflictVars(edge.required.join('\n'), existingVars.filter((v) => v != "?" + targetEdgeNode.variable));
+  nodeVar = "?" + nodeVar;
+
+  [constraint, varsToReplace] = replaceDuplicateVars(requiredClause(edgeMapping.rdf), existingVars.filter((v) => v != "?" + targetEdgeNode.variable));
   constraint = replaceVariable(constraint, "?" + targetEdgeNode.variable, nodeVar);
   anotherEdgeNode = Object.assign({}, anotherEdgeNode); // clone
   varsToReplace.forEach((v) => {
-                        if(v.from == "?" + anotherEdgeNode.variable){
-                          anotherEdgeNode.variable = v.to.replace("?", "");
-                        }
+    if(v.from == "?" + anotherEdgeNode.variable){
+      anotherEdgeNode.variable = v.to.replace("?", "");
+    }
   });
   existingVars = existingVars.concat(getVariables(constraint));
-  constraint = addNodeRequired(constraint, anotherEdgeNode, nodes, existingVars, true);
+  constraint = addNodeRequired(constraint, anotherEdgeNode, nodes, existingVars);
   return constraint;
 }
 
-function nodeSelectClause(nodeDefinition, edges, nodes) {
-  whereClause = nodeDefinition.where.join('\n') + '\n';
-  edgeConstraints = []
-  Object.keys(edges).forEach( (edge_name) => {
-    var edge = edges[edge_name];
-    if(edge.node1.name == nodeDefinition.label.name) {
-      edgeConstraints.push(
-        createEdgeConstraintForNode(whereClause + edgeConstraints.join('\n'), edge,
-                                    edge.node1, edge.node2, nodeDefinition.label.variable, nodes));
-    }
-    if(edge.node2.name == nodeDefinition.label.name) {
-      edgeConstraints.push(
-        createEdgeConstraintForNode(whereClause + edgeConstraints.join('\n'), edge,
-                                    edge.node2, edge.node1, nodeDefinition.label.variable, nodes));
-    }
-  });
-  whereClause += edgeConstraints.map((c) => '{\n' + c + '\n}').join('\nUNION\n');
-
-  return 'SELECT' + ' (?' + nodeDefinition.label.variable + ' AS ?nid) ' + '("' + nodeDefinition.label.name + '" AS ?type)\n' + 
-    nodeDefinition.properties.map(
-      (prop, index) =>
-        '       ("' + prop.name + '" AS ?P' + index + ') (group_concat(distinct ?' + prop.variable + ';separator="' + common.g2g_separator + '") AS ?_' + prop.variable + ')\n').join('') +
-    'WHERE {\n' + 
-      whereClause + '\n' +
-    
-    '}\n' +
-    'GROUP BY ?' + nodeDefinition.label.variable + '\n';
-}
-
-function parseBlocks(blocks) {
-  var map = {nodes: {}, edges: {}};
-  blocks.forEach((block) => parseBlock(block, map));
-
-  var nodeSparqls = {};
-  var edgeSparqls = {};
-
-  Object.keys(map.nodes).forEach( (node) => {
-    nodeSparqls[node] = nodeSelectClause(map.nodes[node], map.edges, map.nodes); 
-  });
-
-  Object.keys(map.edges).forEach( (edge) => {
-    edgeSparqls[edge] = edgeSelectClause(map.edges[edge], map.nodes); 
-  });
-  return [nodeSparqls, edgeSparqls];
-}
-
-function parseBlock(block, map) {
-  var whereClauses = block.slice(1, block.length);
-  var nodeDeclaration, edgeDeclaration;
-  [nodeDeclaration, edgeDeclaration] = parseDeclaration(block[0]);
-  var requiredClauses = whereClauses.filter((line) => !line.trim().startsWith('OPTIONAL'));
-  if(nodeDeclaration != null) {
-    map.nodes[nodeDeclaration.label.name] = {required: requiredClauses,
-                                              where: whereClauses,
-                                              label: nodeDeclaration.label,
-                                              properties: nodeDeclaration.properties};
-  } else {
-    edgeDeclaration.where = whereClauses;
-    edgeDeclaration.required = requiredClauses;
-    map.edges[edgeDeclaration.label.name] = edgeDeclaration;
+function generateEdgeSparql(mapping, allMappings) {
+  var whereClause = mapping.rdf.join('\n');
+  whereClause = addNodeRequired(whereClause, mapping.pg.src, allMappings, getVariables(whereClause));
+  whereClause = addNodeRequired(whereClause, mapping.pg.dst, allMappings, getVariables(whereClause));
+  if(mapping.pg.undirected) {
+    whereClause += `\nFILTER(STR(?${mapping.pg.src.variable}) < STR(?${mapping.pg.dst.variable})).`
   }
+  return `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ("${mapping.pg.label}" AS ?type)`
+    + ` ("${mapping.pg.undirected}" AS ?undirected)\n`
+    + mapping.pg.properties.map(
+      (prop, index) =>
+        `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') +
+    `WHERE {\n${whereClause}\n}\n` +
+    `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n`;
+}
+
+function generateNodeSparql(mapping, allMappings) {
+  var whereClause = mapping.rdf.join('\n');
+  var edgeConstraints = [];
+  allMappings.forEach( (anotherMapping) => {
+    if(anotherMapping.type == 'edge'){
+      if(anotherMapping.pg.src.label == mapping.pg.label) {
+        edgeConstraints.push(
+          createEdgeConstraintForNode(whereClause + edgeConstraints.join('\n'), anotherMapping, mapping.pg.variable, allMappings, true));
+      }
+      if(anotherMapping.pg.dst.label == mapping.pg.label) {
+        edgeConstraints.push(
+          createEdgeConstraintForNode(whereClause + edgeConstraints.join('\n'), anotherMapping, mapping.pg.variable, allMappings, false));
+      }
+    }
+  });
+  whereClause += '\n' + edgeConstraints.map((c) => '{\n' + c + '\n}').join('\nUNION\n');
+  return `SELECT (?${mapping.pg.variable} AS ?nid) ("${mapping.pg.label}" AS ?type)\n` +
+      mapping.pg.properties.map(
+        (prop, index) =>
+          `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`
+      ).join('') +
+    `WHERE {\n ${whereClause} \n}\n` +
+    `GROUP BY ?${mapping.pg.variable}\n`;
 }
 
 function unique(array) {
@@ -192,7 +154,6 @@ function unique(array) {
 }
 
 function getVariables(str) {
-  //TODO: remove question mark from name of variables
   var vars = [];
   var regex = /(\?.+?)\W/g
   var matched = regex.exec(str);
@@ -203,60 +164,25 @@ function getVariables(str) {
   return unique(vars);
 }
 
-function parseDeclaration(decl) {
-  var edgeRegex = /\((.+)\)\-\[(.+)\](->|-)\((.+)\)/;
-  var matched = decl.match(edgeRegex)
-  if(matched) {
-    var edge = parseElement(matched[2]);
-    edge.node1 = parseElement(matched[1]).label;
-    edge.node2 = parseElement(matched[4]).label;
-    edge.undirected = matched[3] == '-';
-    return [null, edge];
-  }
-  else return [parseElement(decl.slice(1, decl.length - 1)), null];
-}
-
-// input: string like "<var_0>:<label> {(<var_i>:<prop_i>, ...)}"
-// output: object like {label: {name: <label>, variable: <var_0>}, properties: [{name: <prop_i>, variable: <var_i>}, ...] }
-function parseElement(element) {
-  var labelPart, propertyPart, labelVariable, labelName;
-  [labelPart, propertyPart] = element.split('{');
-  var result = {};
-  var label_var, label_name;
-  [label_var, label_name] = parseKeyValue(labelPart);
-  result.label = {name: label_name, variable: label_var};
-  if(propertyPart != null) {
-    propertyPart = propertyPart.replace('}', '');
-    result.properties = propertyPart.split(',').map((property) => {
-                          var prop_var, prop_name;
-                          [prop_name, prop_var] = parseKeyValue(property);
-                          return {name: prop_name, variable: prop_var};
-                        });
-  } else {
-    result.properties = [];
-  }
-  return result;
-}
-
-// input: string like "<key>:<value>"
-function parseKeyValue(kv) {
-  return kv.split(':').map((str) => str.trim());
-}
-
 function writeSparqlFiles(name2SparqlMap, dstLocation, header, fileNamePrefix) {
   return Object.keys(name2SparqlMap).map(
     (name) =>
       {
         var fileName = dstLocation + fileNamePrefix + '.' + name + '.rq';
-        fs.writeFileSync(fileName,  header + '\n' + name2SparqlMap[name], 'utf8');
+        fs.writeFileSync(fileName,  header + '\n\n' + name2SparqlMap[name], 'utf8');
         console.log('"' + fileName + '" has been created.');
         return fileName;
       }
   );
 }
 
+
 if (typeof require != 'undefined' && require.main==module) {
-  g2gmlToSparql(g2gPath, SPARQL_DIR);
+  var SPARQL_DIR = process.argv[3];
+  var g2gPath = process.argv[2];
+  var inputName = path.basename(g2gPath);
+  var success = g2gmlToSparql(g2gPath, SPARQL_DIR);  
+  if(!success) {
+    process.exit(-1);
+  }
 }
-
-

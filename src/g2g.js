@@ -35,13 +35,12 @@ if(commander.format === undefined) {
 const SPARQL_DIR = dstDir + '/sparql/';
 var pgPath = dstDir + '/' + inputName + '.pg';
 
-
 common.mkdirPath(dstDir);
 common.removeRecursive(SPARQL_DIR);
 common.mkdirPath(SPARQL_DIR);
 
 function afterSparql(err) {
-  if(err) throw err;
+  if(err) return;
   if(dstFormat != 'rq') {
     common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
   } else {
@@ -91,10 +90,4 @@ function afterPg(err) {
   }
 }
 
-if(!g2gmlToSparql(g2gPath, SPARQL_DIR))
-{
-  process.exit(-1);
-}
-common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
-
-//common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);
+common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);
