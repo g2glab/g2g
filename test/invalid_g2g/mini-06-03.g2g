@@ -1,0 +1,12 @@
+PREFIX : <http://example.org/>
+
+(p:person{speaks:l})
+    ?p a :Person .
+    ?p :speaks ?l.
+
+(p1:person)-[:follows {reason:r}]->(p2:person)
+    ?f :follower ?p1 ;
+       :followed ?p2 ;
+:reason ?r.  # unindented SPARQL line
+
+
