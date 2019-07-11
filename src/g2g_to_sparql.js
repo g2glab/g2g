@@ -118,14 +118,19 @@ function generateEdgeSparql(mapping, allMappings) {
   if(mapping.pg.undirected) {
     whereClause += `\nFILTER(STR(?${mapping.pg.src.variable}) < STR(?${mapping.pg.dst.variable})).`
   }
-  return `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ("${mapping.pg.label}" AS ?type)`
+  var subqueryPrefix = `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ?type ?undirected\n` + 
+      mapping.pg.properties.map(
+        (prop, index) =>
+          `       ?P${index} ?_${prop.val}\n`
+      ).join('') + ' WHERE { {\n';
+  return subqueryPrefix + `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ("${mapping.pg.label}" AS ?type)`
     + ` ("${mapping.pg.undirected}" AS ?undirected)\n`
     + mapping.pg.properties.map(
       (prop, index) =>
         `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') +
     `WHERE {\n${whereClause}\n}\n` +
     `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n` + 
-    `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n`;
+    `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n } \n }`;
 }
 
 function generateNodeSparql(mapping, allMappings) {
@@ -144,14 +149,20 @@ function generateNodeSparql(mapping, allMappings) {
     }
   });
   whereClause += '\n' + edgeConstraints.map((c) => '{\n' + c + '\n}').join('\nUNION\n');
-  return `SELECT (?${mapping.pg.variable} AS ?nid) ("${mapping.pg.label}" AS ?type)\n` +
+  // Surround with select to trick Virtuoso
+  var subqueryPrefix = `SELECT ?nid ?type \n` + 
+      mapping.pg.properties.map(
+        (prop, index) =>
+          `       ?P${index} ?_${prop.val}\n`
+      ).join('') + ' WHERE { {\n';
+  return subqueryPrefix + `SELECT (?${mapping.pg.variable} AS ?nid) ("${mapping.pg.label}" AS ?type)\n` +
       mapping.pg.properties.map(
         (prop, index) =>
           `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`
       ).join('') +
     `WHERE {\n ${whereClause} \n}\n` +
     `GROUP BY ?${mapping.pg.variable}\n` + 
-    `ORDER BY ?${mapping.pg.variable}\n`;
+    `ORDER BY ?${mapping.pg.variable}\n } }`;
 }
 
 function unique(array) {

@@ -31,14 +31,14 @@ edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge, pageSize));
 
 // query all rows with pagination
 function queryAll(dataSrc, query, tsvPath, currentOffset, pageSize, callback) {
-  var currentTsvPath = currentOffset <= 1 ? tsvPath : path.dirname(tsvPath) + path.basename(tsvPath, '.tsv') + currentOffset.toString() + '.tsv';
+  var currentTsvPath = currentOffset <= 0 ? tsvPath : path.dirname(tsvPath) + '/' + path.basename(tsvPath, '.tsv') + currentOffset.toString() + '.tsv';
   var currentQuery = query + ` LIMIT ${pageSize}`;
-  if(currentOffset > 1) {
+  if(currentOffset > 0) {
     currentQuery += ` OFFSET ${currentOffset}`;
   }
   sparqlClient.query(dataSrc, currentQuery, currentTsvPath, (partial) => {
-    console.log('"' + currentTsvPath + '" has been created.');
-    callback(tsvPath, dstPath);
+    process.stdout.write('"' + currentTsvPath + '" has been created.\n');
+    callback(currentTsvPath, dstPath);
     if(partial) {
       console.log(`Query next page (from ${currentOffset + pageSize})...`);
       queryAll(dataSrc, query, tsvPath, currentOffset + pageSize, pageSize, callback);
@@ -57,7 +57,7 @@ function queryTsv(file, callback, pageSize) {
       });
     } else {
       query = fs.readFileSync(file, 'utf-8');
-      queryAll(dataSrc, query, tsvPath, 1, pageSize, callback);
+      queryAll(dataSrc, query, tsvPath, 0, pageSize, callback);
     }
   } else { // use ARQ
     if (!fs.existsSync(dataSrc)) {

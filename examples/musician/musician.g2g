@@ -16,8 +16,9 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 # Edge mappings
 (mus1:Musician)-[:same_group {label:nam, hometown:twn, pageLength:len}]->(mus2:Musician)
-    ?grp a schema:MusicGroup ;
-         dbpedia-owl:bandMember ?mus1 , ?mus2 .
+    ?grp a schema:MusicGroup.
+    { ?grp dbpedia-owl:bandMember ?mus1 , ?mus2. } UNION
+    { ?grp dbpedia-owl:formerBandMember ?mus1 , ?mus2. }
     FILTER(?mus1 != ?mus2)
     OPTIONAL { ?grp rdfs:label ?nam. FILTER(lang(?nam) = "en")}
     OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
