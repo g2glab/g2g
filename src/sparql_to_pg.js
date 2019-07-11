@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-// USAGE: $ sparql_to_pg <endpoint|local_file> <sparql_dir> <tsv_dir> <pg_path>
-// EXAMPLE: $ sparql_to_pg http://dbpedia.org/sparql output/musician/
+// USAGE: $ sparql_to_pg <endpoint|local_file> <sparql_dir> <tsv_dir> <pg_path> <count_on_each_page>
+// EXAMPLE: $ sparql_to_pg http://dbpedia.org/sparql output/musician/ output/musician/tsv output_musician/mucisian.pg 10000
 
 var dataSrc    = process.argv[2];
 var sparqlDir  = process.argv[3];
 var tsvDir     = process.argv[4];
-var dstPath     = process.argv[5];
+var dstPath    = process.argv[5];
+var pageSize = parseInt(process.argv[6]);
 
 var fs = require('fs');
 var path = require('path');
@@ -24,16 +25,40 @@ edgeFiles = sparql_files.filter((name) => name.startsWith('edges')).map((name) =
 
 if (fs.existsSync(dstPath)) fs.unlinkSync(dstPath);
 
-nodeFiles.forEach(file => queryTsv(file, tsvToPg.translateNode));
-edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge));
+nodeFiles.forEach(file => queryTsv(file, tsvToPg.translateNode, pageSize));
+edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge, pageSize));
 
-function queryTsv(file, callback) {
-  var tsvPath = tsvDir + path.basename(file) + '.tsv'
+
+// query all rows with pagination
+function queryAll(dataSrc, query, tsvPath, currentOffset, pageSize, callback) {
+  var currentTsvPath = currentOffset <= 1 ? tsvPath : path.dirname(tsvPath) + path.basename(tsvPath, '.tsv') + currentOffset.toString() + '.tsv';
+  var currentQuery = query + ` LIMIT ${pageSize}`;
+  if(currentOffset > 1) {
+    currentQuery += ` OFFSET ${currentOffset}`;
+  }
+  sparqlClient.query(dataSrc, currentQuery, currentTsvPath, (partial) => {
+    console.log('"' + currentTsvPath + '" has been created.');
+    callback(tsvPath, dstPath);
+    if(partial) {
+      console.log(`Query next page (from ${currentOffset + pageSize})...`);
+      queryAll(dataSrc, query, tsvPath, currentOffset + pageSize, pageSize, callback);
+    }
+  });
+}
+
+function queryTsv(file, callback, pageSize) {
+  var tsvPath = tsvDir + path.basename(file, '.rq') + '.tsv';
   if (validUrl.isUri(dataSrc)) { // use remote endpoint
-    sparqlClient.query(dataSrc, file, tsvPath, () => {
-      console.log('"' + tsvPath + '" has been created.');
-      callback(tsvPath, dstPath)
-    });
+    if(pageSize <= 0)
+    {
+      sparqlClient.query(dataSrc, file, tsvPath, (partial) => {
+        console.log('"' + tsvPath + '" has been created.');
+        callback(tsvPath, dstPath);
+      });
+    } else {
+      query = fs.readFileSync(file, 'utf-8');
+      queryAll(dataSrc, query, tsvPath, 1, pageSize, callback);
+    }
   } else { // use ARQ
     if (!fs.existsSync(dataSrc)) {
       console.log('ERROR: "' + dataSrc + '" does not exist.' );

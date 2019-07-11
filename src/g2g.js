@@ -11,7 +11,8 @@ var commander = require('commander').version(require("../package.json").version)
       dataSrc = data_source;
     })
     .option('-f, --format [format]', 'format of results <rq|pg|json|pgx|neo|dot|aws|all (default: pg)>', /^(rq|pg|json|pgx|neo|dot|aws|all)$/i)
-    .option('-o, --output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)');
+    .option('-o, --output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)')
+    .option('--paginate [page_count]', 'count of rows in each page for pagination mode (default: 10000, negative means no pagination)', parseInt);
 
 commander.parse(process.argv)
 
@@ -20,17 +21,16 @@ if(commander.args.length === 0) {
   commander.help();
 }
 
+var pageSize = commander.paginate || 10000;
+
 var inputName = common.removeExtension(path.basename(g2gPath));
 var dstDir = commander.output_dir || './output/' + inputName;
 
-if(commander.format === undefined) {
-  var dstFormat = 'pg'; // default value
-} else if(commander.format === true) {
+if(commander.format === true) {
   console.error('Error: invalid format!');
   commander.help();
-} else {
-  var dstFormat = commander.format;
-}
+} 
+var dstFormat = commander.format || 'pg';
 
 const SPARQL_DIR = dstDir + '/sparql/';
 var pgPath = dstDir + '/' + inputName + '.pg';
@@ -42,7 +42,7 @@ common.mkdirPath(SPARQL_DIR);
 function afterSparql(err) {
   if(err) return;
   if(dstFormat != 'rq') {
-    common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath);
+    common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath, pageSize);
   } else {
     console.log('Done.');
   }

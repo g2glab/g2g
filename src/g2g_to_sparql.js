@@ -124,7 +124,8 @@ function generateEdgeSparql(mapping, allMappings) {
       (prop, index) =>
         `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') +
     `WHERE {\n${whereClause}\n}\n` +
-    `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n`;
+    `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n` + 
+    `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n`;
 }
 
 function generateNodeSparql(mapping, allMappings) {
@@ -149,7 +150,8 @@ function generateNodeSparql(mapping, allMappings) {
           `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`
       ).join('') +
     `WHERE {\n ${whereClause} \n}\n` +
-    `GROUP BY ?${mapping.pg.variable}\n`;
+    `GROUP BY ?${mapping.pg.variable}\n` + 
+    `ORDER BY ?${mapping.pg.variable}\n`;
 }
 
 function unique(array) {
