@@ -23,9 +23,7 @@ exports.runScript = (scriptPath, callback, ...args) =>
 
 exports.runSpawnSync = (command, callback, ...args) =>
 {
-  var result = childProcess.spawnSync(command, args);
-  process.stdout.write(result.stdout);
-  process.stderr.write(result.stderr);
+  var result = childProcess.spawnSync(command, args, { stdio: 'inherit' } );
   if(result.status === 0) {
     callback();
   } else {
