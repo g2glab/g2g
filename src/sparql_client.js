@@ -11,7 +11,7 @@ function query(endpoint, inputQuery, outFile, callback) {
     query = inputQuery;
   }
   var options = {
-    uri: endpoint,
+    uri: endpoint + '?timeout=0', // infinite 
     form: {query: query},
     headers:{ 
       "Accept": "text/tab-separated-values"
