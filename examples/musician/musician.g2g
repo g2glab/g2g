@@ -1,8 +1,8 @@
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX prop-ja: <http://ja.dbpedia.org/property/>
 PREFIX schema: <http://schema.org/>
 PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+PREFIX dbpedia-prop: <http://dbpedia.org/property/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 # Node mappings
@@ -10,7 +10,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
     ?mus rdfs:label ?nam .
     FILTER(lang(?nam) = "en") .
-    OPTIONAL { ?mus prop-ja:born ?dat }
+    OPTIONAL { ?mus dbpedia-prop:born ?dat }
     OPTIONAL { ?mus dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
     OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
 
