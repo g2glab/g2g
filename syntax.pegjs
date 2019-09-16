@@ -76,7 +76,7 @@ PrefixName =	head:[a-zA-Z]tail:[0-9a-zA-Z_-]* {
 
 EndOfLine = !. / "\n"
 
-___ "spacer without neline"
+___ "spacer without newline"
 	= [ \t]*
 
 __ "tab or spaces"
