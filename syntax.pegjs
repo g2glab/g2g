@@ -1,6 +1,6 @@
-G2GML = prefixes: (PrefixLine*) _ mappings:Mappings { return { "prefixes": prefixes, "mappings": mappings }; }
+G2GML = _ prefixes: (PrefixLine*) _ mappings:Mappings { return { "prefixes": prefixes, "mappings": mappings }; }
 
-PrefixLine = "PREFIX" __ prefix:(PrefixName?) _ ":" _ "<" url:([^\n<>]+)	">"	 "\n"
+PrefixLine = "PREFIX" __ prefix:(PrefixName?) _ ":" _ "<" url:([^\n<>]+)	">"	 "\n"	_
 	{
 		return `PREFIX ${prefix ? prefix : ''}: <${url.join('')}>`
 	}
