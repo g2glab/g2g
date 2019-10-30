@@ -28,11 +28,12 @@ EdgeMapping =
 		};
 	}
 
-EdgeDefinition = src:NodeDefinition _ "-" _ "[" _ ":" label:Name _ properties:PropertyPart _ "]" _ arrow:("-" ">"?) _ dst:NodeDefinition
+EdgeDefinition = src:NodeDefinition _ "-" _ "[" _ edgeId:Name? _ ":" _ label:Name _ properties:PropertyPart _ "]" _ arrow:("-" ">"?) _ dst:NodeDefinition
 {
 	return {
 				'src': src,
 				'dst': dst,
+				'edgeId': edgeId,
 				'label': label,
                 'undirected': arrow.join('') != '->',
 				'properties': properties
@@ -44,7 +45,7 @@ RDFPattern = pattern:((indent:__ {return indent.join('');}) (content:([^\n]*) { 
 	return pattern.join('');
 }
 
-NodeDefinition = "(" _ variable:Name":" _ label:Name _ properties:PropertyPart _ ")"
+NodeDefinition = "(" _ variable:Name _ ":" _ label:Name _ properties:PropertyPart _ ")"
 {
 	return {
 			'variable': variable,

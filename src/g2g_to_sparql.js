@@ -115,6 +115,7 @@ function generateEdgeSparql(mapping, allMappings) {
   var whereClause = mapping.rdf.join('\n');
   whereClause = addNodeRequired(whereClause, mapping.pg.src, allMappings, getVariables(whereClause));
   whereClause = addNodeRequired(whereClause, mapping.pg.dst, allMappings, getVariables(whereClause));
+  var edgeVar = (mapping.pg.edgeId ? "?" + mapping.pg.edgeId : "");
   if(mapping.pg.undirected) {
     whereClause += `\nFILTER(STR(?${mapping.pg.src.variable}) < STR(?${mapping.pg.dst.variable})).`
   }
@@ -129,8 +130,8 @@ function generateEdgeSparql(mapping, allMappings) {
       (prop, index) =>
         `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') +
     `WHERE {\n${whereClause}\n}\n` +
-    `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n` + 
-    `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n } \n }`;
+    `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ${edgeVar}\n` + 
+    `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ${edgeVar}\n } \n }`;
 }
 
 function generateNodeSparql(mapping, allMappings) {
