@@ -19,12 +19,12 @@ function query(endpoint, inputQuery, outFile, callback) {
   };
   request.post(options, function(error, response, body){
     if (!error && response.statusCode == 200) {
-      var partial = 'x-sparql-maxrows' in response.headers;
+      var maxrows = response.headers['x-sparql-maxrows'];
       fs.writeFile(outFile, body, 'utf8', function (err) {
         if (err != null) {
           console.log(err);
         }
-        callback(partial);
+        callback(maxrows);
       });
     } else {
       console.log('error: '+ response.statusCode);
