@@ -2,6 +2,7 @@ exports.query = query;
 
 var request = require('request');
 var fs = require('fs');
+var version = require('commander').version(require("../package.json").version)
 
 function query(endpoint, inputQuery, outFile, callback) {
   var query;
@@ -14,6 +15,7 @@ function query(endpoint, inputQuery, outFile, callback) {
     uri: endpoint + '?timeout=0', // infinite 
     form: {query: query},
     headers:{ 
+      "User-agent": `g2g/mapper${version}`, 
       "Accept": "text/tab-separated-values"
     }
   };
