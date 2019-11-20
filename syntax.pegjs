@@ -43,7 +43,7 @@ EdgeDefinition = src:NodeDefinition _ "-" _ "[" _ edgeId:Name? _ ":" _ label:Nam
 RDFPattern = pattern:((indent:__ {return indent.join('');}) (content:([^\n]*) { return content.join(''); })) EndOfLine
 {
 	return pattern.join('');
-}
+} / (___ "\n") { return  ''; }
 
 NodeDefinition = "(" _ variable:Name _ ":" _ label:Name _ properties:PropertyPart _ ")"
 {
