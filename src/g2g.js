@@ -12,7 +12,7 @@ var commander = require('commander').version(require("../package.json").version)
     })
     .option('-f, --format [format]', 'format of results <rq|pg|json|pgx|neo|dot|aws|all (default: pg)>', /^(rq|pg|json|pgx|neo|dot|aws|all)$/i)
     .option('-o, --output_dir [prefix]', 'directory where results are output (default: output/<input_prefix>)')
-    .option('--paginate [page_count]', 'count of rows in each page for pagination mode (default: 10000, negative means no pagination)', parseInt);
+    .option('-p, --preview', 'preview mode')
 
 commander.parse(process.argv)
 
@@ -31,6 +31,7 @@ if(commander.format === true) {
   commander.help();
 } 
 var dstFormat = commander.format || 'pg';
+var preview = commander.preview || null;
 
 const SPARQL_DIR = dstDir + '/sparql/';
 var pgPath = dstDir + '/' + inputName + '.pg';
@@ -42,7 +43,7 @@ common.mkdirPath(SPARQL_DIR);
 function afterSparql(err) {
   if(err) return;
   if(dstFormat != 'rq') {
-    common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath, pageSize);
+    common.runSpawnSync('sparql_to_pg', afterPg, dataSrc, SPARQL_DIR, dstDir + "/tsv/", pgPath, commander.preview ? 1 : 0);
   } else {
     console.log('Done.');
   }

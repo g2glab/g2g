@@ -7,6 +7,7 @@ var dataSrc    = process.argv[2];
 var sparqlDir  = process.argv[3];
 var tsvDir     = process.argv[4];
 var dstPath    = process.argv[5];
+var previewMode = parseInt(process.argv[6]) > 0;
 
 var fs = require('fs');
 var path = require('path');
@@ -53,6 +54,9 @@ function queryTsv(file, callback) {
   var tsvPath = tsvDir + path.basename(file, '.rq') + '.tsv';
   if (validUrl.isUri(dataSrc)) { // use remote endpoint
     query = fs.readFileSync(file, 'utf-8');
+    if(previewMode) {
+      query += ' LIMIT 5';
+    }
     queryAll(dataSrc, query, tsvPath, 0, -1, callback);
   } else { // use ARQ
     if (!fs.existsSync(dataSrc)) {
