@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// USAGE: $ g2g_to_sparql <g2g_file>
-
 module.exports = g2gmlToSparql;
 
 var fs = require('fs');
@@ -13,7 +11,7 @@ var comment_parser = require('./comment_parser.js');
 var common = require('./common.js');
 
 
-function g2gmlToSparql(g2gmlPath, dstLocation) {
+function g2gmlToSparql(g2gmlPath, dstLocation, previewMode) {
   var prefixPart = "";
   var blocks = [];
   var g2g = fs.readFileSync(g2gmlPath, 'utf8').toString();
@@ -29,9 +27,9 @@ function g2gmlToSparql(g2gmlPath, dstLocation) {
     {
       var mappingName = mapping.pg.label;
       if(mapping.type == 'node') {
-        node2Sparql[mappingName] = generateNodeSparql(mapping, parseResult.mappings);
+        node2Sparql[mappingName] = generateNodeSparql(mapping, parseResult.mappings, previewMode);
       } else {
-        edge2Sparql[mappingName] = generateEdgeSparql(mapping, parseResult.mappings);
+        edge2Sparql[mappingName] = generateEdgeSparql(mapping, parseResult.mappings, previewMode);
       }
     });
 
@@ -111,7 +109,7 @@ function createEdgeConstraintForNode(existingConstraints, edgeMapping, nodeVar, 
   return constraint;
 }
 
-function generateEdgeSparql(mapping, allMappings) {
+function generateEdgeSparql(mapping, allMappings, previewMode) {
   var whereClause = mapping.rdf.join('\n');
   whereClause = addNodeRequired(whereClause, mapping.pg.src, allMappings, getVariables(whereClause));
   whereClause = addNodeRequired(whereClause, mapping.pg.dst, allMappings, getVariables(whereClause));
@@ -119,22 +117,36 @@ function generateEdgeSparql(mapping, allMappings) {
   if(mapping.pg.undirected) {
     whereClause += `\nFILTER(STR(?${mapping.pg.src.variable}) < STR(?${mapping.pg.dst.variable})).`
   }
-  var subqueryPrefix = `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ?type ?undirected\n` + 
+
+  if(previewMode) {
+    var subqueryPrefix = `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ("${mapping.pg.label}" AS ?type)`
+      + ` ("${mapping.pg.undirected}" AS ?undirected)\n`
+      + mapping.pg.properties.map(
+        (prop, index) =>
+          `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') + ' WHERE { {\n';
+    return subqueryPrefix + `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}\n` + 
+      mapping.pg.properties.map(
+        (prop, index) => `?${prop.val}\n`
+      ).join('') +
+      `WHERE {\n${whereClause}\n} LIMIT 5 \n } } GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable}`;
+  } else {
+    var subqueryPrefix = `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ?type ?undirected\n` + 
       mapping.pg.properties.map(
         (prop, index) =>
           `       ?P${index} ?_${prop.val}\n`
       ).join('') + ' WHERE { {\n';
-  return subqueryPrefix + `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ("${mapping.pg.label}" AS ?type)`
-    + ` ("${mapping.pg.undirected}" AS ?undirected)\n`
-    + mapping.pg.properties.map(
-      (prop, index) =>
-        `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') +
-    `WHERE {\n${whereClause}\n}\n` +
-    `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ${edgeVar}\n` + 
-    `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ${edgeVar}\n } \n }`;
+    return subqueryPrefix + `SELECT ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ("${mapping.pg.label}" AS ?type)`
+      + ` ("${mapping.pg.undirected}" AS ?undirected)\n`
+      + mapping.pg.properties.map(
+        (prop, index) =>
+          `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`).join('') +
+      `WHERE {\n${whereClause}\n}\n` +
+      `GROUP BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ${edgeVar}\n` + 
+      `ORDER BY ?${mapping.pg.src.variable} ?${mapping.pg.dst.variable} ${edgeVar}\n } \n }`;
+  }
 }
 
-function generateNodeSparql(mapping, allMappings) {
+function generateNodeSparql(mapping, allMappings, previewMode) {
   var whereClause = mapping.rdf.join('\n');
   var edgeConstraints = [];
   allMappings.forEach( (anotherMapping) => {
@@ -151,19 +163,35 @@ function generateNodeSparql(mapping, allMappings) {
   });
   whereClause += '\n' + edgeConstraints.map((c) => '{\n' + c + '\n}').join('\nUNION\n');
   // Surround with select to trick Virtuoso
-  var subqueryPrefix = `SELECT ?nid ?type \n` + 
+
+  if(previewMode) {
+    var subqueryPrefix = `SELECT (?${mapping.pg.variable} AS ?nid) ("${mapping.pg.label}" AS ?type)\n` +
+      mapping.pg.properties.map(
+        (prop, index) =>
+          `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`
+      ).join('') + ' WHERE { {\n';
+    return subqueryPrefix + `SELECT ?${mapping.pg.variable}\n` + 
+      mapping.pg.properties.map(
+        (prop, index) =>
+          `       ?${prop.val}\n`
+      ).join('') +
+      `WHERE {\n ${whereClause} \n}\n LIMIT 10 }} GROUP BY ?${mapping.pg.variable}`;
+  }
+  else {
+    var subqueryPrefix = `SELECT ?nid ?type \n` + 
       mapping.pg.properties.map(
         (prop, index) =>
           `       ?P${index} ?_${prop.val}\n`
       ).join('') + ' WHERE { {\n';
-  return subqueryPrefix + `SELECT (?${mapping.pg.variable} AS ?nid) ("${mapping.pg.label}" AS ?type)\n` +
+    return subqueryPrefix + `SELECT (?${mapping.pg.variable} AS ?nid) ("${mapping.pg.label}" AS ?type)\n` +
       mapping.pg.properties.map(
         (prop, index) =>
           `       ("${prop.key}" AS ?P${index}) (group_concat(distinct ?${prop.val};separator="${common.g2g_separator}") AS ?_${prop.val})\n`
       ).join('') +
-    `WHERE {\n ${whereClause} \n}\n` +
-    `GROUP BY ?${mapping.pg.variable}\n` + 
-    `ORDER BY ?${mapping.pg.variable}\n } }`;
+      `WHERE {\n ${whereClause} \n}\n` +
+      `GROUP BY ?${mapping.pg.variable}\n` + 
+      `ORDER BY ?${mapping.pg.variable}\n } }`;
+  }
 }
 
 function unique(array) {
@@ -215,10 +243,11 @@ function prettyErrorMessage(e, src)
 }
 
 if (typeof require != 'undefined' && require.main==module) {
+  var previewMode = parseInt(process.argv[4]) > 0;
   var SPARQL_DIR = process.argv[3];
   var g2gPath = process.argv[2];
   var inputName = path.basename(g2gPath);
-  var success = g2gmlToSparql(g2gPath, SPARQL_DIR);  
+  var success = g2gmlToSparql(g2gPath, SPARQL_DIR, previewMode);  
   if(!success) {
     process.exit(-1);
   }

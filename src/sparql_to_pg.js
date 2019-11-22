@@ -15,6 +15,7 @@ var validUrl = require('valid-url');
 var childProcess = require('child_process');
 var sparqlClient = require('./sparql_client.js');
 var tsvToPg = require('./tsv_to_pg.js');
+var common = require('./common.js');
 
 tryToMkdir(tsvDir);
 
@@ -25,9 +26,10 @@ edgeFiles = sparql_files.filter((name) => name.startsWith('edges')).map((name) =
 
 if (fs.existsSync(dstPath)) fs.unlinkSync(dstPath);
 
+result = "";
+
 nodeFiles.forEach(file => queryTsv(file, tsvToPg.translateNode));
 edgeFiles.forEach(file => queryTsv(file, tsvToPg.translateEdge));
-
 
 // query all rows with pagination
 function queryAll(dataSrc, query, tsvPath, currentOffset, pageSize, callback) {
@@ -40,8 +42,9 @@ function queryAll(dataSrc, query, tsvPath, currentOffset, pageSize, callback) {
     currentQuery += ` OFFSET ${currentOffset}`;
   }
   sparqlClient.query(dataSrc, currentQuery, currentTsvPath, (maxrows) => {
-    process.stdout.write('"' + currentTsvPath + '" has been created.\n');
-    callback(currentTsvPath, dstPath);
+    var result = callback(currentTsvPath, dstPath);
+    if(previewMode) console.log(common.highlightedText(result, 'green'));
+    else process.stdout.write('"' + currentTsvPath + '" has been created.\n');
     if(maxrows) {
       maxrows = parseInt(maxrows);
       console.log(`Query next page (from ${currentOffset + maxrows})...`);
@@ -54,9 +57,6 @@ function queryTsv(file, callback) {
   var tsvPath = tsvDir + path.basename(file, '.rq') + '.tsv';
   if (validUrl.isUri(dataSrc)) { // use remote endpoint
     query = fs.readFileSync(file, 'utf-8');
-    if(previewMode) {
-      query += ' LIMIT 5';
-    }
     queryAll(dataSrc, query, tsvPath, 0, -1, callback);
   } else { // use ARQ
     if (!fs.existsSync(dataSrc)) {
@@ -72,7 +72,8 @@ function queryTsv(file, callback) {
         if (err != null) {
           console.log(err);
         }
-        callback(tsvPath, dstPath);
+        var result = callback(tsvPath, dstPath);
+        if(previewMode) console.log(common.highlightedText(result, 'green'));
       });
   }
 }

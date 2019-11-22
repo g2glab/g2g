@@ -49,11 +49,13 @@ function translateNode(src, dst) {
     }
     return line;
   });
+  var contents = lines.join('\n');
   if (fs.existsSync(dst)) {
-    fs.appendFileSync(dst, lines.join('\n'), 'utf8');
+    fs.appendFileSync(dst, contents, 'utf8');
   } else {
-    fs.writeFileSync(dst, lines.join('\n'), 'utf8');
+    fs.writeFileSync(dst, contents, 'utf8');
   }
+  return contents;
 }
 
 function translateEdge(src, dst) {
@@ -75,11 +77,13 @@ function translateEdge(src, dst) {
     }
     return line;
   });
+  var contents = lines.join('\n')
   if (fs.existsSync(dst)) {
-    fs.appendFileSync(dst, lines.join('\n'), 'utf8');
+    fs.appendFileSync(dst, contents, 'utf8');
   } else {
-    fs.writeFileSync(dst, lines.join('\n'), 'utf8');
+    fs.writeFileSync(dst, contents, 'utf8');
   }
+  return contents;
 }
 
 exports.translateNode = translateNode;

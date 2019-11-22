@@ -91,4 +91,4 @@ function afterPg(err) {
   }
 }
 
-common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR);
+common.runSpawnSync('g2g_to_sparql', afterSparql, g2gPath, SPARQL_DIR, commander.preview ? 1 : 0);

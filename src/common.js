@@ -46,18 +46,30 @@ exports.removeExtension = (name) =>
   return name.substring(0, name.lastIndexOf('.')) || name;
 }
 
+var reset   = '\u001b[0m';
+var colorMap = {
+  red: '\u001b[31m',
+  blue: '\033[94m',
+  green: '\033[92m',
+  redBack: '\u001b[41m',
+  header: '\033[95m',
+  warning: '\033[93m',
+  bold: '\033[1m',
+};
+
+exports.highlightedText = (text, scheme) => 
+{
+  return colorMap[scheme] + text + reset;
+}
+
 exports.redText = (text) =>
 {
-  var red     = '\u001b[31m';
-  var reset   = '\u001b[0m';
-  return red + text + reset; 
+  return highlightedText(text, 'red');
 }
 
 exports.redBackgroundText = (text) =>
 {
-  var redBack  = '\u001b[41m';
-  var reset   = '\u001b[0m';
-  return redBack + text + reset; 
+  return highlightedText(text, 'redBack');
 }
 
 
