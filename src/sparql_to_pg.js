@@ -59,7 +59,7 @@ function queryTsv(file, callback) {
       console.log('ERROR: "' + dataSrc + '" does not exist.' );
       process.exit(-1);
     }
-    var arq_result = childProcess.execSync('arq --data ' + dataSrc + ' --query ' + file + ' --results=tsv').toString();
+    var arq_result = childProcess.execSync('arq --data ' + dataSrc + ' --query ' + file + ' --results=tsv', { maxBuffer: Number.MAX_SAFE_INTEGER }).toString();
     arq_result = arq_result.replace(/</g, '"');
     arq_result = arq_result.replace(/>/g, '"');
     arq_result = arq_result.replace(/"\^\^[^\t\n]+/g, '"');  //remove xsd
