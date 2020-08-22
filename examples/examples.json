@@ -1,4 +1,5 @@
 [
+  {"val":"example","text":"Example"},
   {"val":"mini-01","text":"RDF resource >> PG node"},
   {"val":"mini-02","text":"RDF datatype property >> PG node property"},
   {"val":"mini-03","text":"RDF object property >> PG edge"},
