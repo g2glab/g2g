@@ -1,0 +1,12 @@
+PREFIX : <http://example.org/>
+(p:person {name:n})
+    ?p a :Person .
+    ?p :name ?n .
+(p1:person)-[:supervised_by]->(p2:person)
+    ?p1 :supervised_by ?p2 .
+(p1:person)-[:emailed {year:y, attachment:a}]->(p2:person)
+    ?f a :Email ;
+       :sender   ?p1 ;
+       :receiver ?p2 ;
+       :year     ?y .
+    OPTIONAL { ?f :attachment ?a }
