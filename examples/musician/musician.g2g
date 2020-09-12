@@ -6,7 +6,7 @@ PREFIX dbpedia-prop: <http://dbpedia.org/property/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 # Node mappings
-(mus:Musician {vis_label:nam, born:dat, hometown:twn, pageLength:len})
+(mus:musician {vis_label:nam, born:dat, hometown:twn, page_length:len})
     ?mus rdf:type foaf:Person, dbpedia-owl:MusicalArtist .
     ?mus rdfs:label ?nam .
     FILTER(lang(?nam) = "en") .
@@ -15,7 +15,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     OPTIONAL { ?mus dbpedia-owl:wikiPageLength ?len }
 
 # Edge mappings
-(mus1:Musician)-[:same_group {label:nam, hometown:twn, pageLength:len}]->(mus2:Musician)
+(mus1:musician)-[:same_group {label:nam, hometown:twn, page_length:len}]->(mus2:musician)
     ?grp a schema:MusicGroup.
     { ?grp dbpedia-owl:bandMember ?mus1 , ?mus2. } UNION
     { ?grp dbpedia-owl:formerBandMember ?mus1 , ?mus2. }
@@ -24,7 +24,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     OPTIONAL { ?grp dbpedia-owl:hometown / rdfs:label ?twn. FILTER(lang(?twn) = "en"). }
     OPTIONAL { ?grp dbpedia-owl:wikiPageLength ?len }
 
-(mus1:Musician)-[:influenced]->(mus2:Musician)
+(mus1:musician)-[:influenced]->(mus2:musician)
     ?mus1 dbpedia-owl:influenced ?mus2 .
 
 # USAGE:
