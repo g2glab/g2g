@@ -6,10 +6,19 @@ var g2gmlToSparql = require('./../src/g2g_to_sparql.js');
 var chai = require('chai');
 chai.use(require('chai-fs'));
 var assert = chai.assert;
+const process = require('process');
+
+let originalWrite = process.stdout.write;
+
+function mutingStdout(fn) {
+    process.stdout.write = (str) => {};
+    fn();
+    process.stdout.write = originalWrite;
+}
  
 var assertParseFile = function(path, expected) {
   return function() {
-    assert.equal(g2gmlToSparql(path), expected);
+    mutingStdout(() => assert.equal(g2gmlToSparql(path), expected));
   };
 };
 
