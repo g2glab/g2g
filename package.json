@@ -26,5 +26,8 @@
     "sparql_to_pg": "./src/sparql_to_pg.js",
     "g2g_to_sparql": "./src/g2g_to_sparql.js",
     "g2g": "./src/g2g.js"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }
