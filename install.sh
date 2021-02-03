@@ -9,7 +9,7 @@ npm link
 
 # install pg
 #git submodule update --init --recursive
-git clone -b v0.3.4 https://github.com/g2glab/pg.git
+git clone -b v0.3.5 https://github.com/g2glab/pg.git
 cd pg
 npm install
 npm link

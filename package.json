@@ -1,6 +1,6 @@
 {
   "name": "g2g",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "g2g",
   "license": "MIT",
   "repository": {
@@ -18,7 +18,7 @@
     "commander": "^2.16.0",
     "config": "^1.30.0",
     "js-yaml": "^3.13.1",
-    "mocha": "^5.2.0",
+    "mocha": "^8.2.1",
     "pegjs": "^0.10.0",
     "valid-url": "^1.0.9"
   },
