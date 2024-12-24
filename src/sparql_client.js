@@ -1,17 +1,17 @@
 exports.query = query;
 
-var request = require('request');
-var fs = require('fs');
-var version = require('commander').version(require("../package.json").version)
+const request = require('request');
+const fs = require('fs');
+const version = require('commander').version(require("../package.json").version)
 
 function query(endpoint, inputQuery, outFile, callback) {
-  var query;
+  let query;
   if(fs.existsSync(inputQuery)) {
     query = fs.readFileSync(inputQuery, 'utf8');
   } else {
     query = inputQuery;
   }
-  var options = {
+  const options = {
     uri: endpoint + '?timeout=0', // infinite 
     form: {query: query},
     headers:{ 
@@ -21,7 +21,7 @@ function query(endpoint, inputQuery, outFile, callback) {
   };
   request.post(options, function(error, response, body){
     if (!error && response.statusCode == 200) {
-      var maxrows = response.headers['x-sparql-maxrows'];
+      const maxrows = response.headers['x-sparql-maxrows'];
       fs.writeFile(outFile, body, 'utf8', function (err) {
         if (err != null) {
           console.log(err);
